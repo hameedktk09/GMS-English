@@ -1,0 +1,4388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CLFS-GMS</title>
+  <style>
+    /* ALL ORIGINAL CSS STYLES REMAIN EXACTLY THE SAME */
+    body {
+      font-family: Times New Roman, Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 14px;
+      padding: 10px 15px;
+      background-color: #DDDDDD;
+      margin: 5;
+    }
+
+    input[type="text"], select {
+      padding: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .view-header {
+      color: blue;
+      font-size: 18px;
+      margin: 5px 0;
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      padding-right: 0px;
+    }
+
+    .view-options {
+      display: none;
+      position: absolute;
+      background-color: white;
+      border: 1px solid black;
+      box-shadow: 0 0px 0px rgba(0,0,0,0.1);
+      z-index: 100;
+      min-width: 200px;
+      padding: 0px 0;
+    }
+
+    .view-option {
+      color: black;
+      font-size: 14px;
+      padding: 6px 15px;
+      cursor: pointer;
+      background: white;
+      border: none;
+      text-align: left;
+      width: 100%;
+      font-family: inherit;
+      font-weight: normal;
+    }
+
+    .view-option:hover {
+      background-color: #3366FF;
+      color: white;
+    }
+
+    .view-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .view-container:hover .view-options {
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      border: 1px solid #000;
+      background-color: white;
+      table-layout: auto;
+    }
+
+    th, td {
+      border: 1px solid #000;
+      padding: 5px 5px;
+      text-align: center;
+      min-width: 60px;
+      font-size: 14px;
+      background-color: white;
+    }
+
+    #studentTable thead th {
+      background: #F8F8F8;
+      font-size: 14px;
+      padding: 10px 6px;
+    }
+
+    #studentTable td:nth-child(1),
+    #studentTable td:nth-child(2),
+    #studentTable td:nth-child(3),
+    #studentTable td:nth-child(29) {
+      background-color: #F8F8F8;
+    }
+
+    #studentTable tr:hover {
+      background-color: #f5f5f5;
+    }
+
+    td[contenteditable="true"] {
+      background-color: #ffffff;
+      cursor: text;
+      position: relative;
+    }
+
+    td[contenteditable="true"].invalid {
+      background-color: #f8d7da;
+      border: 1px solid red;
+    }
+
+    .info-box, .info-group, .button-box {
+      border: 0px solid #000;
+      background-color: #F8F8F8;
+      margin-bottom: -20px;
+      padding: 4px;
+    }
+
+    .logout-button {
+      background-color: #e74c3c;
+      color: white;
+      border: 1px solid #000;
+      border-radius: 5px;
+      padding: 8px 16px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      margin-right: 0px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logout-button:hover {
+      background-color: #FF9900;
+    }
+
+    .logo-container {
+      width: 25%;
+      background-color: #F8F8F8;
+      padding: 10px;
+      border-right: 1px solid #000;
+    }
+
+    .logo-wrapper {
+      background-color: #F8F8F8;
+      padding: 10px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-wrapper img {
+      max-height: 120px;
+      width: auto;
+    }
+
+    .university-text-container {
+      background-color: #F8F8F8;
+      padding: 15px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #000;
+    }
+
+    #sheetTitle {
+      color: blue;
+      font-size: 18px;
+      margin: 5px 0;
+    }
+
+    .course-selection-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .label-above {
+      font-weight: bold;
+      margin-bottom: 3px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .info-field-style {
+      border: 1px solid #000;
+      background-color: white;
+      padding: 5px;
+      font-family: 'Times New Roman';
+      width: 10px;
+      text-align: center;
+      border-radius: 5px;
+      vertical-align: top;
+    }
+
+    select.info-field-style, input.info-field-style {
+      width: 100px;
+      text-align: center;
+    }
+
+    select#sectionSelect.info-field-style {
+      width: 60px;
+    }
+
+    #semester {
+      padding-right: 6px;
+      background-color: white;
+      color: black;
+    }
+
+    #courseCode {
+      background-image: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    #courseSelect {
+      text-align: left;
+      width: 180px;
+      padding-left: 10px;
+    }
+
+    .button-box {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      border: 1px solid #000;
+      background-color: #F8F8F8;
+      padding: 10px;
+      margin-bottom: 5px;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .button-box > div {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .button-box button {
+      padding: 6px 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid #000;
+      background-color: #FFFFC;
+      border-radius: 5px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button.green-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+
+    button.green-button:hover {
+      background-color: #33CC33;
+    }
+
+    .green-button {
+      background-color: #00CC00 !important;
+      color: white !important;
+      border: 1px solid #000 !important;
+      border-radius: 5px !important;
+      font-weight: normal !important;
+    }
+
+    .green-button:hover {
+      background-color: #00AA00 !important;
+      box-shadow: 0 0 5px rgba(0, 204, 0, 0.7);
+    }
+
+    #noNamesMessage {
+      color: red;
+      font-weight: bold;
+      text-align: center;
+      padding: 5px 0;
+      display: none;
+    }
+
+    .locked-field {
+      background-color: #f0f0f0;
+      cursor: not-allowed;
+    }
+
+    .readonly-no-cursor, .readonly-no-cursor:disabled {
+      cursor: default;
+      background-color: white;
+    }
+
+    .readonly-cell {
+      background-color: #f8f8f8 !important;
+      cursor: not-allowed !important;
+    }
+
+    select:disabled {
+      background-color: #f0f0f0;
+      cursor: not-allowed;
+    }
+
+    input[disabled] {
+      background-color: #f0f0f0;
+      cursor: not-allowed;
+    }
+
+    button.blue-button {
+      background-color: #2196F3;
+      color: white;
+      border: none;
+    }
+
+    button.blue-button:hover {
+      background-color: #33CCFF;
+    }
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        margin-left: left;
+    }
+
+    .search-container input[type="text"] {
+        padding: 6px 10px;
+        height: 34px;
+        width: 180px;
+        font-size: 14px;
+        background-color: #FFFFCC;
+        border: 1px solid #000;
+        border-radius: 5px;
+        margin: 0;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-button {
+      background-color: #f0f0f0;
+      color: #333;
+      padding: 6px 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid #000;
+      border-radius: 5px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dropdown-options {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 100px;box-sizing: border-box;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      border: 1px solid #000;
+    }
+
+    .dropdown-options a,
+    .dropdown-options button {
+      color: black;
+      padding: 6px 10px;
+      text-decoration: none;
+      display: block;
+      font-size: 14px;
+      width: 100%;
+      text-align: left;
+      box-sizing: border-box;
+      white-space: nowrap;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    .dropdown-options a:hover,
+    .dropdown-options button:hover {
+     background-color: #3366FF;!important;
+     color: white !important;
+     border-radius: 0px;
+    }
+
+    .dropdown:hover .dropdown-options {
+      display: block;
+    }
+
+    .dropdown:hover .dropdown-button {
+      background-color: #e0e0e0;
+    }
+
+    .import-button-color {
+      background-color: #FFFFCC !important;
+      color: black !important;
+    }
+
+    .file-import-button {
+      position: relative;
+      display: inline-block;
+    }
+
+    .file-import-button input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .import-success-message {
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      background-color: #dff0d8;
+      color: #3c763d;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      white-space: nowrap;
+      z-index: 10;
+      display: none;
+    }
+
+    .user-info-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 5px;
+      background-color: #F8F8F8;
+      border-radius: 0px;
+      font-size: 17px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .welcome-text {
+      color: green;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+
+    .excellent-remark, .vgood-remark, .good-remark {
+      color: green;
+      font-weight: bold;
+    }
+
+    .fair-remark {
+      color: #000;
+      font-weight: bold;
+    }
+
+    .at-risk-remark {
+      color: red;
+      font-weight: bold;
+    }
+
+    .red-text {
+      color: red;
+      font-weight: bold;
+    }
+    
+    .green-text {
+      color: green;
+      font-weight: bold;
+    }
+
+    .low-grade {
+      color: red;
+      font-weight: normal;
+    }
+
+    /* Grade color coding */
+    .low-grade-red {
+        color: red !important;
+        font-weight: normal !important;
+    }
+
+    .grade-normal {
+        color: black !important;
+        font-weight: normal !important;
+    }
+
+    .status-message-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .status-message {
+      position: absolute;
+      bottom: calc(100% + 14px);
+      left: 10;
+      padding: 4px 4px;
+      background: #009900;
+      color: white;
+      border-radius: 0px;
+      font-size: 14px;
+      font-weight: bold;
+      box-shadow: 0 0px 0px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 100;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .status-message.show {
+      opacity: 1;
+      transform: translateY(-5px);
+    }
+
+    .status-message.error {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .clear-button:hover {
+      background-color: #FF9900 !important;
+    }
+
+    .clear-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .clear-button {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid #000;
+      border-radius: 5px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clear-options {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 150px;
+      box-shadow: 0px 8px/16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      border: 1px solid #000;
+    }
+
+    .clear-options button {
+      background-color: transparent;
+      color: black;
+      padding: 6px 10px;
+      text-decoration: none;
+      display: block;
+      font-size: 14px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      cursor: pointer;
+    }
+
+    .clear-options button:hover {
+        background-color: #0066FF;
+        color: white;
+        border-radius: 0px;
+    }
+
+    .clear-dropdown:hover .clear-options {
+     display: block;
+    }
+
+    .clear-option:hover {
+     background-color: #0099FF;
+    }
+
+    .error-message {
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border: 1px solid red;
+      color: red;
+      font-size: 10px;
+      padding: 1px 3px;
+      border-radius: 3px;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .view-switcher {
+      position: relative;
+      display: none;
+    }
+
+    .view-switcher-button {
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: normal;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .view-switcher-options {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 200px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      border: 1px solid #000;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .view-switcher-options button {
+      color: black;
+      padding: 8px 12px;
+      text-decoration: none;
+      display: block;
+      font-size: 14px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-weight: normal;
+      border-bottom: 1px solid #eee;
+    }
+
+    .view-switcher-options button:last-child {
+      border-bottom: none;
+    }
+
+    .view-switcher-options button:hover {
+      background-color: #f1f1f1;
+    }
+
+    .view-switcher:hover .view-switcher-options {
+      display: block;
+    }
+
+    .view-switcher:hover .view-switcher-button {
+      background-color: #0b7dda;
+    }
+
+    .save-status {
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 12px;
+      margin-left: 10px;
+      display: none;
+    }
+
+    .save-status.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: inline-block;
+    }
+
+    .save-status.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: inline-block;
+    }
+
+    #studentTable td:nth-child(3) {
+      white-space: nowrap;
+      text-align: left; 
+    }
+
+    #studentTable td:nth-child(1) {
+      min-width: auto;
+      width: auto;
+    }
+    
+    #studentTable td:nth-child(29) {
+      background-color: #F8F8F8;
+      font-weight: bold;
+    }
+    
+    /* FIXED: Total column color coding for Final Grades Sheet */
+    #studentTable td.total-pass {
+      color: green !important;
+      font-weight: bold !important;
+    }
+
+    #studentTable td.total-fail {
+      color: red !important;
+      font-weight: bold !important;
+    }
+    
+    #studentTable td.finally-pass {
+      color: green;
+      font-weight: bold;
+    }
+    
+    #studentTable td.finally-fail {
+      color: red;
+      font-weight: bold;
+    }
+    
+    #studentTable td.finally-ip {
+      color: #000;
+      font-weight: bold;
+    }
+    
+    #studentTable td.finally-wa {
+      color: #000;
+      font-weight: bold;
+    }
+    
+    .improvement-text {
+      color: #FF9900;
+      font-weight: bold;
+    }
+    
+    /* Statistics Analysis Modal Styles */
+    .stats-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    .stats-modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 90%;
+      max-width: 1000px;
+      position: relative;
+    }
+    
+    .close-modal {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close-modal:hover {
+      color: black;
+    }
+    
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    .stats-table th, .stats-table td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: center;
+    }
+    
+    .stats-table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    
+    .stats-table-title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 16px;
+      background-color: #e6e6e6;
+      padding: 8px;
+    }
+    
+    .stats-table-subtitle {
+      text-align: center;
+      font-style: italic;
+      background-color: #f8f8f8;
+      padding: 4px;
+    }
+    
+    /* NEW: Tooltip styles for abbreviations */
+    .tooltip-container {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .tooltip {
+      visibility: hidden;
+      width: 140px;
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -70px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 12px;
+      font-weight: normal;
+    }
+    
+    .tooltip-container:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    /* FIXED PRINT STYLES */
+    @media print {
+      body {
+        background-color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      /* Hide button sections during printing */
+      .button-box {
+        display: none !important;
+      }
+
+      /* Ensure all table borders are visible in print */
+      table, th, td {
+        border: 1px solid #000 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      /* Ensure table headers have background in print */
+      #studentTable thead th {
+        background-color: #F8F8F8 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      /* Ensure specific columns have background in print */
+      #studentTable td:nth-child(1),
+      #studentTable td:nth-child(2),
+      #studentTable td:nth-child(3),
+      #studentTable td:nth-child(29) {
+        background-color: #F8F8F8 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      /* Ensure info boxes have background in print */
+      .info-box, .info-group {
+        background-color: #F8F8F8 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* Hide elements that shouldn't appear in print */
+      .logout-button,
+      .dropdown,
+      .view-switcher,
+      .clear-dropdown,
+      .search-container,
+      #lockButton,
+      #performanceAnalysisButton,
+      #resultsAnalysisButton,
+      #copyToConsoleButton,
+      #noNamesMessage,
+      .status-message,
+      .error-message,
+      .tooltip {
+        display: none !important;
+      }
+
+      /* Ensure contenteditable fields look normal in print */
+      td[contenteditable="true"] {
+        background-color: white !important;
+        cursor: default !important;
+      }
+
+      /* Ensure readonly fields look normal in print */
+      .readonly-no-cursor {
+        background-color: white !important;
+      }
+
+      /* Ensure disabled elements look normal in print */
+      select:disabled,
+      input:disabled {
+        background-color: white !important;
+        cursor: default !important;
+      }
+
+      /* Ensure improvement text is visible in print */
+      .improvement-text {
+        color: #FF9900 !important;
+        font-weight: bold !important;
+      }
+
+      /* Ensure color coding works in print */
+      .red-text {
+        color: red !important;
+      }
+      
+      .green-text {
+        color: green !important;
+      }
+      
+      .total-pass {
+        color: green !important;
+      }
+      
+      .total-fail {
+        color: red !important;
+      }
+      
+      .finally-pass {
+        color: green !important;
+      }
+      
+      .finally-fail {
+        color: red !important;
+      }
+      
+      .finally-ip {
+        color: #000 !important;
+      }
+      
+      .finally-wa {
+        color: #000 !important;
+      }
+
+      /* Ensure grade color coding works in print */
+      .low-grade-red {
+        color: red !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      .grade-normal {
+        color: black !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* Ensure footer is visible in print */
+      footer {
+        display: block !important;
+        position: relative !important;
+        margin-top: 20px !important;
+        background-color: #0066CC !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+
+    .split-button-container {
+      display: flex;
+      align-items: stretch; /* Stretch children to fill the height */
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #email-dropdown {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-color: #f0f0f0;
+      border: none;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      outline: none;
+      flex-grow: 1; /* Allows the dropdown to take up available space */
+    }
+
+    /* Improved email dropdown styling */
+    .email-select-container {
+      display: flex;
+      width: 100%;
+      border: 1px solid #000;
+      border-radius: 4px;
+      overflow: hidden;
+      height: 30px;
+    }
+
+    /* Style the placeholder option text */
+    #email-dropdown option[disabled]:first-child {
+      color: #999;
+    }
+    
+    .send-button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      border-left: 1px solid #ccc; /* Separator line */
+      transition: background-color 0.2s;
+      white-space: nowrap;
+    }
+    
+    .send-button:hover {
+      background-color: #0b7dda;
+      color: #00FFFF
+    }
+
+    .preview {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid #eee;
+    }
+
+    .content {
+      flex: 1; /* Pushes footer to bottom if content is short */
+      padding: 50px;
+    }
+
+    footer {
+      position: relative;
+      margin-top: 30px;
+      width: 98.5%;
+      text-align: center;
+      padding: 4px 10px;
+      background-color: #0066CC;
+      color: white;
+      font-family: Times New Roman, Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 15px;
+      font-weight: normal;
+      letter-spacing: 0.5px;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    }
+
+    footer span {
+      font-weight: bold; /* year highlighted */
+    }
+
+    footer .copyright {
+      color: #FFFF00;
+      font-weight: bold;
+    }
+
+    footer .univ-link {
+      color: white;           /* keep it white */
+      font-weight: bold;
+      text-decoration: none;  /* remove underline */
+    }
+
+    footer .univ-link:hover {
+      text-decoration: underline; /* underline on hover only */
+    }
+
+    footer a {
+      color: white;           /* links appear white */
+      font-weight: bold;
+      text-decoration: none;  /* remove underline */
+    }
+
+    footer a:hover {
+      text-decoration: underline; /* underline on hover */
+      color: #00FFFF;
+    }
+    
+    .empty-course {
+      display: none;
+    }
+
+    /* Style for percentage columns */
+    .percentage-column {
+      background-color: #f0f0f0 !important;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body class="raw-view">
+<table style="width: 100%; border: 1px solid #000; border-collapse: collapse; margin-bottom: 15px;">
+  <tbody><tr>
+    <td class="logo-container">
+      <div class="logo-wrapper">
+        <img src="clfsasu1.png" alt="CLFS">
+      </div>
+    </td>
+
+    <td style="width: 40%; padding: 5px; background-color: #F8F8F8; border: none;">
+      <div style="background-color: #F8F8F8; padding: 1px; height: 100%; text-align: center;">
+        <h1 style="margin: 5px 0; white-space: nowrap;">A'Sharqiyah University Ibra, Oman</h1>
+        <h2 style="margin: 5px 0; font-size: 18px;">Center For Language and Foundation Studies</h2>
+        <div class="view-container">
+          <h2 class="view-header" id="sheetTitle">Raw Grades Sheet</h2>
+          <div class="view-options">
+            <button class="view-option" onclick="switchView('raw')">Raw Grades Sheet</button>
+            <button class="view-option" onclick="switchView('summative')">Assessments Grade Sheet</button>
+            <button class="view-option" onclick="switchView('final')">Final Grades Sheet</button>
+         </div>
+        </div>
+
+        <div style="margin-top: 10px;">
+          <select id="semester" class="info-field-style readonly-no-cursor" style="font-family: 'Times New Roman'; font-size: 16px; padding: 5px 10px; min-width: 200px;" disabled="">
+            <option value="Fall" >Fall Semester 2025</option>
+            <option value="Spring" >Spring Semester 2025</option>
+            <option value="Summer" selected>Summer Semester 2025</option>
+          </select>
+        </div>
+      </div>
+    </td>
+
+    <td style="width: 40%; padding: 10px 10px; font-size: 1em; background-color: #F8F8F8; border: 1px solid #000;">
+      <div class="user-info-container">
+        <div>
+          <span style="color: green; font-weight: bold;" id="welcomeText">Instructor</span>: <strong id="instructorName" style="color: #0033CC;">Administrator</strong>
+        </div>
+        <div style="align-self: flex-start; margin-right: 18px;">
+          <button class="logout-button" onclick="logout()">Logout</button>
+        </div>
+      </div>
+
+      <div class="info-group" style="padding: 10px !important;">
+        <div class="course-selection-container">
+          <div class="course-section">
+            <div class="label-above">Course</div>
+            <select id="courseSelect" class="info-field-style">
+              <option value="FPPI002">GFP English Pre-Intermediate</option>
+              <option value="FPIN003">GFP English Intermediate</option>
+              <option value="FPAD004">GFP English Advance</option>
+            </select>
+          </div>
+
+          <div class="code-section">
+            <div class="label-above">Code</div>
+            <input id="courseCode" class="info-field-style readonly-no-cursor" type="text" value="FPPI002" readonly="">
+          </div>
+
+          <div class="section-section">
+            <div class="label-above">Section</div>
+            <select id="sectionSelect" class="info-field-style"></select>
+          </div>
+        </div>
+      </div>
+    </td>
+  </tr>
+</tbody></table>
+
+<div class="button-box">
+  <div>
+    <div class="dropdown">
+      <div class="dropdown" id="importButtonContainer">
+        <button class="dropdown-button import-button-color">📥 Import (Names or Grades)</button>
+        <div class="dropdown-options">
+          <div class="file-import-button status-message-wrapper">
+            <div id="importSuccess" class="import-success-message"></div>
+            <button onclick="document.getElementById('fileInput').click()">Names (Pdf or Excel)</button>
+            <input type="file" id="fileInput" accept=".xlsx,.xls,.pdf" style="display: none;">
+          </div>
+          <button onclick="document.getElementById('jsonFileInput').click()">Grades (Json File)</button>
+          <input type="file" id='jsonFileInput' accept=".json" style="display: none;">
+          <button onclick="document.getElementById('xlsxFileInput').click()">Grades (Excel File)</button>
+          <input type="file" id="xlsxFileInput" accept=".xlsx" style="display: none;">
+        </div>
+      </div>
+    </div>
+    
+    <div class="dropdown">
+      <button class="dropdown-button green-button" style="background-color: #00CC00; color: white; border: 1px solid #000; border-radius: 0; font-weight: bold;">📤 Save As</button>
+      <div class="dropdown-options">
+        <a href="#" onclick="exportToExcel()">Excel File</a>
+        <a href="#" onclick="exportToPDF()">Pdf File</a>
+        <button onclick="saveAllSectionsToFile()">Json File</button>
+      </div>
+    </div>
+
+    <button class="green-button" onclick="saveToLocalStorage()">💾 Save</button>
+
+    <div class="view-switcher">
+      <button class="view-switcher-button" id="viewSwitcherButton">Raw Grades Sheet</button>
+      <div class="view-switcher-options">
+        <button onclick="switchView('raw')">Raw Grades Sheet</button>
+        <button onclick="switchView('summative')">Assessments Grade Sheet</button>
+        <button onclick="switchView('final')">Final Grades Sheet</button>
+        <button onclick="switchView('performance-analysis')">Performance Analysis</button>
+      </div>
+    </div>
+
+    <button class="blue-button" id="lockButton" onclick="toggleEditMode()">🔒 UnLock</button>
+
+    <div class="clear-dropdown" id="clearDropdown">
+      <div class="status-message-wrapper"><button class="clear-button">🚫 Clear</button></div>
+      <div class="clear-options">
+        <button onclick="clearGrades()">Clear Grades Only</button>
+        <button onclick="clearStudents()">Clear All Data</button>
+      </div>
+    </div>
+    <button class="blue-button" id="performanceAnalysisButton" onclick="switchView('performance-analysis')" style="display: none;">📊 Performance Analysis</button>
+    <button class="blue-button" id="resultsAnalysisButton" onclick="showResultsAnalysis()">📈 Statistics Analysis</button>
+    <button class="blue-button" id="copyToConsoleButton" onclick="copyFinalGradesToConsole()" style="display: none;">Copy to Console</button>
+  </div>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search by Name or ID">
+  </div>
+</div>
+
+<table id="studentTable">
+  <thead>
+    <tr>
+      <th rowspan="2">S. No.</th>
+      <th rowspan="2">ID Number</th>
+      <th rowspan="2">Student Name</th>
+      <th rowspan="2"><div class="tooltip-container">Part<span class="tooltip">Participation</span></div> [20]</th>
+      <th rowspan="2"><div class="tooltip-container">E-Port<span class="tooltip">Portfolio</span></div> [20]</th>
+      <th rowspan="2">Presentation [25]</th>
+      <th rowspan="2">Pop Quiz 1 [10]</th>
+      <th rowspan="2">Pop Quiz 2 [10]</th>
+      <th rowspan="2"><div class="tooltip-container">Test 1 GV<span class="tooltip">Grammar and Vocabulary</span></div> [20]</th>
+      <th rowspan="2"><div class="tooltip-container">Test 2 LR<span class="tooltip">Listening and Reading</span></div> [20]</th>
+      <th rowspan="2">Speaking Test [20]</th>
+      <th rowspan="2">Writing Test [20]</th>
+      <th rowspan="2"><div class="tooltip-container">Writing Port<span class="tooltip">Portfolio</span></div> [20]</th>
+      <th rowspan="2">Midterm [50]</th>
+      <th rowspan="2">Final [50]</th>
+      <th rowspan="2">Total</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<div id="noNamesMessage" style="display: none;">No Students Found in this Section</div>
+
+<!-- Statistics Analysis Modal -->
+<div id="statsModal" class="stats-modal">
+  <div class="stats-modal-content">
+    <span class="close-modal">&times;</span>
+    <h2 style="text-align: center; margin-bottom: 20px;">Statistics Analysis</h2>
+    
+    <!-- Numerical Analysis Table -->
+    <table class="stats-table">
+      <tr>
+        <td colspan="10" class="stats-table-title">Numerical Analysis</td>
+      </tr>
+      <tr>
+        <th>No. of Students<br>in this Section</th>
+        <th>Highest Score</th>
+        <th>Class Average</th>
+        <th>Lowest Score</th>
+        <th>Total Pass (%age)</th>
+        <th>Total Not Pass (%age)</th>
+        <th>Total FA(s) (%age)</th>
+        <th>Total WA(s) (%age)</th>
+        <th>Total IP(s) (%age)</th>
+        <th>Others (W, I, … ) (%age)</th>
+      </tr>
+      <tr id="numericalAnalysisData">
+        <!-- Data will be populated by JavaScript -->
+      </tr>
+    </table>
+    
+    <!-- Grade Letters Distribution Table -->
+    <table class="stats-table">
+      <tr>
+        <td colspan="13" class="stats-table-title">Grade Letters Distribution</td>
+      </tr>
+      <tr>
+        <th>A+</th>
+        <th>A</th>
+        <th>A-</th>
+        <th>B+</th>
+        <th>B</th>
+        <th>B-</th>
+        <th>C+</th>
+        <th>C</th>
+        <th>C-</th>
+        <th>D+</th>
+        <th>D</th>
+        <th>D-</th>
+        <th>F</th>
+      </tr>
+      <tr id="gradeLettersDistributionData">
+        <!-- Data will be populated by JavaScript -->
+      </tr>
+    </table>
+    
+    <!-- Grade Distribution Table -->
+    <table class="stats-table">
+      <tr>
+        <td colspan="5" class="stats-table-title">Grade Distribution</td>
+      </tr>
+      <tr>
+        <th>Grades (90-100%)</th>
+        <th>Grades (80-89%)</th>
+        <th>Grades (70-79%)</th>
+        <th>Grades (60-69%)</th>
+        <th>Grades (Below 60%)</th>
+      </tr>
+      <tr id="gradeDistributionData">
+        <!-- Data will be populated by JavaScript -->
+      </tr>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+// ALL ORIGINAL JAVASCRIPT CODE REMAINS EXACTLY THE SAME
+// The only addition is the tooltip functionality which is now built into the HTML structure
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+const fileInput = document.getElementById('fileInput');
+const jsonFileInput = document.getElementById('jsonFileInput');
+const tbody = document.querySelector('#studentTable tbody');
+const searchInput = document.getElementById('searchInput');
+const sectionSelect = document.getElementById('sectionSelect');
+const courseSelect = document.getElementById('courseSelect');
+const courseCode = document.getElementById('courseCode');
+const semesterSelect = document.getElementById('semester');
+const noNamesMessage = document.getElementById('noNamesMessage');
+const instructorNameElem = document.getElementById('instructorName');
+const sheetTitle = document.getElementById('sheetTitle');
+const viewSwitcherButton = document.getElementById('viewSwitcherButton');
+const lockButton = document.getElementById('lockButton');
+const clearDropdown = document.getElementById('clearDropdown');
+const copyToConsoleButton = document.getElementById('copyToConsoleButton');
+const performanceAnalysisButton = document.getElementById('performanceAnalysisButton');
+const resultsAnalysisButton = document.getElementById('resultsAnalysisButton');
+
+let isLocked = false;
+let currentView = 'raw'; // Default view is now 'raw'
+let hasSavedBefore = localStorage.getItem('hasSavedBefore') === 'true';
+
+// Updated marks limits for different views
+const summativeMarksLimits = {
+  3: 10,  // Participation & E-Portfolio [10%]
+  4: 10,  // Presentation [10%]
+  5: 2.5, // Pop Quiz 1 [2.5%]
+  6: 2.5, // Pop Quiz 2 [2.5%]
+  7: 5,   // Test 1 GV [5%]
+  8: 5,   // Test 2 LR [5%]
+  9: 5,   // Speaking Test [5%]
+  10: 5,  // Writing Test [5%]
+  11: 5,  // Writing Portfolio [5%]
+  12: 20, // Midterm [20%]
+  13: 30  // Final Exam [30%]
+};
+
+const rawMarksLimits = {
+  3: 20,  // Participation [20]
+  4: 20,  // E-Portfolio [20]
+  5: 25,  // Presentation [25]
+  6: 10,  // Pop Quiz 1 [10]
+  7: 10,  // Pop Quiz 2 [10]
+  8: 20,  // Test 1 GV [20]
+  9: 20,  // Test 2 LR [20]
+  10: 20, // Speaking Test [20]
+  11: 20, // Writing Test [20]
+  12: 20, // Writing Portfolio [20]
+  13: 50, // Midterm [50]
+  14: 50  // Final Exam [50]
+};
+
+const finalMarksLimits = {
+  3: 10,  // Participation & Portfolio
+  4: 30,  // Tests
+  5: 10,  // Presentation
+  6: 20,  // Midterm
+  7: 30   // Final
+};
+
+let currentMarksLimits = rawMarksLimits; // Default to raw marks limits
+let allCoursesData = JSON.parse(localStorage.getItem('SGS_All_Courses') || '{}');
+
+// NEW: Helper function to format display values (hide zeros/empty values)
+function formatDisplayValue(value) {
+  if (!value || value === '' || value === '0' || value === '0.0' || value === '0.00') {
+    return '';
+  }
+  return value;
+}
+
+// NEW: Calculate summative values without modifying stored data
+function calculateSummativeValues(student) {
+  const participation = parseFloat(student[3]) || 0;
+  const ePortfolio = parseFloat(student[4]) || 0;
+  const presentation = parseFloat(student[5]) || 0;
+  const popQuiz1 = parseFloat(student[6]) || 0;
+  const popQuiz2 = parseFloat(student[7]) || 0;
+  const test1GV = parseFloat(student[8]) || 0;
+  const test2LR = parseFloat(student[9]) || 0;
+  const speakingTest = parseFloat(student[10]) || 0;
+  const writingTest = parseFloat(student[11]) || 0;
+  const writingPortfolio = parseFloat(student[12]) || 0;
+  const midterm = parseFloat(student[13]) || 0;
+  const final = parseFloat(student[14]) || 0;
+  
+  // Only calculate percentages if raw data exists
+  return [
+    (participation > 0 || ePortfolio > 0) ? ((participation + ePortfolio) / 40 * 10).toFixed(1).replace(/\.0$/, '') : '',
+    (presentation > 0) ? (presentation / 25 * 10).toFixed(1).replace(/\.0$/, '') : '',
+    (popQuiz1 > 0) ? (popQuiz1 / 10 * 2.5).toFixed(1).replace(/\.0$/, '') : '',
+    (popQuiz2 > 0) ? (popQuiz2 / 10 * 2.5).toFixed(1).replace(/\.0$/, '') : '',
+    (test1GV > 0) ? (test1GV / 20 * 5).toFixed(1).replace(/\.0$/, '') : '',
+    (test2LR > 0) ? (test2LR / 20 * 5).toFixed(1).replace(/\.0$/, '') : '',
+    (speakingTest > 0) ? (speakingTest / 20 * 5).toFixed(1).replace(/\.0$/, '') : '',
+    (writingTest > 0) ? (writingTest / 20 * 5).toFixed(1).replace(/\.0$/, '') : '',
+    (writingPortfolio > 0) ? (writingPortfolio / 20 * 5).toFixed(1).replace(/\.0$/, '') : '',
+    (midterm > 0) ? (midterm / 50 * 20).toFixed(1).replace(/\.0$/, '') : '',
+    (final > 0) ? (final / 50 * 30).toFixed(1).replace(/\.0$/, '') : ''
+  ];
+}
+
+// NEW: Calculate summative total from values array
+function calculateSummativeTotalFromValues(values) {
+  let totalScore = 0;
+  let hasData = false;
+  
+  values.forEach(value => {
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue) && numValue > 0) {
+      totalScore += numValue;
+      hasData = true;
+    }
+  });
+  
+  return hasData ? totalScore.toFixed(1).replace(/\.0$/, '') : '';
+}
+
+// CORRECTED: Calculate final values with proper conversions
+function calculateFinalValues(student) {
+  // Get raw values
+  const participation = parseFloat(student[3]) || 0;
+  const ePortfolio = parseFloat(student[4]) || 0;
+  const presentation = parseFloat(student[5]) || 0;
+  const midterm = parseFloat(student[13]) || 0;
+  const final = parseFloat(student[14]) || 0;
+  
+  // Calculate final values according to the specified conversions
+  // Participation and Portfolio [10%] - combined from raw values
+  const participationPortfolio = (participation > 0 || ePortfolio > 0) ? 
+    ((participation + ePortfolio) / 40 * 10).toFixed(1).replace(/\.0$/, '') : '';
+  
+  // Presentation [10%] - directly transferred from assessment view
+  const presentationValue = (presentation > 0) ? 
+    (presentation / 25 * 10).toFixed(1).replace(/\.0$/, '') : '';
+  
+  // Midterm [20%] - converted from raw value
+  const midtermValue = (midterm > 0) ? 
+    (midterm / 50 * 20).toFixed(1).replace(/\.0$/, '') : '';
+  
+  // Final [30%] - converted from raw value
+  const finalValue = (final > 0) ? 
+    (final / 50 * 30).toFixed(1).replace(/\.0$/, '') : '';
+  
+  // Tests [30%] - already correct, no change needed
+  const popQuiz1Percent = (parseFloat(student[6]) > 0) ? parseFloat(calculatePercentage(student[6], 10, 2.5)) || 0 : 0;
+  const popQuiz2Percent = (parseFloat(student[7]) > 0) ? parseFloat(calculatePercentage(student[7], 10, 2.5)) || 0 : 0;
+  const test1GVPercent = (parseFloat(student[8]) > 0) ? parseFloat(calculatePercentage(student[8], 20, 5)) || 0 : 0;
+  const test2LRPercent = (parseFloat(student[9]) > 0) ? parseFloat(calculatePercentage(student[9], 20, 5)) || 0 : 0;
+  const speakingTestPercent = (parseFloat(student[10]) > 0) ? parseFloat(calculatePercentage(student[10], 20, 5)) || 0 : 0;
+  const writingTestPercent = (parseFloat(student[11]) > 0) ? parseFloat(calculatePercentage(student[11], 20, 5)) || 0 : 0;
+  const writingPortfolioPercent = (parseFloat(student[12]) > 0) ? parseFloat(calculatePercentage(student[12], 20, 5)) || 0 : 0;
+  
+  const tests = (popQuiz1Percent + popQuiz2Percent + test1GVPercent + test2LRPercent + speakingTestPercent + writingTestPercent + writingPortfolioPercent > 0) ? 
+                (popQuiz1Percent + popQuiz2Percent + test1GVPercent + test2LRPercent + speakingTestPercent + writingTestPercent + writingPortfolioPercent).toFixed(1).replace(/\.0$/, '') : '';
+  
+  // Calculate total only if we have data
+  let totalScore = '';
+  let totalClass = '';
+  if (participationPortfolio || tests || presentationValue || midtermValue || finalValue) {
+    const total = (parseFloat(participationPortfolio) || 0) + 
+                  (parseFloat(tests) || 0) + 
+                  (parseFloat(presentationValue) || 0) + 
+                  (parseFloat(midtermValue) || 0) + 
+                  (parseFloat(finalValue) || 0);
+    totalScore = total > 0 ? Math.round(total).toString() : '';
+    totalClass = total >= 60 ? 'total-pass' : (total > 0 ? 'total-fail' : '');
+  }
+  
+  const finallyValue = determineFinallyValue(student);
+  const gradeLetter = totalScore ? calculateGradeLetter(parseFloat(totalScore)) : '';
+  
+  return {
+    participationPortfolio,
+    tests,
+    presentation: presentationValue,
+    midterm: midtermValue,
+    final: finalValue,
+    totalScore,
+    totalClass,
+    finallyValue,
+    gradeLetter,
+    finallyClass: finallyValue === 'Pass' ? 'finally-pass' : finallyValue === 'Not Pass' || finallyValue === 'FA' ? 'finally-fail' : finallyValue === 'WA' ? 'finally-wa' : 'finally-ip',
+    gradeLetterClass: gradeLetter === 'F' ? 'red-text' : 'green-text'
+  };
+}
+
+// Function to calculate percentage values
+function calculatePercentage(value, maxValue, percentage) {
+  if (!value || value === '' || isNaN(parseFloat(value))) return '';
+  const numericValue = parseFloat(value);
+  return ((numericValue / maxValue) * percentage).toFixed(1);
+}
+
+// Function to apply color coding based on percentage
+function applyGradeColorCoding() {
+    const rows = tbody.querySelectorAll('tr');
+    
+    rows.forEach(row => {
+        // Apply to individual grade columns
+        const gradeColumns = currentView === 'raw' ? 
+          [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] : // Raw view columns
+          [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]; // Summative view columns
+        
+        gradeColumns.forEach(colIndex => {
+            const cell = row.cells[colIndex];
+            if (!cell) return;
+            
+            const value = parseFloat(cell.textContent.trim());
+            const maxMarks = currentMarksLimits[colIndex];
+            
+            if (!isNaN(value) && maxMarks !== undefined && maxMarks > 0) {
+                const percentage = (value / maxMarks) * 100;
+                
+                // Remove existing classes
+                cell.classList.remove('low-grade-red', 'grade-normal');
+                
+                // Add appropriate class
+                if (percentage < 60 && value > 0) {
+                    cell.classList.add('low-grade-red');
+                } else {
+                    cell.classList.add('grade-normal');
+                }
+            } else {
+                // Clear styling if no valid value
+                cell.classList.remove('low-grade-red', 'grade-normal');
+            }
+        });
+    });
+}
+
+// Fixed determineFinallyValue function
+function determineFinallyValue(student) {
+  const studentName = student[2] || '';
+  
+  // Check for FA/WA status in student name (keep this functionality)
+  if (studentName.includes('(FA)')) {
+    return 'FA';
+  }
+  if (studentName.includes('(WA)')) {
+    return 'WA';
+  }
+  
+  const finalExamValue = student[14] || '';
+  const hasFinalExam = finalExamValue.toString().trim() !== '';
+  
+  // If Final exam is not entered, return empty
+  if (!hasFinalExam) {
+    const hasAllGradesExceptFinal = 
+      student[3] && student[3].trim() !== '' && 
+      student[4] && student[4].trim() !== '' && 
+      student[5] && student[5].trim() !== '' && 
+      student[6] && student[6].trim() !== '' && 
+      student[8] && student[8].trim() !== '' && 
+      student[10] && student[10].trim() !== '' && 
+      student[12] && student[12].trim() !== '' && 
+      student[13] && student[13].trim() !== '';
+    
+    if (hasAllGradesExceptFinal) {
+      return 'IP';
+    }
+    return ''; // Empty if Final exam not entered and not all other grades are present
+  }
+  
+  // Calculate total score only if Final exam is entered
+  let totalScore = 0;
+  for (let i = 3; i <= 14; i++) {
+    const value = parseFloat(student[i]);
+    if (!isNaN(value)) {
+      totalScore += value;
+    }
+  }
+  
+  if (totalScore >= 59.5) {
+    return 'Pass';
+  } else if (totalScore > 0) {
+    return 'Not Pass';
+  } 
+  return '';
+}
+
+// Function to calculate grade letter based on total score
+function calculateGradeLetter(totalScore) {
+  if (totalScore >= 96) return 'A+';
+  if (totalScore >= 92) return 'A';
+  if (totalScore >= 90) return 'A-';
+  if (totalScore >= 86) return 'B+';
+  if (totalScore >= 82) return 'B';
+  if (totalScore >= 80) return 'B-';
+  if (totalScore >= 76) return 'C+';
+  if (totalScore >= 72) return 'C';
+  if (totalScore >= 70) return 'C-';
+  if (totalScore >= 66) return 'D+';
+  if (totalScore >= 62) return 'D';
+  if (totalScore >= 60) return 'D-';
+  if (totalScore >= 0) return 'F';
+  return '';
+}
+
+// Function to extract course and section from filename with better patterns
+function extractCourseAndSectionFromFilename(filename) {
+  const baseName = filename.replace(/\.[^/.]+$/, "");
+  
+  // Course patterns (highest to lowest priority)
+  const coursePatterns = [
+    // English course codes
+    { pattern: /FPPI002/i, code: 'FPPI002' },
+    { pattern: /FPIN003/i, code: 'FPIN003' },
+    { pattern: /FPAD004/i, code: 'FPAD004' },
+    
+    // English course names with various patterns
+    { pattern: /English\s*Pre[\s\-]*Intermediate/i, code: 'FPPI002' },
+    { pattern: /English\s*Intermediate/i, code: 'FPIN003' },
+    { pattern: /English\s*Advance/i, code: 'FPAD004' },
+    { pattern: /GFP\s*English\s*Pre[\s\-]*Intermediate/i, code: 'FPPI002' },
+    { pattern: /GFP\s*English\s*Intermediate/i, code: 'FPIN003' },
+    { pattern: /GFP\s*English\s*Advance/i, code: 'FPAD004' },
+    { pattern: /Pre[\s\-]*Intermediate/i, code: 'FPPI002' },
+    { pattern: /Intermediate/i, code: 'FPIN003' },
+    { pattern: /Advance/i, code: 'FPAD004' }
+  ];
+  
+  // Section patterns
+  const sectionPatterns = [
+    /Section[_\s-]?(\d{1,2})/i, 
+    /Sec[_\s-]?(\d{1,2})/i, 
+    /_S(\d{1,2})/i,
+    /[\s_-]S?(\d{1,2})[\s_-]/i,
+    /S?(\d{1,2})$/i
+  ];
+  
+  // Find course
+  let detectedCourse = null;
+  for (const { pattern, code } of coursePatterns) {
+    if (pattern.test(baseName)) {
+      detectedCourse = code;
+      console.log(`Detected course: ${code} from pattern: ${pattern}`);
+      break;
+    }
+  }
+  
+  // Find section
+  let detectedSection = null;
+  for (const pattern of sectionPatterns) {
+    const match = baseName.match(pattern);
+    if (match && match[1]) {
+      detectedSection = match[1].padStart(2, '0');
+      console.log(`Detected section: ${detectedSection} from pattern: ${pattern}`);
+      break;
+    }
+  }
+  
+  console.log(`Filename: ${filename}, Detected Course: ${detectedCourse}, Detected Section: ${detectedSection}`);
+  
+  return {
+    course: detectedCourse,
+    section: detectedSection
+  };
+}
+
+// Function to update course dropdown with only populated courses
+function updateCourseDropdown() {
+  const currentCourse = courseSelect.value;
+  const populatedCourses = new Set();
+  
+  // Get all courses that have data
+  Object.keys(allCoursesData).forEach(key => {
+    const parts = key.split('_');
+    if (parts.length >= 4) {
+      const courseCode = parts[2];
+      const courseData = allCoursesData[key];
+      
+      // Check if this course has student data
+      if (courseData && courseData.students && courseData.students.length > 0) {
+        // Check if any student has actual data (not just empty rows)
+        const hasRealData = courseData.students.some(student => 
+          student && student.length > 2 && 
+          (student[1] || student[2] || // ID or name
+           student.slice(3, 22).some(field => field && field.toString().trim() !== '')) // Any grade data
+        );
+        
+        if (hasRealData) {
+          populatedCourses.add(courseCode);
+        }
+      }
+    }
+  });
+  
+  // Update course dropdown
+  const courseOptions = courseSelect.options;
+  const availableOptions = Array.from(courseOptions).map(option => option.value);
+  
+  // Show/hide options based on whether they have data
+  for (let i = 0; i < courseOptions.length; i++) {
+    const option = courseOptions[i];
+    const hasData = populatedCourses.has(option.value);
+    
+    if (hasData) {
+      option.style.display = '';
+      option.disabled = false;
+    } else {
+      // Keep current course visible even if no data
+      if (option.value === currentCourse) {
+        option.style.display = '';
+        option.disabled = false;
+      } else {
+        option.style.display = 'none';
+        option.disabled = true;
+      }
+    }
+  }
+  
+  // If current course is not in populated courses but we have other options, select the first available
+  if (!populatedCourses.has(currentCourse) && populatedCourses.size > 0) {
+    const firstPopulatedCourse = Array.from(populatedCourses)[0];
+    courseSelect.value = firstPopulatedCourse;
+    courseCode.value = firstPopulatedCourse;
+  }
+}
+
+// MODIFIED: updateSectionDropdown to only show sections with data
+function updateSectionDropdown() {
+  const currentCourse = courseSelect.value;
+  const currentSection = sectionSelect.value || '01';
+  
+  sectionSelect.innerHTML = '';
+  const populatedSections = new Set();
+  
+  // Get all sections for the current course that have data
+  Object.keys(allCoursesData).forEach(key => {
+    const parts = key.split('_');
+    if (parts.length >= 4 && parts[2] === currentCourse) {
+      let sectionNum = parts[3].replace(/Sec/gi, '');
+      sectionNum = parseInt(sectionNum, 10);
+      
+      if (!isNaN(sectionNum)) {
+        sectionNum = Math.max(1, Math.min(99, sectionNum))
+          .toString()
+          .padStart(2, '0');
+          
+        const courseData = allCoursesData[key];
+        
+        // Check if this section has student data
+        if (courseData && courseData.students && courseData.students.length > 0) {
+          // Check if any student has actual data (not just empty rows)
+          const hasRealData = courseData.students.some(student => 
+            student && student.length > 2 && 
+            (student[1] || student[2] || // ID or name
+             student.slice(3, 22).some(field => field && field.toString().trim() !== '')) // Any grade data
+          );
+          
+          if (hasRealData) {
+            populatedSections.add(sectionNum);
+          }
+        }
+      }
+    }
+  });
+  
+  // Sort sections numerically
+  const sortedSections = Array.from(populatedSections).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+  
+  // Add sections to dropdown
+  sortedSections.forEach(section => {
+    const option = document.createElement('option');
+    option.value = section;
+    option.textContent = section;
+    sectionSelect.appendChild(option);
+  });
+  
+  // Set the selected section
+  if (sortedSections.includes(currentSection)) {
+    sectionSelect.value = currentSection;
+  } else if (sortedSections.length > 0) {
+    sectionSelect.value = sortedSections[0];
+  } else {
+    // If no sections with data, add the current section
+    const option = document.createElement('option');
+    option.value = currentSection;
+    option.textContent = currentSection;
+    sectionSelect.appendChild(option);
+    sectionSelect.value = currentSection;
+  }
+}
+
+function initializeFromStorage() {
+  const lastCourse = localStorage.getItem('lastCourse');
+  if (lastCourse) {
+    const {course, section} = JSON.parse(lastCourse);
+    if (course && section) {
+      courseSelect.value = course;
+      sectionSelect.value = section;
+      courseCode.value = course;
+    }
+  }
+
+  // Initialize both dropdowns
+  updateCourseDropdown();
+  updateSectionDropdown();
+}
+
+function getCurrentSemester() {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  let semester;
+  if (currentMonth >= 9 && currentMonth <= 12) {
+    semester = 'Fall';
+  } else if (currentMonth >= 1 && currentMonth <= 4) {
+    semester = 'Spring';
+  } else {
+    semester = 'Summer';
+  }
+
+  return {
+    semester,
+    year: currentYear,
+    fullText: `${semester} Semester ${currentYear}`
+  };
+}
+
+function updateSemesterDisplay() {
+  const currentSemester = getCurrentSemester();
+  semesterSelect.value = currentSemester.semester;
+
+  const options = semesterSelect.options;
+  for (let i = 0; i < options.length; i++) {
+    const option = options[i];
+    option.textContent = `${option.value} Semester ${currentSemester.year}`;
+  }
+}
+
+function getStorageKey() {
+  const currentSemester = getCurrentSemester();
+  const semester = currentSemester.semester;
+  const course = courseSelect.value || 'UnknownCourse';
+  const section = sectionSelect.value.padStart(2, '0');
+  return `SGS_${semester}_${course}_Sec${section}`;
+}
+
+// FIXED: saveToLocalStorage function that preserves raw data
+function saveToLocalStorage() {
+  try {
+    const currentKey = getStorageKey();
+    let currentCourseData = allCoursesData[currentKey] || {
+      students: [],
+      formData: { semester: semesterSelect.value, course: courseSelect.value, section: sectionSelect.value },
+      isLocked: false
+    };
+
+    if (!currentCourseData.students) {
+      currentCourseData.students = [];
+    }
+
+    const tableRows = Array.from(tbody.rows);
+    if (tableRows.length === 0) {
+      showStatus('No student data to save.', document.querySelector('.green-button'));
+      return;
+    }
+
+    const newStudentsData = [];
+    tableRows.forEach((row, index) => {
+      const oldStudentData = currentCourseData.students[index] || Array(23).fill('');
+      const newStudentData = [...oldStudentData];
+
+      // Always preserve ID and Name
+      newStudentData[1] = row.cells[1].textContent.trim();
+      newStudentData[2] = row.cells[2].textContent.trim();
+
+      if (currentView === 'raw') {
+        // In raw view, save exactly what's entered
+        for (let i = 3; i <= 14; i++) {
+          const cellValue = row.cells[i].textContent.trim();
+          // Only save non-empty values, preserve existing data if cell is empty
+          newStudentData[i] = cellValue !== '' ? cellValue : newStudentData[i];
+        }
+        // Mark as raw data
+        newStudentData[15] = 'raw';
+      }
+      // For other views (summative, final), don't modify the stored raw data
+      
+      newStudentsData.push(newStudentData);
+    });
+
+    currentCourseData.students = newStudentsData;
+    currentCourseData.isLocked = isLocked;
+    currentCourseData.timestamp = new Date().toISOString();
+
+    allCoursesData[currentKey] = currentCourseData;
+    localStorage.setItem('SGS_All_Courses', JSON.stringify(allCoursesData));
+    localStorage.setItem('lastCourse', JSON.stringify({
+      course: courseSelect.value,
+      section: sectionSelect.value
+    }));
+
+    // Update dropdowns after saving
+    updateCourseDropdown();
+    updateSectionDropdown();
+
+    showStatus('✅ Data saved successfully!', document.querySelector('.green-button'));
+  } catch (err) {
+    console.error(err);
+    showStatus('❌ Failed to save data', document.querySelector('.green-button'));
+  }
+}
+
+function showStatus(message, buttonElement) {
+  let wrapper = buttonElement.closest('.status-message-wrapper');
+  if (!wrapper) {
+    wrapper = document.createElement('div');
+    wrapper.className = 'status-message-wrapper';
+    buttonElement.parentNode.insertBefore(wrapper, buttonElement);
+    wrapper.appendChild(buttonElement);
+  }
+  let status = wrapper.querySelector('.status-message');
+  if (!status) {
+    status = document.createElement('div');
+    status.className = 'status-message';
+    wrapper.insertBefore(status, wrapper.firstChild);
+  }
+  status.textContent = message;
+  status.classList.add('show');
+  if (message.startsWith('❌')) {
+    status.classList.add('error');
+  } else {
+    status.classList.remove('error');
+  }
+  clearTimeout(status.hideTimeout);
+  status.hideTimeout = setTimeout(() => {
+    status.classList.remove('show');
+    setTimeout(() => {
+      status.remove();
+    }, 300);
+  }, 3000);
+}
+
+// MODIFIED: fileInput event listener to use enhanced course/section detection
+fileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  const importButton = document.querySelector('.dropdown-button');
+  
+  try {
+    let students = [];
+    if (ext === 'pdf') {
+      students = await parsePDF(file);
+    } else if (['xlsx', 'xls', 'csv'].includes(ext)) {
+      students = await parseExcel(file);
+    } else {
+      showStatus('❌ Unsupported file type', importButton);
+      return;
+    }
+    
+    if (students.length === 0) {
+      showStatus('❌ No Students Found in this Section', importButton);
+      loadAllData();
+      return;
+    }
+    
+    // Use enhanced course and section detection
+    const { course: detectedCourse, section: detectedSection } = extractCourseAndSectionFromFilename(file.name);
+    
+    let sectionNumber = detectedSection;
+    if (!sectionNumber) {
+      const currentSection = sectionSelect.value || '01';
+      const nextSection = String(parseInt(currentSection) + 1).padStart(2, '0');
+      const userChoice = confirm(`No section detected in filename "${file.name}". Use section ${nextSection} instead of ${currentSection}?`);
+      sectionNumber = userChoice ? nextSection : currentSection;
+    }
+    
+    const course = detectedCourse || courseSelect.value;
+    courseSelect.value = course;
+    courseCode.value = course;
+    
+    // Get the current storage key
+    const currentKey = getStorageKey();
+    
+    // Get existing students if any
+    const existingData = allCoursesData[currentKey] || { students: [] };
+    const existingStudents = existingData.students || [];
+    
+    // Create a map of existing students by ID for quick lookup
+    const existingStudentsMap = new Map();
+    existingStudents.forEach(student => {
+      if (student[1]) {
+        existingStudentsMap.set(student[1].toString().trim(), student);
+      }
+    });
+    
+    // Merge the new students with existing ones
+    let newCount = 0;
+    let updatedCount = 0;
+    
+    const mergedStudents = students.map(newStudent => {
+      // Check if this student already exists
+      const existingStudent = existingStudentsMap.get(newStudent.id.toString().trim());
+      
+      if (existingStudent) {
+        // Update the name if it has changed
+        if (existingStudent[2] !== newStudent.name) {
+          existingStudent[2] = newStudent.name;
+          updatedCount++;
+        }
+        return existingStudent;
+      } else {
+        // Create a new student entry
+        newCount++;
+        const studentArray = Array(23).fill('');
+        studentArray[1] = newStudent.id;
+        studentArray[2] = newStudent.name;
+        return studentArray;
+      }
+    });
+    
+    const currentSemester = getCurrentSemester();
+    const saveKey = `SGS_${currentSemester.semester}_${course}_Sec${sectionNumber}`;
+    
+    allCoursesData[saveKey] = {
+      students: mergedStudents,
+      formData: {
+        semester: currentSemester.semester,
+        course: course,
+        section: sectionNumber
+      },
+      isLocked: false,
+      timestamp: new Date().toISOString()
+    };
+    
+    localStorage.setItem('SGS_All_Courses', JSON.stringify(allCoursesData));
+    
+    // Update both dropdowns after import
+    updateCourseDropdown();
+    updateSectionDropdown();
+    
+    sectionSelect.value = sectionNumber;
+    loadAllData();
+    
+    let statusMessage = `✅ Imported ${students.length} students`;
+    if (newCount > 0) statusMessage += ` (${newCount} new)`;
+    if (updatedCount > 0) statusMessage += ` (${updatedCount} updated)`;
+    statusMessage += ` to ${course} Section ${sectionNumber}`;
+    
+    showStatus(statusMessage, importButton);
+  } catch (error) {
+    console.error("Import error:", error);
+    showStatus('❌ Import failed: ' + error.message, importButton);
+    noNamesMessage.style.display = 'block';
+  }
+});
+
+async function parseExcel(file) {
+  const buffer = await file.arrayBuffer();
+  const workbook = XLSX.read(buffer, { type: 'array' });
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+  const students = [];
+  let idColumn = -1;
+  let firstNameColumn = -1;
+  let lastNameColumn = -1;
+
+  if (data.length > 0) {
+    const headerRow = data[0];
+    headerRow.forEach((cell, index) => {
+      const cellValue = String(cell).toLowerCase().trim();
+      if (cellValue === 'id number') {
+        idColumn = index;
+      } else if (cellValue === 'first name') {
+        firstNameColumn = index;
+      } else if (cellValue === 'last name') {
+        lastNameColumn = index;
+      }
+    });
+  }
+
+  for (let i = 1; i < data.length; i++) {
+    const row = data[i];
+    if (row.length > Math.max(idColumn, firstNameColumn, lastNameColumn)) {
+      const id = String(row[idColumn] || '').trim();
+      const firstName = String(row[firstNameColumn] || '').trim();
+      const lastName = String(row[lastNameColumn] || '').trim();
+
+      const fullName = `${firstName} ${lastName}`.trim();
+
+      if (id && fullName && /^\d{6,}$/.test(id)) {
+        students.push({ id, name: fullName });
+      }
+    }
+  }
+
+  return students.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+// FIXED: handleGradesFile function with improved column detection
+async function handleGradesFile(event) {
+    const file = event.target.files[0];
+    if (!file) {
+        return;
+    }
+
+    try {
+        const buffer = await file.arrayBuffer();
+        const workbook = XLSX.read(buffer, { type: 'array' });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        const headerRow = data[0];
+        const gradeHeaders = {
+            'Participation': 'participation',
+            'Portfolio': 'portfolio',
+            'Presentation': 'presentation',
+            'Pop Quiz 1': 'popQuiz1',
+            'Pop Quiz 2': 'popQuiz2',
+            'Test 1 GV': 'test1GV',
+            'Test 2 LR': 'test2LR',
+            'Speaking Test': 'speakingTest',
+            'Writing Test': 'writingTest',
+            'Writing Portfolio': 'writingPortfolio',
+            'Midterm': 'midterm',
+            'Final Exam': 'finalExam'
+        };
+
+        const gradeColumnMap = {};
+        let idColumnIndex = -1;
+        let firstNameColumnIndex = -1;
+        let lastNameColumnIndex = -1;
+
+        // Map column headers to grade types and find the ID column
+        headerRow.forEach((header, index) => {
+            const headerStr = String(header).toLowerCase().trim();
+            
+            // Check for grade columns
+            for (const [gradeKey, gradeValue] of Object.entries(gradeHeaders)) {
+                if (headerStr.includes(gradeKey.toLowerCase())) {
+                    gradeColumnMap[gradeValue] = index;
+                    break;
+                }
+            }
+            
+            // Check for ID and name columns
+            if (headerStr.includes('id') || headerStr.includes('number')) {
+                idColumnIndex = index;
+            } else if (headerStr.includes('first') && headerStr.includes('name')) {
+                firstNameColumnIndex = index;
+            } else if (headerStr.includes('last') && headerStr.includes('name')) {
+                lastNameColumnIndex = index;
+            } else if (headerStr.includes('name') && firstNameColumnIndex === -1) {
+                firstNameColumnIndex = index;
+            }
+        });
+
+        // Debug logging to see what columns were found
+        console.log('Grade column mapping:', gradeColumnMap);
+        console.log('ID column index:', idColumnIndex);
+        console.log('First name column index:', firstNameColumnIndex);
+        console.log('Last name column index:', lastNameColumnIndex);
+
+        if (idColumnIndex === -1 && firstNameColumnIndex === -1) {
+            alert('ID Number or Name column not found in the Excel file.');
+            return;
+        }
+
+        // Get current student data
+        const currentKey = getStorageKey();
+        const currentData = allCoursesData[currentKey] || { students: [] };
+        const currentStudents = currentData.students || [];
+
+        // Iterate through student data starting from the second row
+        for (let i = 1; i < data.length; i++) {
+            const row = data[i];
+            if (!row || row.length === 0) continue;
+            
+            let studentId = '';
+            let studentName = '';
+            
+            // Get student identifier
+            if (idColumnIndex !== -1 && row[idColumnIndex] !== undefined) {
+                studentId = String(row[idColumnIndex]).trim();
+            }
+            
+            if (firstNameColumnIndex !== -1 && lastNameColumnIndex !== -1 && 
+                row[firstNameColumnIndex] !== undefined && row[lastNameColumnIndex] !== undefined) {
+                studentName = `${String(row[firstNameColumnIndex]).trim()} ${String(row[lastNameColumnIndex]).trim()}`;
+            } else if (firstNameColumnIndex !== -1 && row[firstNameColumnIndex] !== undefined) {
+                studentName = String(row[firstNameColumnIndex]).trim();
+            }
+            
+            if (!studentId && !studentName) continue;
+
+            // Find matching student in current data
+            let matchedStudentIndex = -1;
+            
+            for (let j = 0; j < currentStudents.length; j++) {
+                const currentStudent = currentStudents[j];
+                const currentStudentId = (currentStudent[1] || '').toString().trim();
+                const currentStudentName = (currentStudent[2] || '').toString().trim().toLowerCase();
+                
+                if ((studentId && currentStudentId === studentId) || 
+                    (studentName && currentStudentName.includes(studentName.toLowerCase()))) {
+                    matchedStudentIndex = j;
+                    break;
+                }
+            }
+            
+            if (matchedStudentIndex === -1) continue;
+            
+            // Update grades for the matched student
+            for (const [gradeType, columnIndex] of Object.entries(gradeColumnMap)) {
+                if (row[columnIndex] !== undefined && row[columnIndex] !== null && row[columnIndex] !== '') {
+                    const gradeValue = parseFloat(row[columnIndex]);
+                    if (!isNaN(gradeValue)) {
+                        // Map grade type to column index in our table
+                        let targetColumn;
+                        switch(gradeType) {
+                            case 'participation': targetColumn = 3; break;
+                            case 'portfolio': targetColumn = 4; break;
+                            case 'presentation': targetColumn = 5; break;
+                            case 'popQuiz1': targetColumn = 6; break;
+                            case 'popQuiz2': targetColumn = 8; break;
+                            case 'test1GV': targetColumn = 10; break;
+                            case 'test2LR': targetColumn = 12; break;
+                            case 'speakingTest': targetColumn = 14; break;
+                            case 'writingTest': targetColumn = 16; break;
+                            case 'writingPortfolio': targetColumn = 18; break;
+                            case 'midterm': targetColumn = 20; break;
+                            case 'finalExam': targetColumn = 21; break;
+                            default: continue;
+                        }
+                        
+                        // Update the student data
+                        currentStudents[matchedStudentIndex][targetColumn] = gradeValue.toString();
+                    }
+                }
+            }
+        }
+
+        // Save updated data and reload
+        allCoursesData[currentKey].students = currentStudents;
+        localStorage.setItem('SGS_All_Courses', JSON.stringify(allCoursesData));
+        loadAllData();
+        
+        alert('Grades have been successfully imported.');
+    } catch (error) {
+        console.error('Error importing grades:', error);
+        alert('An error occurred while importing the grades file.');
+    }
+}
+
+async function parsePDF(file) {
+  const buffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+  const students = [];
+  
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const content = await page.getTextContent();
+    
+    let fullText = '';
+    for (const item of content.items) {
+      fullText += item.str + ' ';
+    }
+    
+    const studentPattern = /(\d{6,})\s+([A-Za-z\s'\-\.]+(?:\s+[A-Za-z'\-\.]+)+)/g;
+    let match;
+    while ((match = studentPattern.exec(fullText)) !== null) {
+      const id = match[1];
+      let name = match[2].trim();
+      
+      // Remove trailing junk like "Grade Total Percent Instructor"
+      name = name.replace(/\b(?:Page|GET|Grade|Total|Percent|Instructor|SAVE|NEXT|PREVIOUS|PRINT|CONFIRM|UNCONFIRM|LOGSISW)\b.*$/i, '').trim();
+      name = name.replace(/\b(?:grade|total|percent|instructor)\b.*$/i, '').trim();
+      name = name.replace(/[\.\,\-\/\|\:\;]+$/g, '').trim();
+      
+      if (id && name && name.split(/\s+/).length >= 2) {
+        students.push({ id, name });
+      }
+    }
+  }
+  
+  return students.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+// FIXED: loadAllData function to handle the new raw view
+function loadAllData() {
+  const currentKey = getStorageKey();
+  const savedData = allCoursesData[currentKey];
+  tbody.innerHTML = '';
+
+  if (savedData && savedData.students.length > 0) {
+    try {
+      restoreFormFields(savedData.formData);
+      savedData.students.forEach((student, index) => {
+        const tr = document.createElement('tr');
+        
+        if (currentView === 'raw') {
+          // RAW GRADES SHEET - Show raw marks exactly as stored
+          tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td contenteditable="false">${student[1] || ''}</td>
+            <td contenteditable="false" style="text-align:left;">${student[2] || ''}</td>
+            <td contenteditable="true">${formatDisplayValue(student[3])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[4])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[5])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[6])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[7])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[8])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[9])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[10])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[11])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[12])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[13])}</td>
+            <td contenteditable="true">${formatDisplayValue(student[14])}</td>
+            <td>${calculateRawTotal(student)}</td>
+          `;
+        } else if (currentView === 'summative') {
+          // ASSESSMENTS GRADE SHEET - Show calculated percentages only if raw data exists
+          const summativeValues = calculateSummativeValues(student);
+          
+          tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td contenteditable="false">${student[1] || ''}</td>
+            <td contenteditable="false" style="text-align:left;">${student[2] || ''}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[0]}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[1]}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[2]}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[3]}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[4]}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[5]}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[6]}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[7]}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[8]}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[9]}</td>
+            <td contenteditable="false" class="readonly-cell">${summativeValues[10]}</td>
+            <td>${calculateSummativeTotalFromValues(summativeValues)}</td>
+          `;
+        } else if (currentView === 'final') {
+          // FINAL GRADES SHEET - Show calculated values only if raw data exists
+          
+let totalScore = 0;
+const finalValues = calculateFinalValues(student);
+
+// Get the total score from final values calculation
+totalScore = parseFloat(finalValues.totalScore) || 0;
+          
+          tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td contenteditable="false">${student[1] || ''}</td>
+            <td contenteditable="false" style="text-align:left;">${student[2] || ''}</td>
+            <td contenteditable="false">${finalValues.participationPortfolio}</td>
+            <td contenteditable="false">${finalValues.tests}</td>
+            <td contenteditable="false">${finalValues.presentation}</td>
+            <td contenteditable="false">${finalValues.midterm}</td>
+            <td contenteditable="false">${finalValues.final}</td>
+            <td class="${finalValues.totalClass}">${finalValues.totalScore}</td>
+            <td contenteditable="false" class="${finalValues.finallyClass}">${finalValues.finallyValue}</td>
+            <td contenteditable="false" class="${finalValues.gradeLetterClass}">${finalValues.gradeLetter}</td>
+          `;
+        } else if (currentView === 'performance-analysis') {
+          const { academicStatus1, academicStatus2, academicStatus3, overallStatus, atRiskCounts, email, finallyValue, emailType } = getPerformanceAnalysis(student);
+          
+          tr.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${student[1] || ''}</td>
+              <td style="text-align:left;">${student[2] || ''}</td>
+              <td class="${academicStatus1 === 'At-Risk' ? 'red-text' : 'green-text'}">${academicStatus1}</td>
+              <td class="${academicStatus2 === 'At-Risk' ? 'red-text' : 'green-text'}">${academicStatus2}</td>
+              <td class="${academicStatus3 === 'At-Risk' ? 'red-text' : 'green-text'}">${academicStatus3}</td>
+              <td class="${overallStatus === 'At-Risk' ? 'red-text' : 'green-text'}">${overallStatus}</td>
+              <td class="${atRiskCounts > 0 ? 'red-text' : 'green-text'}">${atRiskCounts}</td>
+              <td class="${finallyValue === 'Pass' ? 'finally-pass' : finallyValue === 'Not Pass' || finallyValue === 'FA' ? 'finally-fail' : finallyValue === 'WA' ? 'finally-wa' : 'finally-ip'}">${finallyValue}</td>
+              <td>
+${email === 'Not Applicable' || email === '' ? 
+  '' :
+
+  (finallyValue === 'IP' ?
+    `<a href="mailto:${email}?subject=Incomplete%20Final%20Exam&body=Dear%20Student,%0A%0AOur%20records%20indicate%20that%20you%20did%20not%20attempt%20the%20Final%20Exam%20for%20the%20course%20${courseSelect.value}.%0A%0APlease%20provide%20a%20valid%20reason%20for%20your%20absence%20at%20your%20earliest%20convenience%20so%20that%20we%20may%20proceed%20accordingly.%0A%0AThank%20you." class="incomplete-text">Incomplete Letter</a>` :
+
+    (emailType === 'improved' ? 
+      `<a href="mailto:${email}?subject=Improvement%20Letter&body=Dear%20Student,%0A%0AWe%20have%20noticed%20significant%20improvement%20in%20your%20academic%20performance.%20Keep%20up%20the%20good%20work!" class="blue-text">Improvement Letter</a>` :
+
+    (emailType === 'at-risk' ? 
+        `<a href="mailto:${email}?subject=At-Risk%20Warning%20Letter&body=Dear%20Student,%0A%0AIt%20has%20come%20to%20our%20attention%20that%20you%20could%20not%20show%20satisfactory%20performance%20in%20your%20recent%20assessments.%20Please%20visit%20my%20office%20as%20soon%20as%20possible%20to%20discuss%20support%20options." class="red-text">At-Risk Letter</a>` : 
+
+        (finallyValue === 'Not Pass' ? 
+          `<a href="mailto:${email}?subject=Course%20Result%20and%20Support&body=Dear%20Student,%0A%0AI%20know%20this%20is%20not%20the%20result%20you%20were%20hoping%20for,%20and%20I%20understand%20how%20frustrating%20that%20can%20be.%20Please%20don't%20let%20this%20one%20grade%20define%20you.%20You%20showed%20real%20dedication%20this%20semester,%20and%20I%20truly%20believe%20you%20can%20succeed.%20I'm%20here%20to%20help%20you%20get%20a%20fresh%20start%20and%20do%20great%20things%20next%20semester.%20I'm%20rooting%20for%20you." class="red-text">Not Pass Letter</a>` :
+
+          `<a href="mailto:${email}?subject=Appreciation%20Letter&body=Dear%20Student,%0A%0ACongratulations%20on%20your%20excellent%20performance%20in%20the%20recent%20assessments!%20Your%20hard%20work%20and%20dedication%20are%20truly%20commendable.%20Keep%20up%20the%20good%20work!" class="green-text">Appreciation Letter</a>`
+        )
+      )
+    )
+  ) 
+}
+</td>
+          `;
+        }
+
+        tbody.appendChild(tr);
+      });
+      noNamesMessage.style.display = 'none';
+    } catch (e) {
+      console.error("Failed to load saved data:", e);
+      noNamesMessage.style.display = 'block';
+      createEmptyRows(3);
+    }
+  } else {
+    noNamesMessage.style.display = 'block';
+    createEmptyRows(3);
+  }
+  
+  isLocked = savedData ? savedData.isLocked || false : false;
+  setEditMode(!isLocked);
+  calculateTotals();
+  
+  // Apply color coding after loading data
+  setTimeout(() => {
+    applyGradeColorCoding();
+  }, 100);
+  
+  // Update dropdowns after loading data
+  updateCourseDropdown();
+  updateSectionDropdown();
+}
+
+// Function to calculate raw total
+function calculateRawTotal(student) {
+  let totalScore = 0;
+  for (let i = 3; i <= 14; i++) {
+    const value = parseFloat(student[i]);
+    if (!isNaN(value)) {
+      totalScore += value;
+    }
+  }
+  return totalScore > 0 ? (Math.round(totalScore * 100) / 100).toFixed(2) : '';
+}
+
+// Function to calculate summative total
+function calculateSummativeTotal(student) {
+  let totalScore = 0;
+  for (let i = 3; i <= 13; i++) {
+    const value = parseFloat(student[i]);
+    if (!isNaN(value)) {
+      totalScore += value;
+    }
+  }
+  return totalScore > 0 ? (Math.round(totalScore * 100) / 100).toFixed(2) : '';
+}
+
+// Function to parse summative total from student data
+function parseSummativeTotal(student) {
+  // Check if we have a stored total from summative view
+  if (student[22] && student[22].toString().trim() !== '') {
+    return parseFloat(student[22]);
+  }
+  return null;
+}
+
+// Function to calculate final total based on individual components
+function calculateFinalTotal(student) {
+  // For English courses, use the new weightings
+  const participation = parseFloat(student[3]) || 0;
+  const portfolio = parseFloat(student[4]) || 0;
+  const participationPortfolio = participation + portfolio;
+  
+  const presentation = parseFloat(student[5]) || 0;
+  
+  // Calculate tests from percentage columns
+  const popQuiz1Percent = parseFloat(calculatePercentage(student[6], 10, 2.5)) || 0;
+  const popQuiz2Percent = parseFloat(calculatePercentage(student[8], 10, 2.5)) || 0;
+  const test1GVPercent = parseFloat(calculatePercentage(student[10], 20, 5)) || 0;
+  const test2LRPercent = parseFloat(calculatePercentage(student[12], 20, 5)) || 0;
+  const speakingTestPercent = parseFloat(calculatePercentage(student[14], 20, 5)) || 0;
+  const writingTestPercent = parseFloat(calculatePercentage(student[16], 20, 5)) || 0;
+  const writingPortfolioPercent = parseFloat(calculatePercentage(student[18], 20, 5)) || 0;
+  const tests = popQuiz1Percent + popQuiz2Percent + test1GVPercent + test2LRPercent + speakingTestPercent + writingTestPercent + writingPortfolioPercent;
+  
+  const midterm = parseFloat(student[20]) || 0;
+  const final = parseFloat(student[21]) || 0;
+  
+  return participationPortfolio + presentation + tests + midterm + final;
+}
+
+function getFinallyClass(value) {
+  value = value || '';
+  if (value === 'Pass') return 'green-text';
+  if (value === 'Not Pass' || value === 'FA') return 'red-text';
+  if (value === 'IP') return 'fair-remark';
+  if (value === 'WA') return 'fair-remark';
+  return '';
+}
+
+function restoreFormFields(formData) {
+  if (formData) {
+    semesterSelect.value = formData.semester || '';
+    courseSelect.value = formData.course || 'FPPI002';
+    sectionSelect.value = formData.section || '';
+    courseCode.value = courseSelect.value;
+  }
+}
+
+// MODIFIED: setEditMode function to make summative view read-only
+function setEditMode(editable) {
+  isLocked = !editable;
+  
+  if (currentView === 'raw') {
+    // Raw view is editable when unlocked
+    lockButton.style.display = '';
+    clearDropdown.style.display = '';
+    performanceAnalysisButton.style.display = '';
+    resultsAnalysisButton.style.display = '';
+    copyToConsoleButton.style.display = 'none';
+  } else if (currentView === 'summative') {
+    // Summative view is always read-only
+    lockButton.style.display = 'none';
+    clearDropdown.style.display = 'none';
+    performanceAnalysisButton.style.display = '';
+    resultsAnalysisButton.style.display = '';
+    copyToConsoleButton.style.display = 'none';
+  } else if (currentView === 'final') {
+    lockButton.style.display = 'none';
+    clearDropdown.style.display = 'none';
+    performanceAnalysisButton.style.display = 'none';
+    resultsAnalysisButton.style.display = '';
+    copyToConsoleButton.style.display = 'block';
+  } else if (currentView === 'performance-analysis') {
+    lockButton.style.display = 'none';
+    clearDropdown.style.display = 'none';
+    performanceAnalysisButton.style.display = 'none';
+    resultsAnalysisButton.style.display = '';
+    copyToConsoleButton.style.display = 'none';
+  }
+
+  Array.from(tbody.rows).forEach(row => {
+    Array.from(row.cells).forEach((cell, index) => {
+      let isEditable = false;
+      
+      if (currentView === 'raw') {
+        // Make all raw grade columns editable when unlocked
+        if ([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].includes(index)) {
+          isEditable = !isLocked;
+        }
+      } else if (currentView === 'summative') {
+        // Summative view is always read-only (no editable cells)
+        isEditable = false;
+        // Add readonly styling
+        if ([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].includes(index)) {
+          cell.classList.add('readonly-cell');
+        }
+      } else if (currentView === 'final') {
+        if (index === 10 || index === 11) {
+          isEditable = false;
+        } 
+      } 
+      
+      cell.contentEditable = isEditable ? "true" : "false";
+      cell.classList.toggle('readonly-no-cursor', !isEditable);
+      
+      // Remove readonly styling for non-summative views
+      if (currentView !== 'summative') {
+        cell.classList.remove('readonly-cell');
+      }
+    });
+  });
+}
+
+function toggleEditMode() {
+  setEditMode(isLocked);
+  lockButton.textContent = isLocked ? "✏️ Unlock to Edit" : "🔒 Lock";
+}
+
+function createEmptyRows(count) {
+  tbody.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const tr = document.createElement('tr');
+    if (currentView === 'raw') {
+      tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td contenteditable="false"></td>
+        <td contenteditable="false" style="text-align:left;"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td></td>
+      `;
+    } else if (currentView === 'summative') {
+      tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td contenteditable="false"></td>
+        <td contenteditable="false" style="text-align:left;"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td contenteditable="false" class="readonly-cell"></td>
+        <td></td>
+      `;
+    } else if (currentView === 'final') {
+      tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td contenteditable="false"></td>
+        <td contenteditable="false" style="text-align:left;"></td>
+        <td contenteditable="false"></td>
+        <td contenteditable="false"></td>
+        <td contenteditable="false"></td>
+        <td contenteditable="false"></td>
+        <td contenteditable="false"></td>
+        <td></td>
+        <td contenteditable="false"></td>
+        <td contenteditable="false"></td>
+      `;
+    } else if (currentView === 'performance-analysis') {
+      tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td contenteditable="false"></td>
+        <td contenteditable="false" style="text-align:left;"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      `;
+    }
+    tbody.appendChild(tr);
+  }
+  setEditMode(false);
+}
+
+function handleEmailSend() {
+  const dropdown = document.getElementById('email-dropdown');
+  const selectedGroup = dropdown.value;
+  
+  if (!selectedGroup) {
+    alert('Please select a group to email.');
+    return;
+  }
+  
+  sendGroupEmail(selectedGroup);
+}
+
+// FIXED: calculateTotals function to apply color coding to Total column in Final Grades Sheet
+function calculateTotals() {
+  Array.from(tbody.rows).forEach(row => {
+    let totalCell, finallyCell;
+    let totalScore = 0;
+    let hasMarks = false;
+
+    if (currentView === 'summative') {
+    totalCell = row.cells[14];
+    let totalMax = 0;  
+
+      for (let i = 3; i <= 13; i++) {
+        const cell = row.cells[i];
+        const value = parseFloat(cell.textContent.trim());
+        if (!isNaN(value) && value >= 0) {
+          totalScore += value;
+          totalMax += summativeMarksLimits[i];
+          hasMarks = true;
+          
+          const percentage = (value / summativeMarksLimits[i]) * 100;
+          // Remove existing classes
+          cell.classList.remove('low-grade-red', 'grade-normal');
+          
+          // Apply color coding based on percentage
+          if (percentage < 60 && value > 0) {
+            cell.classList.add('low-grade-red');
+          } else {
+            cell.classList.add('grade-normal');
+          }
+        } else {
+          // Clear styling if no valid value
+          cell.classList.remove('low-grade-red', 'grade-normal');
+        }
+      }
+      
+      if (hasMarks) {
+        totalCell.textContent = (Math.round(totalScore * 100) / 100).toFixed(2);
+        totalCell.className = '';
+        if ((totalScore / totalMax) * 100 >= 59.5) {
+          totalCell.classList.add('total-pass');
+        } else if (totalScore > 0) {
+          totalCell.classList.add('total-fail');
+        }
+      } else {
+        totalCell.textContent = '';
+        totalCell.className = '';
+      }
+    } else if (currentView === 'raw') {
+      totalCell = row.cells[15];
+      let totalMax = 0;  
+
+      for (let i = 3; i <= 14; i++) {
+        const cell = row.cells[i];
+        const value = parseFloat(cell.textContent.trim());
+        if (!isNaN(value) && value >= 0) {
+          totalScore += value;
+          totalMax += rawMarksLimits[i];
+          hasMarks = true;
+          
+          const percentage = (value / rawMarksLimits[i]) * 100;
+          // Remove existing classes
+          cell.classList.remove('low-grade-red', 'grade-normal');
+          
+          // Apply color coding based on percentage
+          if (percentage < 60 && value > 0) {
+            cell.classList.add('low-grade-red');
+          } else {
+            cell.classList.add('grade-normal');
+          }
+        } else {
+          // Clear styling if no valid value
+          cell.classList.remove('low-grade-red', 'grade-normal');
+        }
+      }
+      
+      if (hasMarks) {
+        totalCell.textContent = (Math.round(totalScore * 100) / 100).toFixed(2);
+        totalCell.className = '';
+        if ((totalScore / totalMax) * 100 >= 59.5) {
+          totalCell.classList.add('total-pass');
+        } else if (totalScore > 0) {
+          totalCell.classList.add('total-fail');
+        }
+      } else {
+        totalCell.textContent = '';
+        totalCell.className = '';
+      }
+    } else if (currentView === 'final') {
+      totalCell = row.cells[8];
+      finallyCell = row.cells[9];
+      
+
+      // Get values from the cells for English courses
+      const participationPortfolio = parseFloat(row.cells[3].textContent) || 0;
+      const tests = parseFloat(row.cells[4].textContent) || 0;
+      const presentation = parseFloat(row.cells[5].textContent) || 0;
+      const midterm = parseFloat(row.cells[6].textContent) || 0;
+      const final = parseFloat(row.cells[7].textContent) || 0;
+      
+
+      // Calculate total score with English course weightings
+      totalScore = participationPortfolio + tests + presentation + midterm + final;
+      
+// Check if any marks exist
+      hasMarks = participationPortfolio > 0 || tests > 0 || presentation > 0 || 
+                 midterm > 0 || final > 0;
+  
+  if (hasMarks) {
+    totalCell.textContent = (Math.round(totalScore * 100) / 100).toFixed(0);
+    
+    // FIXED: Apply color coding based on 60% threshold
+    totalCell.className = ''; // Clear existing classes
+    if (totalScore >= 60) {
+      totalCell.classList.add('total-pass');
+    } else if (totalScore > 0) {
+      totalCell.classList.add('total-fail');
+    }
+  } else {
+    totalCell.textContent = '';
+    totalCell.className = '';
+  }
+      
+      // Update finally cell styling
+      const finallyValue = finallyCell.textContent.trim();
+      finallyCell.className = '';
+      if (finallyValue === 'Pass') {
+        finallyCell.classList.add('finally-pass');
+      } else if (finallyValue === 'Not Pass' || finallyValue === 'FA') {
+        finallyCell.classList.add('finally-fail');
+      } else if (finallyValue === 'IP') {
+        finallyCell.classList.add('finally-ip');
+      } else if (finallyValue === 'WA') {
+        finallyCell.classList.add('finally-wa');
+      }
+    }
+  });
+  
+  // Apply color coding after calculating totals
+  applyGradeColorCoding();
+}
+
+function updateRemarks(total, max, remarksCell) {
+  if (max === 0 || total === 0) {
+    remarksCell.textContent = '';
+    remarksCell.className = '';
+    return;
+  }
+  const percentage = (total / max) * 100;
+  let remarkText = '';
+  if (currentView === 'summative') {
+      if (percentage >= 90) {
+        remarkText = "Excellent";
+      } else if (percentage >= 80) {
+        remarkText = "V. Good";
+      } else if (percentage >= 70) {
+        remarkText = "Good";
+      } else if (percentage >= 59.5) {
+        remarkText = "Fair";
+      } else {
+        remarkText = "At-Risk";
+      }
+  } else if (currentView === 'final') {
+    if (percentage >= 59.5) {
+      remarkText = "Pass";
+    } else {
+      remarkText = "Not Pass";
+    }
+  }
+  remarksCell.textContent = remarkText;
+  remarksCell.className = getRemarkClass(remarkText);
+}
+
+function getRemarkClass(remarkText) {
+  if (remarkText === "Excellent" || remarkText === "V. Good" || remarkText === "Good") {
+    return 'excellent-remark';
+  } else if (remarkText === "Fair") {
+    return 'fair-remark';
+  } else if (remarkText === "At-Risk" || remarkText === "Not Pass") {
+    return 'at-risk-remark';
+  } else if (remarkText === "Pass") {
+    return 'excellent-remark';
+  }
+  return '';
+}
+
+function validateGradeInput(cell, maxMarks) {
+  const value = cell.textContent.trim();
+  cell.classList.remove('invalid');
+  cell.classList.remove('low-grade-red', 'grade-normal');
+  const errorMessage = cell.querySelector('.error-message');
+  if (errorMessage) {
+    errorMessage.remove();
+  }
+  if (value === '') {
+    return true;
+  }
+  const numValue = parseFloat(value);
+  if (isNaN(numValue) || numValue < 0 || numValue > maxMarks) {
+    return false;
+  }
+  if (!/^\d*\.?\d*$/.test(value)) {
+    return false;
+  }
+  
+  // Apply color coding based on percentage
+  const percentage = (numValue / maxMarks) * 100;
+  if (percentage < 60 && numValue > 0) {
+    cell.classList.add('low-grade-red');
+  } else {
+    cell.classList.add('grade-normal');
+  }
+  
+  return true;
+}
+
+tbody.addEventListener('focusout', (e) => {
+  const targetCell = e.target.closest('td');
+  if (!targetCell) return;
+  const cellIndex = targetCell.cellIndex;
+  let maxMarks;
+  if (currentView === 'summative') {
+    maxMarks = summativeMarksLimits[cellIndex];
+    if (maxMarks !== undefined) {
+      if(!validateGradeInput(targetCell, maxMarks)) {
+        targetCell.classList.add('invalid');
+        targetCell.textContent = '';
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+        errorMessage.textContent = `Marks [0, ${maxMarks}] only`;
+        targetCell.appendChild(errorMessage);
+        setTimeout(() => {
+          targetCell.focus();
+        }, 0);
+      }
+    }
+  } else if (currentView === 'raw') {
+    maxMarks = rawMarksLimits[cellIndex];
+    if (maxMarks !== undefined) {
+      if(!validateGradeInput(targetCell, maxMarks)) {
+        targetCell.classList.add('invalid');
+        targetCell.textContent = '';
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+        errorMessage.textContent = `Marks [0, ${maxMarks}] only`;
+        targetCell.appendChild(errorMessage);
+        setTimeout(() => {
+          targetCell.focus();
+        }, 0);
+      }
+    }
+  } else if (currentView === 'final') {
+  }
+  calculateTotals();
+});
+
+// Function to update percentage columns when editable cells change
+function updatePercentageColumns(changedCell) {
+  const row = changedCell.parentNode;
+  const cellIndex = changedCell.cellIndex;
+  
+  // Update percentage columns based on which cell was changed
+  switch(cellIndex) {
+    case 6: // Pop Quiz 1 (10)
+      const popQuiz1Value = row.cells[6].textContent.trim();
+      const popQuiz1Percent = calculatePercentage(popQuiz1Value, 10, 2.5);
+      row.cells[7].textContent = popQuiz1Percent;
+      break;
+    case 8: // Pop Quiz 2 (10)
+      const popQuiz2Value = row.cells[8].textContent.trim();
+      const popQuiz2Percent = calculatePercentage(popQuiz2Value, 10, 2.5);
+      row.cells[9].textContent = popQuiz2Percent;
+      break;
+    case 10: // Test 1 GV (20)
+      const test1GVValue = row.cells[10].textContent.trim();
+      const test1GVPercent = calculatePercentage(test1GVValue, 20, 5);
+      row.cells[11].textContent = test1GVPercent;
+      break;
+    case 12: // Test 2 LR (20)
+      const test2LRValue = row.cells[12].textContent.trim();
+      const test2LRPercent = calculatePercentage(test2LRValue, 20, 5);
+      row.cells[13].textContent = test2LRPercent;
+      break;
+    case 14: // Speaking Test (20)
+      const speakingTestValue = row.cells[14].textContent.trim();
+      const speakingTestPercent = calculatePercentage(speakingTestValue, 20, 5);
+      row.cells[15].textContent = speakingTestPercent;
+      break;
+    case 16: // Writing Test (20)
+      const writingTestValue = row.cells[16].textContent.trim();
+      const writingTestPercent = calculatePercentage(writingTestValue, 20, 5);
+      row.cells[17].textContent = writingTestPercent;
+      break;
+    case 18: // Writing Portfolio (20)
+      const writingPortfolioValue = row.cells[18].textContent.trim();
+      const writingPortfolioPercent = calculatePercentage(writingPortfolioValue, 20, 5);
+      row.cells[19].textContent = writingPortfolioPercent;
+      break;
+  }
+}
+
+tbody.addEventListener('input', (e) => {
+  const targetCell = e.target.closest('td');
+  if (!targetCell) return;
+  const cellIndex = targetCell.cellIndex;
+  let maxMarks;
+  if (currentView === 'summative') {
+    maxMarks = summativeMarksLimits[cellIndex];
+    if (maxMarks !== undefined) {
+      const value = targetCell.textContent.trim();
+      const numValue = parseFloat(value);
+      const errorMessage = targetCell.querySelector('.error-message');
+      if (errorMessage) {
+        errorMessage.remove();
+      }
+      targetCell.classList.remove('invalid');
+      targetCell.classList.remove('low-grade-red', 'grade-normal');
+      if (value === '') return;
+      if (isNaN(numValue) || numValue < 0 || numValue > maxMarks || !/^\d*\.?\d*$/.test(value)) {
+        targetCell.classList.add('invalid');
+      } else {
+        // Apply color coding based on percentage
+        const percentage = (numValue / maxMarks) * 100;
+        if (percentage < 60 && numValue > 0) {
+          targetCell.classList.add('low-grade-red');
+        } else {
+          cell.classList.add('grade-normal');
+        }
+      }
+    }
+  } else if (currentView === 'raw') {
+    maxMarks = rawMarksLimits[cellIndex];
+    if (maxMarks !== undefined) {
+      const value = targetCell.textContent.trim();
+      const numValue = parseFloat(value);
+      const errorMessage = targetCell.querySelector('.error-message');
+      if (errorMessage) {
+        errorMessage.remove();
+      }
+      targetCell.classList.remove('invalid');
+      targetCell.classList.remove('low-grade-red', 'grade-normal');
+      if (value === '') return;
+      if (isNaN(numValue) || numValue < 0 || numValue > maxMarks || !/^\d*\.?\d*$/.test(value)) {
+        targetCell.classList.add('invalid');
+      } else {
+        // Apply color coding based on percentage
+        const percentage = (numValue / maxMarks) * 100;
+        if (percentage < 60 && numValue > 0) {
+          targetCell.classList.add('low-grade-red');
+        } else {
+          cell.classList.add('grade-normal');
+        }
+      }
+    }
+  }
+});
+
+function filterTable() {
+  const filter = searchInput.value.toLowerCase();
+  const rows = tbody.querySelectorAll('tr');
+  rows.forEach(row => {
+    const id = row.cells[1].textContent.toLowerCase();
+    const name = row.cells[2].textContent.toLowerCase();
+    if (id.includes(filter) || name.includes(filter)) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
+// NEW: Function to get formatted filename
+function getFormattedFileName(extension) {
+  const currentSemester = getCurrentSemester();
+  const instructorNameElem = document.getElementById('instructorName');
+  let instructorName = instructorNameElem ? instructorNameElem.textContent.trim() : 'Administrator';
+  
+  // Extract first name if full name is available
+  if (instructorName.includes(' ')) {
+    instructorName = instructorName.split(' ')[0];
+  }
+  
+  // Remove "Dr." or similar prefixes if present
+  instructorName = instructorName.replace(/^(Dr\.?|Prof\.?)\s*/i, '');
+  
+  // Format: "Semester yyyy-InstructorName"
+  const semesterYear = `${currentSemester.semester} ${currentSemester.year}`;
+  const baseName = `${semesterYear}-${instructorName}`;
+  
+  return `${baseName}.${extension}`;
+}
+
+// MODIFIED: exportToExcel function with enhanced header information
+function exportToExcel() {
+  // Save current view to restore later
+  const originalView = currentView;
+  
+  // Temporarily switch to final view to get the correct table structure
+  switchView('final');
+  
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+  
+  // Get the table data
+  const table = document.getElementById('studentTable');
+  const ws = XLSX.utils.table_to_sheet(table);
+  
+  // Add header information
+  const currentSemester = getCurrentSemester();
+  const instructorName = document.getElementById('instructorName').textContent;
+  const courseName = courseSelect.options[courseSelect.selectedIndex].text;
+  const courseCodeValue = courseCode.value;
+  const sectionValue = sectionSelect.value;
+  
+  // Add header rows
+  const headerData = [
+    ["A'Sharqiyah University Ibra, Oman"],
+    ["Center For Language and Foundation Studies"],
+    ["Final Grades Sheet"],
+    [""],
+    [`${currentSemester.fullText}`],
+    [`Instructor: ${instructorName}`],
+    [`Course: ${courseName} Code: ${courseCodeValue} Section: ${sectionValue}`],
+    [""]
+  ];
+  
+  // Convert table data to array
+  const tableArray = XLSX.utils.sheet_to_json(ws, {header: 1});
+  
+  // Combine header and table data
+  const fullData = [...headerData, ...tableArray];
+  
+  // Create a new worksheet with the combined data
+  const fullWs = XLSX.utils.aoa_to_sheet(fullData);
+  
+  // Set column widths for better formatting
+  const colWidths = [
+    {wch: 8},  // S.No.
+    {wch: 12}, // ID Number
+    {wch: 30}, // Student Name
+    {wch: 20}, // Participation & Portfolio
+    {wch: 12}, // Tests
+    {wch: 15}, // Presentation
+    {wch: 12}, // Midterm
+    {wch: 10}, // Final
+    {wch: 10}, // Total
+    {wch: 10}, // Result
+    {wch: 10}  // Grade Letter
+  ];
+  fullWs['!cols'] = colWidths;
+  
+  // Add the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, fullWs, "Final Grades");
+  
+  // Use the new filename format
+  const fileName = getFormattedFileName('xlsx');
+  XLSX.writeFile(wb, fileName);
+  
+  // Restore original view
+  switchView(originalView);
+}
+
+// MODIFIED: exportToPDF function with enhanced header information and landscape layout
+function exportToPDF() {
+  // Save current view to restore later
+  const originalView = currentView;
+  
+  // Temporarily switch to final view to get the correct table structure
+  switchView('final');
+  
+  const { jsPDF } = window.jspdf;
+  
+  // Create PDF in landscape mode
+  const doc = new jsPDF({
+    orientation: 'landscape',
+    unit: 'mm',
+    format: 'a4'
+  });
+  
+  const currentSemester = getCurrentSemester();
+  const instructorName = document.getElementById('instructorName').textContent;
+  const courseName = courseSelect.options[courseSelect.selectedIndex].text;
+  const courseCodeValue = courseCode.value;
+  const sectionValue = sectionSelect.value;
+  
+  // Add header information
+  doc.setFontSize(16);
+  doc.setFont(undefined, 'bold');
+  doc.text("A'Sharqiyah University Ibra, Oman", 20, 20);
+  
+  doc.setFontSize(14);
+  doc.text("Center For Language and Foundation Studies", 20, 28);
+  
+  doc.setFontSize(16);
+  doc.text("Final Grades Sheet", 20, 36);
+  
+  doc.setFontSize(12);
+  doc.setFont(undefined, 'normal');
+  doc.text(`${currentSemester.fullText}`, 20, 44);
+  doc.text(`Instructor: ${instructorName}`, 20, 52);
+  doc.text(`Course: ${courseName} Code: ${courseCodeValue} Section: ${sectionValue}`, 20, 60);
+  
+  // Add the table
+  doc.autoTable({
+    html: '#studentTable',
+    startY: 70,
+    theme: 'grid',
+    headStyles: {
+      fillColor: [240, 240, 240],
+      textColor: [0, 0, 0],
+      fontStyle: 'bold'
+    },
+    styles: {
+      fontSize: 9,
+      cellPadding: 2,
+    },
+    columnStyles: {
+      0: { cellWidth: 10 },
+      1: { cellWidth: 20 },
+      2: { cellWidth: 40, halign: 'left' },
+      3: { cellWidth: 25 }, // Participation & Portfolio
+      4: { cellWidth: 15 }, // Tests
+      5: { cellWidth: 20 }  // Presentation
+    },
+    margin: { top: 70 }
+  });
+  
+  // Use the new filename format
+  const fileName = getFormattedFileName('pdf');
+  doc.save(fileName);
+  
+  // Restore original view
+  switchView(originalView);
+}
+
+// MODIFIED: saveAllSectionsToFile function with new filename format
+function saveAllSectionsToFile() {
+  if (Object.keys(allCoursesData).length === 0) {
+    showStatus('❌ No data to save.', document.querySelector('.dropdown-button'));
+    return;
+  }
+  
+  const jsonString = JSON.stringify(allCoursesData, null, 2);
+  const blob = new Blob([jsonString], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  
+  // Use the new filename format
+  const fileName = getFormattedFileName('json');
+  a.download = fileName;
+  
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showStatus('✅ All sections data saved to JSON file!', document.querySelector('.dropdown-button'));
+}
+
+function loadFromFile() {
+  const file = jsonFileInput.files[0];
+  if (!file) {
+    showStatus('❌ No file selected.', document.querySelector('.dropdown-button'));
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      
+      // Check if this is a single section or all sections data
+      if (data.students && data.formData) {
+        // Single section format
+        const currentSemester = getCurrentSemester();
+        const saveKey = `SGS_${currentSemester.semester}_${data.formData.course}_Sec${data.formData.section}`;
+        allCoursesData[saveKey] = data;
+        localStorage.setItem('SGS_All_Courses', JSON.stringify(allCoursesData));
+        updateCourseDropdown();
+        courseSelect.value = data.formData.course;
+        courseCode.value = data.formData.course;
+        sectionSelect.value = data.formData.section;
+        loadAllData();
+        showStatus('✅ Grades imported from JSON successfully!', document.querySelector('.dropdown-button'));
+      } else if (typeof data === 'object') {
+        // All sections format
+        Object.keys(data).forEach(key => {
+          allCoursesData[key] = data[key];
+        });
+        localStorage.setItem('SGS_All_Courses', JSON.stringify(allCoursesData));
+        updateCourseDropdown();
+        loadAllData();
+        showStatus('✅ All sections data imported from JSON successfully!', document.querySelector('.dropdown-button'));
+      } else {
+        throw new Error("Invalid JSON file format.");
+      }
+    } catch (err) {
+      console.error("JSON file import error:", err);
+      showStatus('❌ Failed to import JSON file. ' + err.message, document.querySelector('.dropdown-button'));
+    }
+  };
+  reader.readAsText(file);
+}
+
+function clearGrades() {
+  if (!confirm("Are you sure you want to clear ALL grades for this section? This cannot be undone.")) {
+    return;
+  }
+  const currentKey = getStorageKey();
+  const savedData = allCoursesData[currentKey];
+  if (!savedData) {
+    showStatus('❌ No data to clear.', document.querySelector('.clear-button'));
+    return;
+  }
+  const students = savedData.students;
+  if (!students || students.length === 0) {
+    showStatus('❌ No students to clear grades for.', document.querySelector('.clear-button'));
+    return;
+  }
+
+  students.forEach(student => {
+    for (let i = 3; i <= 21; i++) {
+        student[i] = '';
+      }
+      student[22] = '';
+  });
+
+  localStorage.setItem('SGS_All_Courses', JSON.stringify(allCoursesData));
+  loadAllData();
+  
+  // Update dropdowns after clearing
+  updateCourseDropdown();
+  updateSectionDropdown();
+  
+  showStatus('✅ Grades cleared!', document.querySelector('.clear-button'));
+}
+
+function clearStudents() {
+  if (!confirm("Are you sure you want to clear ALL student data for this section? This cannot be undone.")) {
+    return;
+  }
+  const currentKey = getStorageKey();
+  if (allCoursesData[currentKey]) {
+    allCoursesData[currentKey].students = [];
+    localStorage.setItem('SGS_All_Courses', JSON.stringify(allCoursesData));
+  }
+  loadAllData();
+  
+  // Update dropdowns after clearing
+  updateCourseDropdown();
+  updateSectionDropdown();
+  
+  showStatus('✅ All data cleared!', document.querySelector('.clear-button'));
+}
+
+function logout() {
+  window.location.href = "Login.html";
+}
+
+// MODIFIED: switchView function to handle the new raw view as default
+function switchView(viewType) {
+  currentView = viewType;
+
+  const saveAsButton = document.querySelector('.button-box > div .dropdown:nth-child(2)');
+  const saveButton = document.querySelector('button[onclick="saveToLocalStorage()"]');
+
+  if (viewType === 'performance-analysis' || viewType === 'final' || viewType === 'summative') {
+    saveAsButton.style.display = 'none';
+    saveButton.style.display = 'none';
+  } else {
+    saveAsButton.style.display = 'inline-block';
+    saveButton.style.display = 'inline-block';
+  }
+
+  // Show/hide import button based on view
+  const importButton = document.getElementById('importButtonContainer');
+  if (viewType === 'raw') {
+    importButton.style.display = ''; // Show for raw view only
+  } else {
+    importButton.style.display = 'none'; // Hide for other views
+  }
+
+  if (viewType === 'raw') {
+    sheetTitle.textContent = 'Raw Grades Sheet';
+    viewSwitcherButton.textContent = 'Raw Grades Sheet';
+    document.querySelector('#studentTable thead').innerHTML = `
+      <tr>
+        <th rowspan="2">S. No.</th>
+        <th rowspan="2">ID Number</th>
+        <th rowspan="2">Student Name</th>
+        <th rowspan="2"><div class="tooltip-container">Part<span class="tooltip">Participation</span></div> [20]</th>
+        <th rowspan="2"><div class="tooltip-container">E-Port<span class="tooltip">Portfolio</span></div> [20]</th>
+        <th rowspan="2">Presentation [25]</th>
+        <th rowspan="2">Pop Quiz 1 [10]</th>
+        <th rowspan="2">Pop Quiz 2 [10]</th>
+        <th rowspan="2"><div class="tooltip-container">Test 1 GV<span class="tooltip">Grammar and Vocabulary</span></div> [20]</th>
+        <th rowspan="2"><div class="tooltip-container">Test 2 LR<span class="tooltip">Listening and Reading</span></div> [20]</th>
+        <th rowspan="2">Speaking Test [20]</th>
+        <th rowspan="2">Writing Test [20]</th>
+        <th rowspan="2"><div class="tooltip-container">Writing Port<span class="tooltip">Portfolio</span></div> [20]</th>
+        <th rowspan="2">Midterm [50]</th>
+        <th rowspan="2">Final [50]</th>
+        <th rowspan="2">Total [285]</th>
+      </tr>`;
+    currentMarksLimits = rawMarksLimits;
+  } else if (viewType === 'summative') {
+    sheetTitle.textContent = 'Assessments Grade Sheet';
+    viewSwitcherButton.textContent = 'Assessments Grade Sheet';
+    document.querySelector('#studentTable thead').innerHTML = `
+      <tr>
+        <th rowspan="2">S. No.</th>
+        <th rowspan="2">ID Number</th>
+        <th rowspan="2">Student Name</th>
+        <th rowspan="2"><div class="tooltip-container">Part and E-Port<span class="tooltip">Participation and Portfolio</span></div> [10%]</th>
+        <th rowspan="2">Presentation [10%]</th>
+        <th rowspan="2">Pop Quiz 1 [2.5%]</th>
+        <th rowspan="2">Pop Quiz 2 [2.5%]</th>
+        <th rowspan="2"><div class="tooltip-container">Test 1 GV<span class="tooltip">Grammar and Vocabulary</span></div> [5%]</th>
+        <th rowspan="2"><div class="tooltip-container">Test 2 LR<span class="tooltip">Listening and Reading</span></div> [5%]</th>
+        <th rowspan="2">Speaking Test [5%]</th>
+        <th rowspan="2">Writing Test [5%]</th>
+        <th rowspan="2"><div class="tooltip-container">Writing Port<span class="tooltip">Portfolio</span></div> [5%]</th>
+        <th rowspan="2">Midterm [20%]</th>
+        <th rowspan="2">Final [30%]</th>
+        <th rowspan="2">Total [100%]</th>
+      </tr>`;
+    currentMarksLimits = summativeMarksLimits;
+  } else if (viewType === 'final') {
+    sheetTitle.textContent = 'Final Grades Sheet';
+    viewSwitcherButton.textContent = 'Final Grades Sheet';
+    document.querySelector('#studentTable thead').innerHTML = `
+      <tr>
+        <th>S. No.</th>
+        <th>ID Number</th>
+        <th>Student Name</th>
+        <th>Participation and Portfolio [10%]</th>
+        <th>Tests [30%]</th>
+        <th>Presentation [10%]</th>
+        <th>Midterm [20%]</th>
+        <th>Final [30%]</th>
+        <th>Total [100%]</th>
+        <th>Result</th>
+        <th>Grade Letter</th>
+      </tr>`;
+    currentMarksLimits = finalMarksLimits;
+  } else if (viewType === 'performance-analysis') {
+    sheetTitle.textContent = 'Performance Analysis';
+    viewSwitcherButton.textContent = 'Performance Analysis';
+    document.querySelector('#studentTable thead').innerHTML = `
+      <tr>
+        <th>S. No.</th>
+        <th>ID Number</th>
+        <th>Student Name</th>
+        <th>Academic Status-1</th>
+        <th>Academic Status-2</th>
+        <th>Academic Status-3</th>
+        <th>Overall Status</th>
+        <th>At-Risk Counts</th>
+        <th>Finally</th>
+        <th>
+	<div style="display: flex; width: 95%; border: 1px solid #000; border-radius: 4px; overflow: hidden; height: 25px;">
+        <select id="email-dropdown" style="flex: 1; border: none; padding: 0px 5px; outline: none; background-color: #f8f8f8; font-weight: bold; height: 85%;">
+          <option value="" disabled selected>Select Category</option>
+          <option value="all-students">All Students</option>
+	  <option value="at-risk">At-risk Students</option>
+          <option value="improved">Improved Students</option>
+          <option value="appreciable">Appreciable Students</option>
+          <option value="in-progress">In Progress Students</option>
+          <option value="fail-absence">Fail Absence Students</option>
+        </select>
+        <button onclick="handleEmailSend()" style="border: none; background: #2196F3; color: white; padding: 0 10px; cursor: pointer; white-space: nowrap; font-weight: bold; height: 100%; transition: background 0.2s;" onmouseover="this.style.background='#33CC33'" onmouseout="this.style.background='#2196F3'">Send Email</button>
+      </div>
+	</th>
+      </tr>`;
+  }
+  
+  loadAllData();
+}
+
+// UPDATED sendGroupEmail function with "All Students" support
+function sendGroupEmail(groupType) {
+  const currentKey = getStorageKey();
+  const savedData = allCoursesData[currentKey];
+  
+  if (!savedData || !savedData.students || savedData.students.length === 0) {
+    alert('No student data available for emailing.');
+    return;
+  }
+  
+  let emailRecipients = [];
+  let subject = '';
+  let body = '';
+  
+  // Filter students based on the selected group
+  switch(groupType) {
+    case 'all-students':
+      // Send to ALL students with valid email addresses
+      emailRecipients = savedData.students
+        .filter(student => {
+          // Include all students who have an ID number (basic validation)
+          const studentId = student[1] || '';
+          return studentId.toString().trim() !== '' && /^\d+$/.test(studentId.toString().trim());
+        })
+        .map(student => {
+          const studentId = student[1] || '';
+          // Generate email from student ID
+          return `${studentId}@asu.edu.om`;
+        })
+        .filter(email => email !== '@asu.edu.om'); // Remove invalid emails
+      subject = 'Important Course Announcement';
+      body = 'Dear Student,\n\nThis is an important announcement regarding your course. Please check the course portal for updates and important information.\n\nBest regards,\nYour Instructor';
+      break;
+      
+    case 'at-risk':
+      emailRecipients = savedData.students
+        .filter(student => {
+          const analysis = getPerformanceAnalysis(student);
+          return analysis.emailType === 'at-risk' && analysis.email !== 'Not Applicable';
+        })
+        .map(student => {
+          const analysis = getPerformanceAnalysis(student);
+          return analysis.email;
+        });
+      subject = 'Academic Support Needed - At-Risk Status';
+      body = 'Dear Student,\n\nOur records indicate that you may need additional academic support. Please visit during office hours to discuss strategies for improvement.\n\nBest regards,\nYour Instructor';
+      break;
+      
+    case 'improved':
+      emailRecipients = savedData.students
+        .filter(student => {
+          const analysis = getPerformanceAnalysis(student);
+          return analysis.emailType === 'improved' && analysis.email !== 'Not Applicable';
+        })
+        .map(student => {
+          const analysis = getPerformanceAnalysis(student);
+          return analysis.email;
+        });
+      subject = 'Improvement in Academic Performance';
+      body = 'Dear Student,\n\nI have noticed significant improvement in your recent academic performance. Keep up the excellent work!\n\nBest regards,\nYour Instructor';
+      break;
+      
+    case 'appreciable':
+      emailRecipients = savedData.students
+        .filter(student => {
+          const analysis = getPerformanceAnalysis(student);
+          return analysis.emailType === 'appreciable' && analysis.email !== 'Not Applicable';
+        })
+        .map(student => {
+          const analysis = getPerformanceAnalysis(student);
+          return analysis.email;
+        });
+      subject = 'Appreciation for Excellent Academic Performance';
+      body = 'Dear Student,\n\nCongratulations on your excellent performance! Your dedication to your studies is commendable.\n\nBest regards,\nYour Instructor';
+      break;
+      
+    case 'in-progress':
+      emailRecipients = savedData.students
+        .filter(student => {
+          const analysis = getPerformanceAnalysis(student);
+          return (analysis.finallyValue === 'IP') && analysis.email !== 'Not Applicable';
+        })
+        .map(student => {
+          const analysis = getPerformanceAnalysis(student);
+          return analysis.email;
+        });
+      subject = 'Incomplete Grade Status';
+      body = 'Dear Student,\n\nOur records show that you have an incomplete grade. Please contact me to discuss how to complete the required work.\n\nBest regards,\nYour Instructor';
+      break;
+      
+    case 'fail-absence':
+      emailRecipients = savedData.students
+        .filter(student => {
+          const analysis = getPerformanceAnalysis(student);
+          return (analysis.finallyValue === 'FA' || analysis.finallyValue === 'WA') && analysis.email !== 'Not Applicable';
+        })
+        .map(student => {
+          const analysis = getPerformanceAnalysis(student);
+          return analysis.email;
+        });
+      subject = 'Important: Course Completion Status';
+      body = 'Dear Student,\n\nOur records indicate issues with your course completion. Please contact me urgently to discuss your academic standing.\n\nBest regards,\nYour Instructor';
+      break;
+      
+    default:
+      alert('Please select a valid group to email.');
+      return;
+  }
+  
+  if (emailRecipients.length === 0) {
+    alert(`No students found in the ${groupType.replace('-', ' ')} category.`);
+    return;
+  }
+  
+  // Create mailto link
+  const mailtoLink = `mailto:${emailRecipients.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
+  // Open email client
+  window.location.href = mailtoLink;
+}
+
+function copyFinalGradesToConsole() {
+  const tableRows = Array.from(document.querySelectorAll('#studentTable tbody tr'));
+  const finalGradesData = [];
+  const currentKey = getStorageKey();
+  const savedData = allCoursesData[currentKey];
+
+  if (!savedData || savedData.students.length === 0) {
+    showStatus('❌ No student data to export.', document.getElementById('copyToConsoleButton'));
+    return;
+  }
+
+  tableRows.forEach((row, index) => {
+    const student = {};
+    const savedStudentData = savedData.students[index];
+
+    if (savedStudentData && savedStudentData.length > 3) {
+      student['ID number'] = savedStudentData[1] || '';
+      
+      // Get individual grades from summative view data
+      const participation = savedStudentData[3] || '';
+      const portfolio = savedStudentData[4] || '';
+      const presentation = savedStudentData[5] || '';
+      const popQuiz1 = savedStudentData[6] || '';
+      const popQuiz2 = savedStudentData[8] || '';
+      const test1GV = savedStudentData[10] || '';
+      const test2LR = savedStudentData[12] || '';
+      const speakingTest = savedStudentData[14] || '';
+      const writingTest = savedStudentData[16] || '';
+      const writingPortfolio = savedStudentData[18] || '';
+      const midterm = savedStudentData[20] || '';
+      const final = savedStudentData[21] || '';
+      
+      // Calculate combined grades for final view (English courses)
+      const participationPortfolio = (parseFloat(participation) || 0) + (parseFloat(portfolio) || 0);
+      
+      // Calculate tests from percentage values
+      const popQuiz1Percent = parseFloat(calculatePercentage(popQuiz1, 10, 2.5)) || 0;
+      const popQuiz2Percent = parseFloat(calculatePercentage(popQuiz2, 10, 2.5)) || 0;
+      const test1GVPercent = parseFloat(calculatePercentage(test1GV, 20, 5)) || 0;
+      const test2LRPercent = parseFloat(calculatePercentage(test2LR, 20, 5)) || 0;
+      const speakingTestPercent = parseFloat(calculatePercentage(speakingTest, 20, 5)) || 0;
+      const writingTestPercent = parseFloat(calculatePercentage(writingTest, 20, 5)) || 0;
+      const writingPortfolioPercent = parseFloat(calculatePercentage(writingPortfolio, 20, 5)) || 0;
+      const tests = popQuiz1Percent + popQuiz2Percent + test1GVPercent + test2LRPercent + speakingTestPercent + writingTestPercent + writingPortfolioPercent;
+      
+      // Map to LOGSIS field names for English courses
+      student['Participation & Portfolio of 10'] = participationPortfolio > 0 ? participationPortfolio.toFixed(1).replace(/\.0+$/, '') : '';
+      student['Tests of 30'] = tests > 0 ? tests.toFixed(1).replace(/\.0+$/, '') : '';
+      student['Presentation of 10'] = presentation > 0 ? presentation.toFixed(1).replace(/\.0+$/, '') : '';
+      student['Midterm of 20'] = midterm;
+      student['Final of 30'] = final;
+      
+      student['Total [100%]'] = row.cells[8].textContent.trim() || '';
+      student['Finally'] = row.cells[9].textContent.trim().toUpperCase() || '';
+      student['Grade Letter'] = row.cells[10].textContent.trim() || '';
+
+      finalGradesData.push(student);
+    }
+  });
+
+  const jsCode = `
+// LOGSIS Grade Import Script with Delays
+// Instructions: 
+// 1. Go to: http://sisweb.asu.edu.om/portal/pls/portal/Siw_Assign_Stu_Grd_Dml
+// 2. Open browser console (F12 → Console tab)
+// 3. Paste this entire script and press Enter
+// 4. The system will automatically fill all grades with proper delays
+
+(async function() {
+  const studentData = ${JSON.stringify(finalGradesData, null, 2)};
+  
+  console.log('🔍 Starting LOGSIS grade import for', studentData.length, 'students...');
+  console.log('📊 Student data:', studentData);
+  console.log('⏰ Using delays between operations for system stability');
+
+  // Helper function to add delays
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // Helper function to sanitize grade values
+  function sanitizeGrade(value) {
+    if (!value || value === '' || value === '0.0' || value === '0' || value === '0.00') {
+      return '';
+    }
+    // Convert to number and back to string to remove trailing .0
+    const numValue = parseFloat(value);
+    return isNaN(numValue) ? '' : numValue.toString();
+  }
+
+  let processedCount = 0;
+  let errorCount = 0;
+
+  // Process each student with delays
+  for (let index = 0; index < studentData.length; index++) {
+    const student = studentData[index];
+    const studentId = student['ID number'];
+    
+    if (!studentId) {
+      console.warn('❌ Skipping student at index', index, '- No ID number');
+      errorCount++;
+      await delay(100); // Small delay even for skipped students
+      continue;
+    }
+
+    console.log(\`\\\\n🎯 Processing student \${index + 1}/\${studentData.length}: ID \${studentId}\`);
+
+    // Find the student row in LOGSIS - look for the ID in any table cell
+    const allCells = document.querySelectorAll('td');
+    let studentRow = null;
+    
+    for (const cell of allCells) {
+      if (cell.textContent.trim() === studentId) {
+        studentRow = cell.closest('tr');
+        break;
+      }
+    }
+
+    if (!studentRow) {
+      console.warn(\`❌ Student ID \${studentId} not found in LOGSIS table\`);
+      console.log('🔍 Available IDs in table:');
+      document.querySelectorAll('td').forEach(td => {
+        if (td.textContent.match(/\\\\d{6,}/)) {
+          console.log('  -', td.textContent.trim());
+        }
+      });
+      errorCount++;
+      await delay(500); // Delay before next student
+      continue;
+    }
+
+    console.log(\`✅ Found student row for ID \${studentId}\`);
+
+    // Get all input fields in this row
+    const allInputs = studentRow.querySelectorAll('input[type="text"]');
+    console.log(\`📝 Found \${allInputs.length} input fields in row\`);
+
+    if (allInputs.length < 6) {
+      console.warn('❌ Not enough input fields found in row. Expected at least 6, found:', allInputs.length);
+      errorCount++;
+      await delay(500); // Delay before next student
+      continue;
+    }
+
+    // LOGSIS typically has this order for English courses
+    const gradeFields = [
+      { index: 0, name: 'Participation & Portfolio of 10', grade: student['Participation & Portfolio of 10'] },
+      { index: 1, name: 'Tests of 30', grade: student['Tests of 30'] },
+      { index: 2, name: 'Presentation of 10', grade: student['Presentation of 10'] },
+      { index: 3, name: 'Midterm of 20', grade: student['Midterm of 20'] },
+      { index: 4, name: 'Final of 30', grade: student['Final of 30'] }
+    ];
+
+    console.log('🎯 Grade mapping for English courses:', gradeFields.map(f => f.name));
+
+    let filledFields = 0;
+
+    // Fill each grade field with delays between fields
+    for (const { index, name, grade } of gradeFields) {
+      const sanitizedGrade = sanitizeGrade(grade);
+      
+      if (index < allInputs.length && sanitizedGrade !== '') {
+        const input = allInputs[index];
+        
+        // Fill the field
+        input.value = sanitizedGrade;
+        
+        // Trigger events with delays between them
+        await delay(50);
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        await delay(50);
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        await delay(50);
+        input.dispatchEvent(new Event('blur', { bubbles: true }));
+        
+        filledFields++;
+        console.log(\`   ✅ Filled \${name}: \${sanitizedGrade} (field index \${index})\`);
+        
+        // Delay between filling different fields for the same student
+        await delay(200);
+      } else if (index < allInputs.length) {
+        console.log(\`   ⏭️  Skipping \${name} - no grade data\`);
+        await delay(50); // Small delay for skipped fields
+      }
+    }
+
+    processedCount++;
+    console.log(\`✓ Student \${studentId}: Successfully filled \${filledFields} fields\`);
+    
+    // Delay between processing different students
+    if (index < studentData.length - 1) {
+      console.log(\`⏳ Waiting before next student...\`);
+      await delay(800); // Longer delay between students
+    }
+  }
+
+  // Show completion summary
+  console.log(
+    \`%c\\\\n🎉 LOGSIS Import Complete! \\\\nProcessed: \${processedCount} students \\\\nErrors: \${errorCount}\\\\nUsed delays for system stability\`,
+    "background: #4CAF50; color: white; font-weight: bold; padding: 10px; border-radius: 5px; font-size: 14px;"
+  );
+  
+  if (errorCount > 0) {
+    console.warn(
+      \`%c⚠️ Some students (\${errorCount}) could not be processed. Check the console above for details.\`,
+      "background: #FF9800; color: white; font-weight: bold; padding: 8px; border-radius: 4px;"
+    );
+  }
+
+  return {
+    success: true,
+    processed: processedCount,
+    errors: errorCount,
+    message: \`Successfully imported grades for \${processedCount} students with proper delays\`
+  };
+})();
+
+// Manual field mapping helper for English courses
+console.log('\\\\n💡 MANUAL FIELD MAPPING HELPER FOR ENGLISH COURSES:');
+console.log('Expected field order:');
+console.log('1. Participation & Portfolio of 10');
+console.log('2. Tests of 30');
+console.log('3. Presentation of 10');
+console.log('4. Midterm of 20');
+console.log('5. Final of 30');
+console.log('\\\\n⏰ Delay settings:');
+console.log('- Between fields: 200ms');
+console.log('- Between students: 800ms');
+console.log('- Between events: 50ms');
+`;
+
+  // Copy to clipboard
+  navigator.clipboard.writeText(jsCode)
+    .then(() => {
+      showStatus('✅ LOGSIS import script copied to clipboard!', document.getElementById('copyToConsoleButton'));
+      
+      // Show detailed instructions
+      setTimeout(() => {
+        const instructions = `LOGSIS Import Script Copied! ✅
+📊 GRADES BEING IMPORTED FOR ENGLISH COURSES:
+• Participation + Portfolio → Participation & Portfolio of 10
+• Pop Quiz 1 + Pop Quiz 2 + Test 1 GV + Test 2 LR + Speaking Test + Writing Test + Writing Portfolio → Tests of 30  
+• Presentation → Presentation of 10
+• Midterm → Midterm of 20
+• Final → Final of 30`;
+
+        alert(instructions);
+      }, 500);
+    })
+    .catch(err => {
+      console.error('Failed to copy: ', err);
+      showStatus('❌ Failed to copy script.', document.getElementById('copyToConsoleButton'));
+    });
+}
+
+function showResultsAnalysis() {
+  const currentKey = getStorageKey();
+  const savedData = allCoursesData[currentKey];
+  
+  if (!savedData || !savedData.students || savedData.students.length === 0) {
+    alert('No student data available for analysis.');
+    return;
+  }
+  
+  // Calculate statistics
+  const stats = calculateStatistics(savedData.students);
+  
+  // Update the modal with the calculated data
+  updateStatsModal(stats);
+  
+  // Show the modal
+  document.getElementById('statsModal').style.display = 'block';
+}
+
+function calculateStatistics(students) {
+  let totalStudents = 0;
+  let highestScore = 0;
+  let lowestScore = 100;
+  let totalScore = 0;
+  let passCount = 0;
+  let notPassCount = 0;
+  let faCount = 0;
+  let waCount = 0;
+  let ipCount = 0;
+  let othersCount = 0;
+  
+  const gradeDistribution = {
+    aPlus: 0, // 100.00%-96%
+    a: 0,     // 95.99%-92%
+    aMinus: 0, // 91.99%-90%
+    bPlus: 0, // 89.99%-86%
+    b: 0,     // 85.99%-82%
+    bMinus: 0, // 81.99%-80%
+    cPlus: 0, // 79.99%-76%
+    c: 0,     // 75.99%-72%
+    cMinus: 0, // 71.99%-70%
+    dPlus: 0, // 69.99%-66%
+    d: 0,     // 65.99%-62%
+    dMinus: 0, // 61.99%-60%
+    f: 0      // 59.99%-0%
+  };
+
+  // Grade Distribution by percentage ranges
+  const percentageDistribution = {
+    ninetyToHundred: 0,   // 90-100%
+    eightyToEightyNine: 0, // 80-89%
+    seventyToSeventyNine: 0, // 70-79%
+    sixtyToSixtyNine: 0,  // 60-69%
+    belowSixty: 0         // Below 60%
+  };
+  
+  students.forEach(student => {
+    // Skip empty rows
+    if (!student[1] && !student[2]) return;
+    
+    totalStudents++;
+    
+    // Calculate total score
+    let score = 0;
+    for (let i = 3; i <= 21; i++) {
+      const value = parseFloat(student[i]);
+      if (!isNaN(value)) {
+        score += value;
+      }
+    }
+    
+    // Update highest and lowest scores
+    if (score > highestScore) highestScore = score;
+    if (score > 0 && score < lowestScore) lowestScore = score;
+    
+    totalScore += score;
+    
+    // Categorize by final status
+    const finallyValue = determineFinallyValue(student);
+    switch (finallyValue) {
+      case 'Pass':
+        passCount++;
+        break;
+      case 'Not Pass':
+        notPassCount++;
+        break;
+      case 'FA':
+        faCount++;
+        break;
+      case 'WA':
+        waCount++;
+        break;
+      case 'IP':
+        ipCount++;
+        break;
+      default:
+        othersCount++;
+    }
+    
+    // Categorize by grade distribution (only for students with final scores)
+    if (finallyValue === 'Pass' || finallyValue === 'Not Pass') {
+      // Grade letters distribution
+      if (score >= 96) {
+        gradeDistribution.aPlus++;
+      } else if (score >= 92) {
+        gradeDistribution.a++;
+      } else if (score >= 90) {
+        gradeDistribution.aMinus++;
+      } else if (score >= 86) {
+        gradeDistribution.bPlus++;
+      } else if (score >= 82) {
+        gradeDistribution.b++;
+      } else if (score >= 80) {
+        gradeDistribution.bMinus++;
+      } else if (score >= 76) {
+        gradeDistribution.cPlus++;
+      } else if (score >= 72) {
+        gradeDistribution.c++;
+      } else if (score >= 70) {
+        gradeDistribution.cMinus++;
+      } else if (score >= 66) {
+        gradeDistribution.dPlus++;
+      } else if (score >= 62) {
+        gradeDistribution.d++;
+      } else if (score >= 60) {
+        gradeDistribution.dMinus++;
+      } else {
+        gradeDistribution.f++;
+      }
+      
+      // Percentage range distribution
+      if (score >= 90) {
+        percentageDistribution.ninetyToHundred++;
+      } else if (score >= 80) {
+        percentageDistribution.eightyToEightyNine++;
+      } else if (score >= 70) {
+        percentageDistribution.seventyToSeventyNine++;
+      } else if (score >= 60) {
+        percentageDistribution.sixtyToSixtyNine++;
+      } else {
+        percentageDistribution.belowSixty++;
+      }
+    }
+  });
+  
+  // Calculate percentages
+  const passPercentage = totalStudents > 0 ? ((passCount / totalStudents) * 100).toFixed(1) : 0;
+  const notPassPercentage = totalStudents > 0 ? ((notPassCount / totalStudents) * 100).toFixed(1) : 0;
+  const faPercentage = totalStudents > 0 ? ((faCount / totalStudents) * 100).toFixed(1) : 0;
+  const waPercentage = totalStudents > 0 ? ((waCount / totalStudents) * 100).toFixed(1) : 0;
+  const ipPercentage = totalStudents > 0 ? ((ipCount / totalStudents) * 100).toFixed(1) : 0;
+  const othersPercentage = totalStudents > 0 ? ((othersCount / totalStudents) * 100).toFixed(1) : 0;
+  
+  const averageScore = totalStudents > 0 ? (totalScore / totalStudents).toFixed(1) : 0;
+  
+  return {
+    totalStudents,
+    highestScore: Math.round(highestScore),
+    averageScore,
+    lowestScore: Math.round(lowestScore),
+    passCount,
+    passPercentage,
+    notPassCount,
+    notPassPercentage,
+    faCount,
+    faPercentage,
+    waCount,
+    waPercentage,
+    ipCount,
+    ipPercentage,
+    othersCount,
+    othersPercentage,
+    gradeDistribution,
+    percentageDistribution
+  };
+}
+
+function updateStatsModal(stats) {
+  // Update Numerical Analysis table
+  const numericalAnalysisRow = `
+    <td>${stats.totalStudents}</td>
+    <td>${stats.highestScore}</td>
+    <td>${stats.averageScore}</td>
+    <td>${stats.lowestScore}</td>
+    <td>${stats.passCount}  ( ${stats.passPercentage}% )</td>
+    <td>${stats.notPassCount}  ( ${stats.notPassPercentage}% )</td>
+    <td>${stats.faCount}  ( ${stats.faPercentage}% )</td>
+    <td>${stats.waCount}  ( ${stats.waPercentage}% )</td>
+    <td>${stats.ipCount}  ( ${stats.ipPercentage}% )</td>
+    <td>${stats.othersCount}  ( ${stats.othersPercentage}% )</td>
+  `;
+  document.getElementById('numericalAnalysisData').innerHTML = numericalAnalysisRow;
+  
+  // Update Grade Letters Distribution table
+  const gradeLettersRow = `
+    <td>${stats.gradeDistribution.aPlus}</td>
+    <td>${stats.gradeDistribution.a}</td>
+    <td>${stats.gradeDistribution.aMinus}</td>
+    <td>${stats.gradeDistribution.bPlus}</td>
+    <td>${stats.gradeDistribution.b}</td>
+    <td>${stats.gradeDistribution.bMinus}</td>
+    <td>${stats.gradeDistribution.cPlus}</td>
+    <td>${stats.gradeDistribution.c}</td>
+    <td>${stats.gradeDistribution.cMinus}</td>
+    <td>${stats.gradeDistribution.dPlus}</td>
+    <td>${stats.gradeDistribution.d}</td>
+    <td>${stats.gradeDistribution.dMinus}</td>
+    <td>${stats.gradeDistribution.f}</td>
+  `;
+  document.getElementById('gradeLettersDistributionData').innerHTML = gradeLettersRow;
+  
+  // Update Grade Distribution table
+  const gradeDistributionRow = `
+    <td>${stats.percentageDistribution.ninetyToHundred}</td>
+    <td>${stats.percentageDistribution.eightyToEightyNine}</td>
+    <td>${stats.percentageDistribution.seventyToSeventyNine}</td>
+    <td>${stats.percentageDistribution.sixtyToSixtyNine}</td>
+    <td>${stats.percentageDistribution.belowSixty}</td>
+  `;
+  document.getElementById('gradeDistributionData').innerHTML = gradeDistributionRow;
+}
+
+function getStatusFromPercentage(percentage) {
+    return percentage >= 59.5 ? 'Normal' : 'At-Risk';
+}
+
+function calculateAndFormatTotal(student) {
+    let totalScore = 0;
+    let hasPassingExam = false;
+    
+    // Individual exam scores and their weights
+    const exams = [
+        {score: parseFloat(student[3]) || 0, weight: 20, name: 'Participation'},
+        {score: parseFloat(student[4]) || 0, weight: 20, name: 'Portfolio'},
+        {score: parseFloat(student[5]) || 0, weight: 25, name: 'Presentation'},
+        {score: parseFloat(student[6]) || 0, weight: 10, name: 'Pop Quiz 1'},
+        {score: parseFloat(student[8]) || 0, weight: 10, name: 'Pop Quiz 2'},
+        {score: parseFloat(student[10]) || 0, weight: 20, name: 'Test 1 GV'},
+        {score: parseFloat(student[12]) || 0, weight: 20, name: 'Test 2 LR'},
+        {score: parseFloat(student[14]) || 0, weight: 20, name: 'Speaking Test'},
+        {score: parseFloat(student[16]) || 0, weight: 20, name: 'Writing Test'},
+        {score: parseFloat(student[18]) || 0, weight: 20, name: 'Writing Portfolio'},
+        {score: parseFloat(student[20]) || 0, weight: 20, name: 'Midterm'},
+        {score: parseFloat(student[21]) || 0, weight: 30, name: 'Final Exam'}
+    ];
+    
+    // Check if any single exam or combination meets the 59.5% threshold
+    // Check individual exams
+    for (const exam of exams) {
+        if (exam.score > 0) {
+            const percentage = (exam.score / exam.weight) * 100;
+            if (percentage >= 59.5) {
+                hasPassingExam = true;
+                break;
+            }
+        }
+    }
+    
+    // Check combinations of exams if no single exam passed
+    if (!hasPassingExam) {
+        // Check all possible combinations of exams (this is simplified)
+        let combinedScore = 0;
+        let combinedWeight = 0;
+        
+        for (const exam of exams) {
+            if (exam.score > 0) {
+                combinedScore += exam.score;
+                combinedWeight += exam.weight;
+                
+                if (combinedWeight > 0) {
+                    const combinedPercentage = (combinedScore / combinedWeight) * 100;
+                    if (combinedPercentage >= 59.5) {
+                        hasPassingExam = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    // Calculate total score
+    for (const exam of exams) {
+        totalScore += exam.score;
+    }
+    
+    return {
+        score: totalScore,
+        isPassing: hasPassingExam || totalScore >= 59.5
+    };
+}
+
+// UPDATED: getPerformanceAnalysis function with new academic status criteria
+function getPerformanceAnalysis(student) {
+    const finallyValue = determineFinallyValue(student);
+    const hasAlphabetCode = (finallyValue !== 'IP' && finallyValue !== 'Pass' && finallyValue !== 'Not Pass') &&
+        /[A-Za-z]/.test(finallyValue);
+
+    // Get raw values to check if data exists
+    const popQuiz1Value = student[6] || '';
+    const test1GVValue = student[8] || '';
+    const midtermValue = student[13] || '';
+    const speakingTestValue = student[10] || '';
+    const popQuiz2Value = student[7] || '';
+    const writingTestValue = student[11] || '';
+    
+    let academicStatus1 = '';
+    let academicStatus2 = '';
+    let academicStatus3 = '';
+    let overallStatus = '';
+    let atRiskCounts = 0;
+    let emailType = 'appreciable';
+
+    // Calculate academic statuses based on the new criteria
+    // Academic Status-1: Pop Quiz 1 + Test 1
+    if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '') {
+        const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
+        const test1GVScore = parseFloat(test1GVValue) || 0;
+        const combinedScore1 = popQuiz1Score + test1GVScore;
+        const combinedMax1 = 10 + 20; // Pop Quiz 1 [10] + Test 1 GV [20]
+        const combinedPercentage1 = (combinedScore1 / combinedMax1) * 100;
+        academicStatus1 = combinedPercentage1 >= 59.5 ? 'Normal' : 'At-Risk';
+        if (academicStatus1 === 'At-Risk') atRiskCounts++;
+    }
+
+    // Academic Status-2: Pop Quiz 1 + Test 1 + Midterm
+    if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '' && midtermValue.trim() !== '') {
+        const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
+        const test1GVScore = parseFloat(test1GVValue) || 0;
+        const midtermScore = parseFloat(midtermValue) || 0;
+        const combinedScore2 = popQuiz1Score + test1GVScore + midtermScore;
+        const combinedMax2 = 10 + 20 + 50; // Pop Quiz 1 [10] + Test 1 GV [20] + Midterm [50]
+        const combinedPercentage2 = (combinedScore2 / combinedMax2) * 100;
+        academicStatus2 = combinedPercentage2 >= 59.5 ? 'Normal' : 'At-Risk';
+        if (academicStatus2 === 'At-Risk') atRiskCounts++;
+    }
+
+    // Academic Status-3: Pop Quiz 1 + Test 1 + Midterm + Speaking Test + Pop Quiz 2 + Writing Test
+    if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '' && midtermValue.trim() !== '' && 
+        speakingTestValue.trim() !== '' && popQuiz2Value.trim() !== '' && writingTestValue.trim() !== '') {
+        const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
+        const test1GVScore = parseFloat(test1GVValue) || 0;
+        const midtermScore = parseFloat(midtermValue) || 0;
+        const speakingTestScore = parseFloat(speakingTestValue) || 0;
+        const popQuiz2Score = parseFloat(popQuiz2Value) || 0;
+        const writingTestScore = parseFloat(writingTestValue) || 0;
+        const combinedScore3 = popQuiz1Score + test1GVScore + midtermScore + speakingTestScore + popQuiz2Score + writingTestScore;
+        const combinedMax3 = 10 + 20 + 50 + 20 + 10 + 20; // All components from assessments sheet
+        const combinedPercentage3 = (combinedScore3 / combinedMax3) * 100;
+        academicStatus3 = combinedPercentage3 >= 59.5 ? 'Normal' : 'At-Risk';
+        if (academicStatus3 === 'At-Risk') atRiskCounts++;
+    }
+
+    // Calculate overall status based on cumulative assessments
+    let cumulativeScore = 0;
+    let cumulativeMax = 0;
+    let hasAnyData = false;
+    
+    // Check each assessment in order
+    const assessments = [
+        {score: parseFloat(student[6]) || 0, max: 10, name: 'Pop Quiz 1'}, // Pop Quiz 1
+        {score: parseFloat(student[8]) || 0, max: 20, name: 'Test 1 GV'}, // Test 1 GV
+        {score: parseFloat(student[13]) || 0, max: 50, name: 'Midterm'}, // Midterm
+        {score: parseFloat(student[10]) || 0, max: 20, name: 'Speaking Test'}, // Speaking Test
+        {score: parseFloat(student[7]) || 0, max: 10, name: 'Pop Quiz 2'}, // Pop Quiz 2
+        {score: parseFloat(student[11]) || 0, max: 20, name: 'Writing Test'}, // Writing Test
+        {score: parseFloat(student[14]) || 0, max: 50, name: 'Final Exam'}   // Final Exam
+    ];
+    
+    for (const assessment of assessments) {
+        if (assessment.score > 0 || (assessment.name === 'Final Exam' && student[14].trim() !== '')) {
+            cumulativeScore += assessment.score;
+            cumulativeMax += assessment.max;
+            hasAnyData = true;
+            
+            // Check if cumulative percentage meets the threshold
+            if (cumulativeMax > 0) {
+                const cumulativePercentage = (cumulativeScore / cumulativeMax) * 100;
+                if (cumulativePercentage >= 59.5) {
+                    overallStatus = 'Normal';
+                    break;
+                }
+            }
+        }
+    }
+    
+    // If we didn't set overallStatus to Normal in the loop, set it to At-Risk
+    if (hasAnyData && !overallStatus) {
+        overallStatus = 'At-Risk';
+    }
+
+    // COUNT OVERALL STATUS IN AT-RISK COUNTS
+    if (overallStatus === 'At-Risk') {
+        atRiskCounts++;
+    }
+
+    // Determine email type based on status progression and final result
+    // Email categories are linked ONLY to Academic Statuses 1-3, not Overall Status
+    if (finallyValue === 'Not Pass') {
+        emailType = 'not-pass';
+    } else if (finallyValue === 'Pass') {
+        emailType = 'appreciable';
+    } else if (academicStatus1 === 'Normal' && !academicStatus2 && !academicStatus3) {
+        emailType = 'appreciable';
+    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'Normal' && !academicStatus3) {
+        emailType = 'appreciable';
+    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'Normal' && academicStatus3 === 'Normal') {
+        emailType = 'appreciable';
+    } else if (academicStatus1 === 'At-Risk' && !academicStatus2 && !academicStatus3) {
+        emailType = 'at-risk';
+    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'At-Risk' && !academicStatus3) {
+        emailType = 'at-risk';
+    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'At-Risk' && academicStatus3 === 'At-Risk') {
+        emailType = 'at-risk';
+    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'Normal' && !academicStatus3) {
+        emailType = 'improved';
+    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'Normal' && academicStatus3 === 'Normal') {
+        emailType = 'appreciable';
+    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'At-Risk' && academicStatus3 === 'Normal') {
+        emailType = 'improved';
+    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'At-Risk' && !academicStatus3) {
+        emailType = 'at-risk';
+    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'At-Risk' && academicStatus3 === 'At-Risk') {
+        emailType = 'at-risk';
+    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'At-Risk' && academicStatus3 === 'Normal') {
+        emailType = 'improved';
+    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'Normal' && academicStatus3 === 'At-Risk') {
+        emailType = 'at-risk';
+    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'Normal' && academicStatus3 === 'At-Risk') {
+        emailType = 'at-risk';
+    }
+
+    return {
+        academicStatus1,
+        academicStatus2, 
+        academicStatus3,
+        overallStatus,
+        atRiskCounts: atRiskCounts === 0 ? '' : atRiskCounts,
+        email: hasAlphabetCode || !hasAnyData ? 'Not Applicable' : (student[1] ? `${student[1]}@asu.edu.om` : ''),
+        finallyValue: hasAnyData || hasAlphabetCode ? finallyValue : '',
+        emailType
+    };
+}
+
+document.getElementById('xlsxFileInput').addEventListener('change', handleGradesFile);
+
+// MODIFIED: Initialize with raw view as default
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const savedUser = localStorage.getItem('currentUser');
+  let instructorName;
+  if (savedUser) {
+    const user = JSON.parse(savedUser);
+    instructorName = user.fullName;
+  } else {
+    instructorName = urlParams.get('instructor') || 'Administrator';
+  }
+  document.getElementById('instructorName').textContent = instructorName;
+  updateSemesterDisplay();
+  initializeFromStorage();
+
+  courseSelect.addEventListener('change', () => {
+    courseCode.value = courseSelect.value;
+    updateSectionDropdown();
+    loadAllData();
+  });
+  sectionSelect.addEventListener('change', loadAllData);
+  semesterSelect.addEventListener('change', loadAllData);
+  searchInput.addEventListener('keyup', filterTable);
+
+  jsonFileInput.addEventListener('change', loadFromFile);
+
+  switchView('raw'); // Start with raw view
+
+  // Add event listener for closing the modal
+  document.querySelector('.close-modal').addEventListener('click', function() {
+    document.getElementById('statsModal').style.display = 'none';
+  });
+
+  // Close modal if user clicks outside of it
+  window.addEventListener('click', function(event) {
+    const modal = document.getElementById('statsModal');
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+  setInterval(() => {
+    saveToLocalStorage();
+  }, 30000);
+
+  setTimeout(() => {
+    const currentKey = getStorageKey();
+    const hasData = allCoursesData[currentKey] && allCoursesData[currentKey].students &&
+                   allCoursesData[currentKey].students.some(student =>
+                     student.some((field, idx) => idx > 2 && field && field.toString().trim() !== '')
+                   );
+    if (hasData && !hasSavedBefore) {
+      showStatus('Tip: Data is auto save or you save it permanently', document.querySelector('.green-button'));
+    }
+  }, 5000);
+
+window.addEventListener('beforeunload', (e) => {
+    const currentKey = getStorageKey();
+    const hasData = allCoursesData[currentKey] && allCoursesData[currentKey].students &&
+                   allCoursesData[currentKey].students.some(student =>
+                     student.some((field, idx) => idx > 2 && field && field.toString().trim() !== '')
+                   );
+    if (hasData) {
+      e.preventDefault();
+      e.returnValue = 'You have unsaved grade data. Are you sure you want to leave?';
+      return e.returnValue;
+    } 
+  });
+});
+</script>
+
+<footer>
+  <a href="https://www.asu.edu.om/" target="_blank" class="univ-link">
+  A'Sharqiyah University </a>: P.O Box 42, Postal Code:400 Ibra, Sultanate of Oman.
+<a href="https://www.asu.edu.om/Page/Details/25?t=Centre%20for%20Language%20and%20Foundation%20Studies"> 
+Center For Language and Foundation Studies
+</a>. Copyright <span class="copyright">&copy; <a href="mailto:h.rehman@asu.edu.om">drkhan</a> <span id="year"></span></span>.
+</footer>
+<script>
+    // Automatically insert current year
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
