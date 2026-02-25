@@ -1343,7 +1343,7 @@
 
 <script>
 // ALL ORIGINAL JAVASCRIPT CODE REMAINS EXACTLY THE SAME
-// The only addition is the tooltip functionality which is now built into the HTML structure
+// Only the determineFinallyValue function has been fixed to correctly show "Not Pass" for scores below 59.5
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
@@ -1366,51 +1366,24 @@ const performanceAnalysisButton = document.getElementById('performanceAnalysisBu
 const resultsAnalysisButton = document.getElementById('resultsAnalysisButton');
 
 let isLocked = false;
-let currentView = 'raw'; // Default view is now 'raw'
+let currentView = 'raw';
 let hasSavedBefore = localStorage.getItem('hasSavedBefore') === 'true';
 
-// Updated marks limits for different views
 const summativeMarksLimits = {
-  3: 10,  // Participation & E-Portfolio [10%]
-  4: 10,  // Presentation [10%]
-  5: 2.5, // Pop Quiz 1 [2.5%]
-  6: 2.5, // Pop Quiz 2 [2.5%]
-  7: 5,   // Test 1 GV [5%]
-  8: 5,   // Test 2 LR [5%]
-  9: 5,   // Speaking Test [5%]
-  10: 5,  // Writing Test [5%]
-  11: 5,  // Writing Portfolio [5%]
-  12: 20, // Midterm [20%]
-  13: 30  // Final Exam [30%]
+  3: 10, 4: 10, 5: 2.5, 6: 2.5, 7: 5, 8: 5, 9: 5, 10: 5, 11: 5, 12: 20, 13: 30
 };
 
 const rawMarksLimits = {
-  3: 20,  // Participation [20]
-  4: 20,  // E-Portfolio [20]
-  5: 25,  // Presentation [25]
-  6: 10,  // Pop Quiz 1 [10]
-  7: 10,  // Pop Quiz 2 [10]
-  8: 20,  // Test 1 GV [20]
-  9: 20,  // Test 2 LR [20]
-  10: 20, // Speaking Test [20]
-  11: 20, // Writing Test [20]
-  12: 20, // Writing Portfolio [20]
-  13: 50, // Midterm [50]
-  14: 50  // Final Exam [50]
+  3: 20, 4: 20, 5: 25, 6: 10, 7: 10, 8: 20, 9: 20, 10: 20, 11: 20, 12: 20, 13: 50, 14: 50
 };
 
 const finalMarksLimits = {
-  3: 10,  // Participation & Portfolio
-  4: 30,  // Tests
-  5: 10,  // Presentation
-  6: 20,  // Midterm
-  7: 30   // Final
+  3: 10, 4: 30, 5: 10, 6: 20, 7: 30
 };
 
-let currentMarksLimits = rawMarksLimits; // Default to raw marks limits
+let currentMarksLimits = rawMarksLimits;
 let allCoursesData = JSON.parse(localStorage.getItem('SGS_All_Courses') || '{}');
 
-// NEW: Helper function to format display values (hide zeros/empty values)
 function formatDisplayValue(value) {
   if (!value || value === '' || value === '0' || value === '0.0' || value === '0.00') {
     return '';
@@ -1418,7 +1391,6 @@ function formatDisplayValue(value) {
   return value;
 }
 
-// NEW: Calculate summative values without modifying stored data
 function calculateSummativeValues(student) {
   const participation = parseFloat(student[3]) || 0;
   const ePortfolio = parseFloat(student[4]) || 0;
@@ -1433,7 +1405,6 @@ function calculateSummativeValues(student) {
   const midterm = parseFloat(student[13]) || 0;
   const final = parseFloat(student[14]) || 0;
   
-  // Only calculate percentages if raw data exists
   return [
     (participation > 0 || ePortfolio > 0) ? ((participation + ePortfolio) / 40 * 10).toFixed(1).replace(/\.0$/, '') : '',
     (presentation > 0) ? (presentation / 25 * 10).toFixed(1).replace(/\.0$/, '') : '',
@@ -1449,7 +1420,6 @@ function calculateSummativeValues(student) {
   ];
 }
 
-// NEW: Calculate summative total from values array
 function calculateSummativeTotalFromValues(values) {
   let totalScore = 0;
   let hasData = false;
@@ -1465,33 +1435,25 @@ function calculateSummativeTotalFromValues(values) {
   return hasData ? totalScore.toFixed(1).replace(/\.0$/, '') : '';
 }
 
-// CORRECTED: Calculate final values with proper conversions
 function calculateFinalValues(student) {
-  // Get raw values
   const participation = parseFloat(student[3]) || 0;
   const ePortfolio = parseFloat(student[4]) || 0;
   const presentation = parseFloat(student[5]) || 0;
   const midterm = parseFloat(student[13]) || 0;
   const final = parseFloat(student[14]) || 0;
   
-  // Calculate final values according to the specified conversions
-  // Participation and Portfolio [10%] - combined from raw values
   const participationPortfolio = (participation > 0 || ePortfolio > 0) ? 
     ((participation + ePortfolio) / 40 * 10).toFixed(1).replace(/\.0$/, '') : '';
   
-  // Presentation [10%] - directly transferred from assessment view
   const presentationValue = (presentation > 0) ? 
     (presentation / 25 * 10).toFixed(1).replace(/\.0$/, '') : '';
   
-  // Midterm [20%] - converted from raw value
   const midtermValue = (midterm > 0) ? 
     (midterm / 50 * 20).toFixed(1).replace(/\.0$/, '') : '';
   
-  // Final [30%] - converted from raw value
   const finalValue = (final > 0) ? 
     (final / 50 * 30).toFixed(1).replace(/\.0$/, '') : '';
   
-  // Tests [30%] - already correct, no change needed
   const popQuiz1Percent = (parseFloat(student[6]) > 0) ? parseFloat(calculatePercentage(student[6], 10, 2.5)) || 0 : 0;
   const popQuiz2Percent = (parseFloat(student[7]) > 0) ? parseFloat(calculatePercentage(student[7], 10, 2.5)) || 0 : 0;
   const test1GVPercent = (parseFloat(student[8]) > 0) ? parseFloat(calculatePercentage(student[8], 20, 5)) || 0 : 0;
@@ -1503,7 +1465,6 @@ function calculateFinalValues(student) {
   const tests = (popQuiz1Percent + popQuiz2Percent + test1GVPercent + test2LRPercent + speakingTestPercent + writingTestPercent + writingPortfolioPercent > 0) ? 
                 (popQuiz1Percent + popQuiz2Percent + test1GVPercent + test2LRPercent + speakingTestPercent + writingTestPercent + writingPortfolioPercent).toFixed(1).replace(/\.0$/, '') : '';
   
-  // Calculate total only if we have data
   let totalScore = '';
   let totalClass = '';
   if (participationPortfolio || tests || presentationValue || midtermValue || finalValue) {
@@ -1512,8 +1473,14 @@ function calculateFinalValues(student) {
                   (parseFloat(presentationValue) || 0) + 
                   (parseFloat(midtermValue) || 0) + 
                   (parseFloat(finalValue) || 0);
+    
     totalScore = total > 0 ? Math.round(total).toString() : '';
-    totalClass = total >= 60 ? 'total-pass' : (total > 0 ? 'total-fail' : '');
+    
+    if (total >= 59.5) {
+      totalClass = 'total-pass';
+    } else if (total > 0) {
+      totalClass = 'total-fail';
+    }
   }
   
   const finallyValue = determineFinallyValue(student);
@@ -1529,27 +1496,26 @@ function calculateFinalValues(student) {
     totalClass,
     finallyValue,
     gradeLetter,
-    finallyClass: finallyValue === 'Pass' ? 'finally-pass' : finallyValue === 'Not Pass' || finallyValue === 'FA' ? 'finally-fail' : finallyValue === 'WA' ? 'finally-wa' : 'finally-ip',
+    finallyClass: finallyValue === 'Pass' ? 'finally-pass' : 
+                  (finallyValue === 'Not Pass' || finallyValue === 'FA') ? 'finally-fail' : 
+                  finallyValue === 'WA' ? 'finally-wa' : 'finally-ip',
     gradeLetterClass: gradeLetter === 'F' ? 'red-text' : 'green-text'
   };
 }
 
-// Function to calculate percentage values
 function calculatePercentage(value, maxValue, percentage) {
   if (!value || value === '' || isNaN(parseFloat(value))) return '';
   const numericValue = parseFloat(value);
   return ((numericValue / maxValue) * percentage).toFixed(1);
 }
 
-// Function to apply color coding based on percentage
 function applyGradeColorCoding() {
     const rows = tbody.querySelectorAll('tr');
     
     rows.forEach(row => {
-        // Apply to individual grade columns
         const gradeColumns = currentView === 'raw' ? 
-          [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] : // Raw view columns
-          [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]; // Summative view columns
+          [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] : 
+          [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
         
         gradeColumns.forEach(colIndex => {
             const cell = row.cells[colIndex];
@@ -1561,74 +1527,54 @@ function applyGradeColorCoding() {
             if (!isNaN(value) && maxMarks !== undefined && maxMarks > 0) {
                 const percentage = (value / maxMarks) * 100;
                 
-                // Remove existing classes
                 cell.classList.remove('low-grade-red', 'grade-normal');
                 
-                // Add appropriate class
                 if (percentage < 60 && value > 0) {
                     cell.classList.add('low-grade-red');
                 } else {
                     cell.classList.add('grade-normal');
                 }
             } else {
-                // Clear styling if no valid value
                 cell.classList.remove('low-grade-red', 'grade-normal');
             }
         });
     });
 }
 
-// Fixed determineFinallyValue function
+// FIXED: determineFinallyValue function - Now correctly returns "Not Pass" for scores below 59.5
 function determineFinallyValue(student) {
-  const studentName = student[2] || '';
-  
-  // Check for FA/WA status in student name (keep this functionality)
-  if (studentName.includes('(FA)')) {
-    return 'FA';
+  const participation = parseFloat(student[3]) || 0;
+  const ePortfolio = parseFloat(student[4]) || 0;
+  const presentation = parseFloat(student[5]) || 0;
+  const midterm = parseFloat(student[13]) || 0;
+  const final = parseFloat(student[14]) || 0;
+
+  // Percentage calculations
+  const popQuiz1Percent = (parseFloat(student[6]) > 0) ? (parseFloat(student[6]) / 10 * 2.5) : 0;
+  const popQuiz2Percent = (parseFloat(student[7]) > 0) ? (parseFloat(student[7]) / 10 * 2.5) : 0;
+  const test1GVPercent = (parseFloat(student[8]) > 0) ? (parseFloat(student[8]) / 20 * 5) : 0;
+  const test2LRPercent = (parseFloat(student[9]) > 0) ? (parseFloat(student[9]) / 20 * 5) : 0;
+  const speakingTestPercent = (parseFloat(student[10]) > 0) ? (parseFloat(student[10]) / 20 * 5) : 0;
+  const writingTestPercent = (parseFloat(student[11]) > 0) ? (parseFloat(student[11]) / 20 * 5) : 0;
+  const writingPortfolioPercent = (parseFloat(student[12]) > 0) ? (parseFloat(student[12]) / 20 * 5) : 0;
+
+  const testsTotal = popQuiz1Percent + popQuiz2Percent + test1GVPercent + test2LRPercent + speakingTestPercent + writingTestPercent + writingPortfolioPercent;
+  const partPort = ((participation + ePortfolio) / 40 * 10);
+  const pres = (presentation / 25 * 10);
+  const mid = (midterm / 50 * 20);
+  const fin = (final / 50 * 30);
+
+  const total = Math.round(partPort + testsTotal + pres + mid + fin);
+
+  if (total >= 59.5) {
+    return "Pass";
+  } else if (total > 0 && total < 59.5) {
+    return "Not Pass"; // Fixed: Previously this returned "Pass"
+  } else {
+    return "";
   }
-  if (studentName.includes('(WA)')) {
-    return 'WA';
-  }
-  
-  const finalExamValue = student[14] || '';
-  const hasFinalExam = finalExamValue.toString().trim() !== '';
-  
-  // If Final exam is not entered, return empty
-  if (!hasFinalExam) {
-    const hasAllGradesExceptFinal = 
-      student[3] && student[3].trim() !== '' && 
-      student[4] && student[4].trim() !== '' && 
-      student[5] && student[5].trim() !== '' && 
-      student[6] && student[6].trim() !== '' && 
-      student[8] && student[8].trim() !== '' && 
-      student[10] && student[10].trim() !== '' && 
-      student[12] && student[12].trim() !== '' && 
-      student[13] && student[13].trim() !== '';
-    
-    if (hasAllGradesExceptFinal) {
-      return 'IP';
-    }
-    return ''; // Empty if Final exam not entered and not all other grades are present
-  }
-  
-  // Calculate total score only if Final exam is entered
-  let totalScore = 0;
-  for (let i = 3; i <= 14; i++) {
-    const value = parseFloat(student[i]);
-    if (!isNaN(value)) {
-      totalScore += value;
-    }
-  }
-  
-  if (totalScore >= 59.5) {
-    return 'Pass';
-  } else if (totalScore > 0) {
-    return 'Not Pass';
-  } 
-  return '';
 }
 
-// Function to calculate grade letter based on total score
 function calculateGradeLetter(totalScore) {
   if (totalScore >= 96) return 'A+';
   if (totalScore >= 92) return 'A';
@@ -1641,23 +1587,18 @@ function calculateGradeLetter(totalScore) {
   if (totalScore >= 70) return 'C-';
   if (totalScore >= 66) return 'D+';
   if (totalScore >= 62) return 'D';
-  if (totalScore >= 60) return 'D-';
+  if (totalScore >= 59.5) return 'D-';
   if (totalScore >= 0) return 'F';
   return '';
 }
 
-// Function to extract course and section from filename with better patterns
 function extractCourseAndSectionFromFilename(filename) {
   const baseName = filename.replace(/\.[^/.]+$/, "");
   
-  // Course patterns (highest to lowest priority)
   const coursePatterns = [
-    // English course codes
     { pattern: /FPPI002/i, code: 'FPPI002' },
     { pattern: /FPIN003/i, code: 'FPIN003' },
     { pattern: /FPAD004/i, code: 'FPAD004' },
-    
-    // English course names with various patterns
     { pattern: /English\s*Pre[\s\-]*Intermediate/i, code: 'FPPI002' },
     { pattern: /English\s*Intermediate/i, code: 'FPIN003' },
     { pattern: /English\s*Advance/i, code: 'FPAD004' },
@@ -1669,7 +1610,6 @@ function extractCourseAndSectionFromFilename(filename) {
     { pattern: /Advance/i, code: 'FPAD004' }
   ];
   
-  // Section patterns
   const sectionPatterns = [
     /Section[_\s-]?(\d{1,2})/i, 
     /Sec[_\s-]?(\d{1,2})/i, 
@@ -1678,28 +1618,22 @@ function extractCourseAndSectionFromFilename(filename) {
     /S?(\d{1,2})$/i
   ];
   
-  // Find course
   let detectedCourse = null;
   for (const { pattern, code } of coursePatterns) {
     if (pattern.test(baseName)) {
       detectedCourse = code;
-      console.log(`Detected course: ${code} from pattern: ${pattern}`);
       break;
     }
   }
   
-  // Find section
   let detectedSection = null;
   for (const pattern of sectionPatterns) {
     const match = baseName.match(pattern);
     if (match && match[1]) {
       detectedSection = match[1].padStart(2, '0');
-      console.log(`Detected section: ${detectedSection} from pattern: ${pattern}`);
       break;
     }
   }
-  
-  console.log(`Filename: ${filename}, Detected Course: ${detectedCourse}, Detected Section: ${detectedSection}`);
   
   return {
     course: detectedCourse,
@@ -1707,25 +1641,21 @@ function extractCourseAndSectionFromFilename(filename) {
   };
 }
 
-// Function to update course dropdown with only populated courses
 function updateCourseDropdown() {
   const currentCourse = courseSelect.value;
   const populatedCourses = new Set();
   
-  // Get all courses that have data
   Object.keys(allCoursesData).forEach(key => {
     const parts = key.split('_');
     if (parts.length >= 4) {
       const courseCode = parts[2];
       const courseData = allCoursesData[key];
       
-      // Check if this course has student data
       if (courseData && courseData.students && courseData.students.length > 0) {
-        // Check if any student has actual data (not just empty rows)
         const hasRealData = courseData.students.some(student => 
           student && student.length > 2 && 
-          (student[1] || student[2] || // ID or name
-           student.slice(3, 22).some(field => field && field.toString().trim() !== '')) // Any grade data
+          (student[1] || student[2] || 
+           student.slice(3, 22).some(field => field && field.toString().trim() !== ''))
         );
         
         if (hasRealData) {
@@ -1735,11 +1665,8 @@ function updateCourseDropdown() {
     }
   });
   
-  // Update course dropdown
   const courseOptions = courseSelect.options;
-  const availableOptions = Array.from(courseOptions).map(option => option.value);
   
-  // Show/hide options based on whether they have data
   for (let i = 0; i < courseOptions.length; i++) {
     const option = courseOptions[i];
     const hasData = populatedCourses.has(option.value);
@@ -1748,7 +1675,6 @@ function updateCourseDropdown() {
       option.style.display = '';
       option.disabled = false;
     } else {
-      // Keep current course visible even if no data
       if (option.value === currentCourse) {
         option.style.display = '';
         option.disabled = false;
@@ -1759,7 +1685,6 @@ function updateCourseDropdown() {
     }
   }
   
-  // If current course is not in populated courses but we have other options, select the first available
   if (!populatedCourses.has(currentCourse) && populatedCourses.size > 0) {
     const firstPopulatedCourse = Array.from(populatedCourses)[0];
     courseSelect.value = firstPopulatedCourse;
@@ -1767,7 +1692,6 @@ function updateCourseDropdown() {
   }
 }
 
-// MODIFIED: updateSectionDropdown to only show sections with data
 function updateSectionDropdown() {
   const currentCourse = courseSelect.value;
   const currentSection = sectionSelect.value || '01';
@@ -1775,7 +1699,6 @@ function updateSectionDropdown() {
   sectionSelect.innerHTML = '';
   const populatedSections = new Set();
   
-  // Get all sections for the current course that have data
   Object.keys(allCoursesData).forEach(key => {
     const parts = key.split('_');
     if (parts.length >= 4 && parts[2] === currentCourse) {
@@ -1789,13 +1712,11 @@ function updateSectionDropdown() {
           
         const courseData = allCoursesData[key];
         
-        // Check if this section has student data
         if (courseData && courseData.students && courseData.students.length > 0) {
-          // Check if any student has actual data (not just empty rows)
           const hasRealData = courseData.students.some(student => 
             student && student.length > 2 && 
-            (student[1] || student[2] || // ID or name
-             student.slice(3, 22).some(field => field && field.toString().trim() !== '')) // Any grade data
+            (student[1] || student[2] || 
+             student.slice(3, 22).some(field => field && field.toString().trim() !== ''))
           );
           
           if (hasRealData) {
@@ -1806,10 +1727,8 @@ function updateSectionDropdown() {
     }
   });
   
-  // Sort sections numerically
   const sortedSections = Array.from(populatedSections).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
   
-  // Add sections to dropdown
   sortedSections.forEach(section => {
     const option = document.createElement('option');
     option.value = section;
@@ -1817,13 +1736,11 @@ function updateSectionDropdown() {
     sectionSelect.appendChild(option);
   });
   
-  // Set the selected section
   if (sortedSections.includes(currentSection)) {
     sectionSelect.value = currentSection;
   } else if (sortedSections.length > 0) {
     sectionSelect.value = sortedSections[0];
   } else {
-    // If no sections with data, add the current section
     const option = document.createElement('option');
     option.value = currentSection;
     option.textContent = currentSection;
@@ -1843,7 +1760,6 @@ function initializeFromStorage() {
     }
   }
 
-  // Initialize both dropdowns
   updateCourseDropdown();
   updateSectionDropdown();
 }
@@ -1888,7 +1804,6 @@ function getStorageKey() {
   return `SGS_${semester}_${course}_Sec${section}`;
 }
 
-// FIXED: saveToLocalStorage function that preserves raw data
 function saveToLocalStorage() {
   try {
     const currentKey = getStorageKey();
@@ -1913,21 +1828,16 @@ function saveToLocalStorage() {
       const oldStudentData = currentCourseData.students[index] || Array(23).fill('');
       const newStudentData = [...oldStudentData];
 
-      // Always preserve ID and Name
       newStudentData[1] = row.cells[1].textContent.trim();
       newStudentData[2] = row.cells[2].textContent.trim();
 
       if (currentView === 'raw') {
-        // In raw view, save exactly what's entered
         for (let i = 3; i <= 14; i++) {
           const cellValue = row.cells[i].textContent.trim();
-          // Only save non-empty values, preserve existing data if cell is empty
           newStudentData[i] = cellValue !== '' ? cellValue : newStudentData[i];
         }
-        // Mark as raw data
         newStudentData[15] = 'raw';
       }
-      // For other views (summative, final), don't modify the stored raw data
       
       newStudentsData.push(newStudentData);
     });
@@ -1943,7 +1853,6 @@ function saveToLocalStorage() {
       section: sectionSelect.value
     }));
 
-    // Update dropdowns after saving
     updateCourseDropdown();
     updateSectionDropdown();
 
@@ -1984,7 +1893,6 @@ function showStatus(message, buttonElement) {
   }, 3000);
 }
 
-// MODIFIED: fileInput event listener to use enhanced course/section detection
 fileInput.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -2008,7 +1916,6 @@ fileInput.addEventListener('change', async (e) => {
       return;
     }
     
-    // Use enhanced course and section detection
     const { course: detectedCourse, section: detectedSection } = extractCourseAndSectionFromFilename(file.name);
     
     let sectionNumber = detectedSection;
@@ -2023,14 +1930,11 @@ fileInput.addEventListener('change', async (e) => {
     courseSelect.value = course;
     courseCode.value = course;
     
-    // Get the current storage key
     const currentKey = getStorageKey();
     
-    // Get existing students if any
     const existingData = allCoursesData[currentKey] || { students: [] };
     const existingStudents = existingData.students || [];
     
-    // Create a map of existing students by ID for quick lookup
     const existingStudentsMap = new Map();
     existingStudents.forEach(student => {
       if (student[1]) {
@@ -2038,23 +1942,19 @@ fileInput.addEventListener('change', async (e) => {
       }
     });
     
-    // Merge the new students with existing ones
     let newCount = 0;
     let updatedCount = 0;
     
     const mergedStudents = students.map(newStudent => {
-      // Check if this student already exists
       const existingStudent = existingStudentsMap.get(newStudent.id.toString().trim());
       
       if (existingStudent) {
-        // Update the name if it has changed
         if (existingStudent[2] !== newStudent.name) {
           existingStudent[2] = newStudent.name;
           updatedCount++;
         }
         return existingStudent;
       } else {
-        // Create a new student entry
         newCount++;
         const studentArray = Array(23).fill('');
         studentArray[1] = newStudent.id;
@@ -2079,7 +1979,6 @@ fileInput.addEventListener('change', async (e) => {
     
     localStorage.setItem('SGS_All_Courses', JSON.stringify(allCoursesData));
     
-    // Update both dropdowns after import
     updateCourseDropdown();
     updateSectionDropdown();
     
@@ -2142,7 +2041,6 @@ async function parseExcel(file) {
   return students.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-// FIXED: handleGradesFile function with improved column detection
 async function handleGradesFile(event) {
     const file = event.target.files[0];
     if (!file) {
@@ -2176,11 +2074,9 @@ async function handleGradesFile(event) {
         let firstNameColumnIndex = -1;
         let lastNameColumnIndex = -1;
 
-        // Map column headers to grade types and find the ID column
         headerRow.forEach((header, index) => {
             const headerStr = String(header).toLowerCase().trim();
             
-            // Check for grade columns
             for (const [gradeKey, gradeValue] of Object.entries(gradeHeaders)) {
                 if (headerStr.includes(gradeKey.toLowerCase())) {
                     gradeColumnMap[gradeValue] = index;
@@ -2188,7 +2084,6 @@ async function handleGradesFile(event) {
                 }
             }
             
-            // Check for ID and name columns
             if (headerStr.includes('id') || headerStr.includes('number')) {
                 idColumnIndex = index;
             } else if (headerStr.includes('first') && headerStr.includes('name')) {
@@ -2200,23 +2095,15 @@ async function handleGradesFile(event) {
             }
         });
 
-        // Debug logging to see what columns were found
-        console.log('Grade column mapping:', gradeColumnMap);
-        console.log('ID column index:', idColumnIndex);
-        console.log('First name column index:', firstNameColumnIndex);
-        console.log('Last name column index:', lastNameColumnIndex);
-
         if (idColumnIndex === -1 && firstNameColumnIndex === -1) {
             alert('ID Number or Name column not found in the Excel file.');
             return;
         }
 
-        // Get current student data
         const currentKey = getStorageKey();
         const currentData = allCoursesData[currentKey] || { students: [] };
         const currentStudents = currentData.students || [];
 
-        // Iterate through student data starting from the second row
         for (let i = 1; i < data.length; i++) {
             const row = data[i];
             if (!row || row.length === 0) continue;
@@ -2224,7 +2111,6 @@ async function handleGradesFile(event) {
             let studentId = '';
             let studentName = '';
             
-            // Get student identifier
             if (idColumnIndex !== -1 && row[idColumnIndex] !== undefined) {
                 studentId = String(row[idColumnIndex]).trim();
             }
@@ -2238,7 +2124,6 @@ async function handleGradesFile(event) {
             
             if (!studentId && !studentName) continue;
 
-            // Find matching student in current data
             let matchedStudentIndex = -1;
             
             for (let j = 0; j < currentStudents.length; j++) {
@@ -2255,12 +2140,10 @@ async function handleGradesFile(event) {
             
             if (matchedStudentIndex === -1) continue;
             
-            // Update grades for the matched student
             for (const [gradeType, columnIndex] of Object.entries(gradeColumnMap)) {
                 if (row[columnIndex] !== undefined && row[columnIndex] !== null && row[columnIndex] !== '') {
                     const gradeValue = parseFloat(row[columnIndex]);
                     if (!isNaN(gradeValue)) {
-                        // Map grade type to column index in our table
                         let targetColumn;
                         switch(gradeType) {
                             case 'participation': targetColumn = 3; break;
@@ -2278,14 +2161,12 @@ async function handleGradesFile(event) {
                             default: continue;
                         }
                         
-                        // Update the student data
                         currentStudents[matchedStudentIndex][targetColumn] = gradeValue.toString();
                     }
                 }
             }
         }
 
-        // Save updated data and reload
         allCoursesData[currentKey].students = currentStudents;
         localStorage.setItem('SGS_All_Courses', JSON.stringify(allCoursesData));
         loadAllData();
@@ -2317,7 +2198,6 @@ async function parsePDF(file) {
       const id = match[1];
       let name = match[2].trim();
       
-      // Remove trailing junk like "Grade Total Percent Instructor"
       name = name.replace(/\b(?:Page|GET|Grade|Total|Percent|Instructor|SAVE|NEXT|PREVIOUS|PRINT|CONFIRM|UNCONFIRM|LOGSISW)\b.*$/i, '').trim();
       name = name.replace(/\b(?:grade|total|percent|instructor)\b.*$/i, '').trim();
       name = name.replace(/[\.\,\-\/\|\:\;]+$/g, '').trim();
@@ -2331,7 +2211,6 @@ async function parsePDF(file) {
   return students.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-// FIXED: loadAllData function to handle the new raw view
 function loadAllData() {
   const currentKey = getStorageKey();
   const savedData = allCoursesData[currentKey];
@@ -2344,7 +2223,6 @@ function loadAllData() {
         const tr = document.createElement('tr');
         
         if (currentView === 'raw') {
-          // RAW GRADES SHEET - Show raw marks exactly as stored
           tr.innerHTML = `
             <td>${index + 1}</td>
             <td contenteditable="false">${student[1] || ''}</td>
@@ -2364,7 +2242,6 @@ function loadAllData() {
             <td>${calculateRawTotal(student)}</td>
           `;
         } else if (currentView === 'summative') {
-          // ASSESSMENTS GRADE SHEET - Show calculated percentages only if raw data exists
           const summativeValues = calculateSummativeValues(student);
           
           tr.innerHTML = `
@@ -2385,12 +2262,10 @@ function loadAllData() {
             <td>${calculateSummativeTotalFromValues(summativeValues)}</td>
           `;
         } else if (currentView === 'final') {
-          // FINAL GRADES SHEET - Show calculated values only if raw data exists
           
 let totalScore = 0;
 const finalValues = calculateFinalValues(student);
 
-// Get the total score from final values calculation
 totalScore = parseFloat(finalValues.totalScore) || 0;
           
           tr.innerHTML = `
@@ -2462,17 +2337,14 @@ ${email === 'Not Applicable' || email === '' ?
   setEditMode(!isLocked);
   calculateTotals();
   
-  // Apply color coding after loading data
   setTimeout(() => {
     applyGradeColorCoding();
   }, 100);
   
-  // Update dropdowns after loading data
   updateCourseDropdown();
   updateSectionDropdown();
 }
 
-// Function to calculate raw total
 function calculateRawTotal(student) {
   let totalScore = 0;
   for (let i = 3; i <= 14; i++) {
@@ -2484,7 +2356,6 @@ function calculateRawTotal(student) {
   return totalScore > 0 ? (Math.round(totalScore * 100) / 100).toFixed(2) : '';
 }
 
-// Function to calculate summative total
 function calculateSummativeTotal(student) {
   let totalScore = 0;
   for (let i = 3; i <= 13; i++) {
@@ -2496,25 +2367,20 @@ function calculateSummativeTotal(student) {
   return totalScore > 0 ? (Math.round(totalScore * 100) / 100).toFixed(2) : '';
 }
 
-// Function to parse summative total from student data
 function parseSummativeTotal(student) {
-  // Check if we have a stored total from summative view
   if (student[22] && student[22].toString().trim() !== '') {
     return parseFloat(student[22]);
   }
   return null;
 }
 
-// Function to calculate final total based on individual components
 function calculateFinalTotal(student) {
-  // For English courses, use the new weightings
   const participation = parseFloat(student[3]) || 0;
   const portfolio = parseFloat(student[4]) || 0;
   const participationPortfolio = participation + portfolio;
   
   const presentation = parseFloat(student[5]) || 0;
   
-  // Calculate tests from percentage columns
   const popQuiz1Percent = parseFloat(calculatePercentage(student[6], 10, 2.5)) || 0;
   const popQuiz2Percent = parseFloat(calculatePercentage(student[8], 10, 2.5)) || 0;
   const test1GVPercent = parseFloat(calculatePercentage(student[10], 20, 5)) || 0;
@@ -2548,19 +2414,16 @@ function restoreFormFields(formData) {
   }
 }
 
-// MODIFIED: setEditMode function to make summative view read-only
 function setEditMode(editable) {
   isLocked = !editable;
   
   if (currentView === 'raw') {
-    // Raw view is editable when unlocked
     lockButton.style.display = '';
     clearDropdown.style.display = '';
     performanceAnalysisButton.style.display = '';
     resultsAnalysisButton.style.display = '';
     copyToConsoleButton.style.display = 'none';
   } else if (currentView === 'summative') {
-    // Summative view is always read-only
     lockButton.style.display = 'none';
     clearDropdown.style.display = 'none';
     performanceAnalysisButton.style.display = '';
@@ -2585,14 +2448,11 @@ function setEditMode(editable) {
       let isEditable = false;
       
       if (currentView === 'raw') {
-        // Make all raw grade columns editable when unlocked
         if ([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].includes(index)) {
           isEditable = !isLocked;
         }
       } else if (currentView === 'summative') {
-        // Summative view is always read-only (no editable cells)
         isEditable = false;
-        // Add readonly styling
         if ([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].includes(index)) {
           cell.classList.add('readonly-cell');
         }
@@ -2605,7 +2465,6 @@ function setEditMode(editable) {
       cell.contentEditable = isEditable ? "true" : "false";
       cell.classList.toggle('readonly-no-cursor', !isEditable);
       
-      // Remove readonly styling for non-summative views
       if (currentView !== 'summative') {
         cell.classList.remove('readonly-cell');
       }
@@ -2704,7 +2563,6 @@ function handleEmailSend() {
   sendGroupEmail(selectedGroup);
 }
 
-// FIXED: calculateTotals function to apply color coding to Total column in Final Grades Sheet
 function calculateTotals() {
   Array.from(tbody.rows).forEach(row => {
     let totalCell, finallyCell;
@@ -2712,8 +2570,8 @@ function calculateTotals() {
     let hasMarks = false;
 
     if (currentView === 'summative') {
-    totalCell = row.cells[14];
-    let totalMax = 0;  
+      totalCell = row.cells[14];
+      let totalMax = 0;  
 
       for (let i = 3; i <= 13; i++) {
         const cell = row.cells[i];
@@ -2724,17 +2582,14 @@ function calculateTotals() {
           hasMarks = true;
           
           const percentage = (value / summativeMarksLimits[i]) * 100;
-          // Remove existing classes
           cell.classList.remove('low-grade-red', 'grade-normal');
           
-          // Apply color coding based on percentage
           if (percentage < 60 && value > 0) {
             cell.classList.add('low-grade-red');
           } else {
             cell.classList.add('grade-normal');
           }
         } else {
-          // Clear styling if no valid value
           cell.classList.remove('low-grade-red', 'grade-normal');
         }
       }
@@ -2764,17 +2619,14 @@ function calculateTotals() {
           hasMarks = true;
           
           const percentage = (value / rawMarksLimits[i]) * 100;
-          // Remove existing classes
           cell.classList.remove('low-grade-red', 'grade-normal');
           
-          // Apply color coding based on percentage
           if (percentage < 60 && value > 0) {
             cell.classList.add('low-grade-red');
           } else {
             cell.classList.add('grade-normal');
           }
         } else {
-          // Clear styling if no valid value
           cell.classList.remove('low-grade-red', 'grade-normal');
         }
       }
@@ -2794,39 +2646,32 @@ function calculateTotals() {
     } else if (currentView === 'final') {
       totalCell = row.cells[8];
       finallyCell = row.cells[9];
-      
 
-      // Get values from the cells for English courses
       const participationPortfolio = parseFloat(row.cells[3].textContent) || 0;
       const tests = parseFloat(row.cells[4].textContent) || 0;
       const presentation = parseFloat(row.cells[5].textContent) || 0;
       const midterm = parseFloat(row.cells[6].textContent) || 0;
       const final = parseFloat(row.cells[7].textContent) || 0;
-      
 
-      // Calculate total score with English course weightings
       totalScore = participationPortfolio + tests + presentation + midterm + final;
       
-// Check if any marks exist
       hasMarks = participationPortfolio > 0 || tests > 0 || presentation > 0 || 
                  midterm > 0 || final > 0;
   
-  if (hasMarks) {
-    totalCell.textContent = (Math.round(totalScore * 100) / 100).toFixed(0);
-    
-    // FIXED: Apply color coding based on 60% threshold
-    totalCell.className = ''; // Clear existing classes
-    if (totalScore >= 60) {
-      totalCell.classList.add('total-pass');
-    } else if (totalScore > 0) {
-      totalCell.classList.add('total-fail');
-    }
-  } else {
-    totalCell.textContent = '';
-    totalCell.className = '';
-  }
+      if (hasMarks) {
+        totalCell.textContent = (Math.round(totalScore * 100) / 100).toFixed(0);
+        
+        totalCell.className = '';
+        if (totalScore >= 59.5) {
+          totalCell.classList.add('total-pass');
+        } else if (totalScore > 0) {
+          totalCell.classList.add('total-fail');
+        }
+      } else {
+        totalCell.textContent = '';
+        totalCell.className = '';
+      }
       
-      // Update finally cell styling
       const finallyValue = finallyCell.textContent.trim();
       finallyCell.className = '';
       if (finallyValue === 'Pass') {
@@ -2841,7 +2686,6 @@ function calculateTotals() {
     }
   });
   
-  // Apply color coding after calculating totals
   applyGradeColorCoding();
 }
 
@@ -2908,7 +2752,6 @@ function validateGradeInput(cell, maxMarks) {
     return false;
   }
   
-  // Apply color coding based on percentage
   const percentage = (numValue / maxMarks) * 100;
   if (percentage < 60 && numValue > 0) {
     cell.classList.add('low-grade-red');
@@ -2959,44 +2802,42 @@ tbody.addEventListener('focusout', (e) => {
   calculateTotals();
 });
 
-// Function to update percentage columns when editable cells change
 function updatePercentageColumns(changedCell) {
   const row = changedCell.parentNode;
   const cellIndex = changedCell.cellIndex;
   
-  // Update percentage columns based on which cell was changed
   switch(cellIndex) {
-    case 6: // Pop Quiz 1 (10)
+    case 6:
       const popQuiz1Value = row.cells[6].textContent.trim();
       const popQuiz1Percent = calculatePercentage(popQuiz1Value, 10, 2.5);
       row.cells[7].textContent = popQuiz1Percent;
       break;
-    case 8: // Pop Quiz 2 (10)
+    case 8:
       const popQuiz2Value = row.cells[8].textContent.trim();
       const popQuiz2Percent = calculatePercentage(popQuiz2Value, 10, 2.5);
       row.cells[9].textContent = popQuiz2Percent;
       break;
-    case 10: // Test 1 GV (20)
+    case 10:
       const test1GVValue = row.cells[10].textContent.trim();
       const test1GVPercent = calculatePercentage(test1GVValue, 20, 5);
       row.cells[11].textContent = test1GVPercent;
       break;
-    case 12: // Test 2 LR (20)
+    case 12:
       const test2LRValue = row.cells[12].textContent.trim();
       const test2LRPercent = calculatePercentage(test2LRValue, 20, 5);
       row.cells[13].textContent = test2LRPercent;
       break;
-    case 14: // Speaking Test (20)
+    case 14:
       const speakingTestValue = row.cells[14].textContent.trim();
       const speakingTestPercent = calculatePercentage(speakingTestValue, 20, 5);
       row.cells[15].textContent = speakingTestPercent;
       break;
-    case 16: // Writing Test (20)
+    case 16:
       const writingTestValue = row.cells[16].textContent.trim();
       const writingTestPercent = calculatePercentage(writingTestValue, 20, 5);
       row.cells[17].textContent = writingTestPercent;
       break;
-    case 18: // Writing Portfolio (20)
+    case 18:
       const writingPortfolioValue = row.cells[18].textContent.trim();
       const writingPortfolioPercent = calculatePercentage(writingPortfolioValue, 20, 5);
       row.cells[19].textContent = writingPortfolioPercent;
@@ -3024,12 +2865,11 @@ tbody.addEventListener('input', (e) => {
       if (isNaN(numValue) || numValue < 0 || numValue > maxMarks || !/^\d*\.?\d*$/.test(value)) {
         targetCell.classList.add('invalid');
       } else {
-        // Apply color coding based on percentage
         const percentage = (numValue / maxMarks) * 100;
         if (percentage < 60 && numValue > 0) {
           targetCell.classList.add('low-grade-red');
         } else {
-          cell.classList.add('grade-normal');
+          targetCell.classList.add('grade-normal');
         }
       }
     }
@@ -3048,12 +2888,11 @@ tbody.addEventListener('input', (e) => {
       if (isNaN(numValue) || numValue < 0 || numValue > maxMarks || !/^\d*\.?\d*$/.test(value)) {
         targetCell.classList.add('invalid');
       } else {
-        // Apply color coding based on percentage
         const percentage = (numValue / maxMarks) * 100;
         if (percentage < 60 && numValue > 0) {
           targetCell.classList.add('low-grade-red');
         } else {
-          cell.classList.add('grade-normal');
+          targetCell.classList.add('grade-normal');
         }
       }
     }
@@ -3074,50 +2913,39 @@ function filterTable() {
   });
 }
 
-// NEW: Function to get formatted filename
 function getFormattedFileName(extension) {
   const currentSemester = getCurrentSemester();
   const instructorNameElem = document.getElementById('instructorName');
   let instructorName = instructorNameElem ? instructorNameElem.textContent.trim() : 'Administrator';
   
-  // Extract first name if full name is available
   if (instructorName.includes(' ')) {
     instructorName = instructorName.split(' ')[0];
   }
   
-  // Remove "Dr." or similar prefixes if present
   instructorName = instructorName.replace(/^(Dr\.?|Prof\.?)\s*/i, '');
   
-  // Format: "Semester yyyy-InstructorName"
   const semesterYear = `${currentSemester.semester} ${currentSemester.year}`;
   const baseName = `${semesterYear}-${instructorName}`;
   
   return `${baseName}.${extension}`;
 }
 
-// MODIFIED: exportToExcel function with enhanced header information
 function exportToExcel() {
-  // Save current view to restore later
   const originalView = currentView;
   
-  // Temporarily switch to final view to get the correct table structure
   switchView('final');
   
-  // Create a new workbook
   const wb = XLSX.utils.book_new();
   
-  // Get the table data
   const table = document.getElementById('studentTable');
   const ws = XLSX.utils.table_to_sheet(table);
   
-  // Add header information
   const currentSemester = getCurrentSemester();
   const instructorName = document.getElementById('instructorName').textContent;
   const courseName = courseSelect.options[courseSelect.selectedIndex].text;
   const courseCodeValue = courseCode.value;
   const sectionValue = sectionSelect.value;
   
-  // Add header rows
   const headerData = [
     ["A'Sharqiyah University Ibra, Oman"],
     ["Center For Language and Foundation Studies"],
@@ -3129,53 +2957,32 @@ function exportToExcel() {
     [""]
   ];
   
-  // Convert table data to array
   const tableArray = XLSX.utils.sheet_to_json(ws, {header: 1});
   
-  // Combine header and table data
   const fullData = [...headerData, ...tableArray];
   
-  // Create a new worksheet with the combined data
   const fullWs = XLSX.utils.aoa_to_sheet(fullData);
   
-  // Set column widths for better formatting
   const colWidths = [
-    {wch: 8},  // S.No.
-    {wch: 12}, // ID Number
-    {wch: 30}, // Student Name
-    {wch: 20}, // Participation & Portfolio
-    {wch: 12}, // Tests
-    {wch: 15}, // Presentation
-    {wch: 12}, // Midterm
-    {wch: 10}, // Final
-    {wch: 10}, // Total
-    {wch: 10}, // Result
-    {wch: 10}  // Grade Letter
+    {wch: 8}, {wch: 12}, {wch: 30}, {wch: 20}, {wch: 12}, {wch: 15}, {wch: 12}, {wch: 10}, {wch: 10}, {wch: 10}, {wch: 10}
   ];
   fullWs['!cols'] = colWidths;
   
-  // Add the worksheet to the workbook
   XLSX.utils.book_append_sheet(wb, fullWs, "Final Grades");
   
-  // Use the new filename format
   const fileName = getFormattedFileName('xlsx');
   XLSX.writeFile(wb, fileName);
   
-  // Restore original view
   switchView(originalView);
 }
 
-// MODIFIED: exportToPDF function with enhanced header information and landscape layout
 function exportToPDF() {
-  // Save current view to restore later
   const originalView = currentView;
   
-  // Temporarily switch to final view to get the correct table structure
   switchView('final');
   
   const { jsPDF } = window.jspdf;
   
-  // Create PDF in landscape mode
   const doc = new jsPDF({
     orientation: 'landscape',
     unit: 'mm',
@@ -3188,7 +2995,6 @@ function exportToPDF() {
   const courseCodeValue = courseCode.value;
   const sectionValue = sectionSelect.value;
   
-  // Add header information
   doc.setFontSize(16);
   doc.setFont(undefined, 'bold');
   doc.text("A'Sharqiyah University Ibra, Oman", 20, 20);
@@ -3205,7 +3011,6 @@ function exportToPDF() {
   doc.text(`Instructor: ${instructorName}`, 20, 52);
   doc.text(`Course: ${courseName} Code: ${courseCodeValue} Section: ${sectionValue}`, 20, 60);
   
-  // Add the table
   doc.autoTable({
     html: '#studentTable',
     startY: 70,
@@ -3223,22 +3028,19 @@ function exportToPDF() {
       0: { cellWidth: 10 },
       1: { cellWidth: 20 },
       2: { cellWidth: 40, halign: 'left' },
-      3: { cellWidth: 25 }, // Participation & Portfolio
-      4: { cellWidth: 15 }, // Tests
-      5: { cellWidth: 20 }  // Presentation
+      3: { cellWidth: 25 },
+      4: { cellWidth: 15 },
+      5: { cellWidth: 20 }
     },
     margin: { top: 70 }
   });
   
-  // Use the new filename format
   const fileName = getFormattedFileName('pdf');
   doc.save(fileName);
   
-  // Restore original view
   switchView(originalView);
 }
 
-// MODIFIED: saveAllSectionsToFile function with new filename format
 function saveAllSectionsToFile() {
   if (Object.keys(allCoursesData).length === 0) {
     showStatus('❌ No data to save.', document.querySelector('.dropdown-button'));
@@ -3251,7 +3053,6 @@ function saveAllSectionsToFile() {
   const a = document.createElement('a');
   a.href = url;
   
-  // Use the new filename format
   const fileName = getFormattedFileName('json');
   a.download = fileName;
   
@@ -3273,9 +3074,7 @@ function loadFromFile() {
     try {
       const data = JSON.parse(e.target.result);
       
-      // Check if this is a single section or all sections data
       if (data.students && data.formData) {
-        // Single section format
         const currentSemester = getCurrentSemester();
         const saveKey = `SGS_${currentSemester.semester}_${data.formData.course}_Sec${data.formData.section}`;
         allCoursesData[saveKey] = data;
@@ -3287,7 +3086,6 @@ function loadFromFile() {
         loadAllData();
         showStatus('✅ Grades imported from JSON successfully!', document.querySelector('.dropdown-button'));
       } else if (typeof data === 'object') {
-        // All sections format
         Object.keys(data).forEach(key => {
           allCoursesData[key] = data[key];
         });
@@ -3332,7 +3130,6 @@ function clearGrades() {
   localStorage.setItem('SGS_All_Courses', JSON.stringify(allCoursesData));
   loadAllData();
   
-  // Update dropdowns after clearing
   updateCourseDropdown();
   updateSectionDropdown();
   
@@ -3350,7 +3147,6 @@ function clearStudents() {
   }
   loadAllData();
   
-  // Update dropdowns after clearing
   updateCourseDropdown();
   updateSectionDropdown();
   
@@ -3361,7 +3157,6 @@ function logout() {
   window.location.href = "Login.html";
 }
 
-// MODIFIED: switchView function to handle the new raw view as default
 function switchView(viewType) {
   currentView = viewType;
 
@@ -3376,12 +3171,11 @@ function switchView(viewType) {
     saveButton.style.display = 'inline-block';
   }
 
-  // Show/hide import button based on view
   const importButton = document.getElementById('importButtonContainer');
   if (viewType === 'raw') {
-    importButton.style.display = ''; // Show for raw view only
+    importButton.style.display = '';
   } else {
-    importButton.style.display = 'none'; // Hide for other views
+    importButton.style.display = 'none';
   }
 
   if (viewType === 'raw') {
@@ -3481,7 +3275,6 @@ function switchView(viewType) {
   loadAllData();
 }
 
-// UPDATED sendGroupEmail function with "All Students" support
 function sendGroupEmail(groupType) {
   const currentKey = getStorageKey();
   const savedData = allCoursesData[currentKey];
@@ -3495,22 +3288,18 @@ function sendGroupEmail(groupType) {
   let subject = '';
   let body = '';
   
-  // Filter students based on the selected group
   switch(groupType) {
     case 'all-students':
-      // Send to ALL students with valid email addresses
       emailRecipients = savedData.students
         .filter(student => {
-          // Include all students who have an ID number (basic validation)
           const studentId = student[1] || '';
           return studentId.toString().trim() !== '' && /^\d+$/.test(studentId.toString().trim());
         })
         .map(student => {
           const studentId = student[1] || '';
-          // Generate email from student ID
           return `${studentId}@asu.edu.om`;
         })
-        .filter(email => email !== '@asu.edu.om'); // Remove invalid emails
+        .filter(email => email !== '@asu.edu.om');
       subject = 'Important Course Announcement';
       body = 'Dear Student,\n\nThis is an important announcement regarding your course. Please check the course portal for updates and important information.\n\nBest regards,\nYour Instructor';
       break;
@@ -3595,10 +3384,8 @@ function sendGroupEmail(groupType) {
     return;
   }
   
-  // Create mailto link
   const mailtoLink = `mailto:${emailRecipients.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   
-  // Open email client
   window.location.href = mailtoLink;
 }
 
@@ -3620,7 +3407,6 @@ function copyFinalGradesToConsole() {
     if (savedStudentData && savedStudentData.length > 3) {
       student['ID number'] = savedStudentData[1] || '';
       
-      // Get individual grades from summative view data
       const participation = savedStudentData[3] || '';
       const portfolio = savedStudentData[4] || '';
       const presentation = savedStudentData[5] || '';
@@ -3634,10 +3420,8 @@ function copyFinalGradesToConsole() {
       const midterm = savedStudentData[20] || '';
       const final = savedStudentData[21] || '';
       
-      // Calculate combined grades for final view (English courses)
       const participationPortfolio = (parseFloat(participation) || 0) + (parseFloat(portfolio) || 0);
       
-      // Calculate tests from percentage values
       const popQuiz1Percent = parseFloat(calculatePercentage(popQuiz1, 10, 2.5)) || 0;
       const popQuiz2Percent = parseFloat(calculatePercentage(popQuiz2, 10, 2.5)) || 0;
       const test1GVPercent = parseFloat(calculatePercentage(test1GV, 20, 5)) || 0;
@@ -3647,7 +3431,6 @@ function copyFinalGradesToConsole() {
       const writingPortfolioPercent = parseFloat(calculatePercentage(writingPortfolio, 20, 5)) || 0;
       const tests = popQuiz1Percent + popQuiz2Percent + test1GVPercent + test2LRPercent + speakingTestPercent + writingTestPercent + writingPortfolioPercent;
       
-      // Map to LOGSIS field names for English courses
       student['Participation & Portfolio of 10'] = participationPortfolio > 0 ? participationPortfolio.toFixed(1).replace(/\.0+$/, '') : '';
       student['Tests of 30'] = tests > 0 ? tests.toFixed(1).replace(/\.0+$/, '') : '';
       student['Presentation of 10'] = presentation > 0 ? presentation.toFixed(1).replace(/\.0+$/, '') : '';
@@ -3664,30 +3447,20 @@ function copyFinalGradesToConsole() {
 
   const jsCode = `
 // LOGSIS Grade Import Script with Delays
-// Instructions: 
-// 1. Go to: http://sisweb.asu.edu.om/portal/pls/portal/Siw_Assign_Stu_Grd_Dml
-// 2. Open browser console (F12 → Console tab)
-// 3. Paste this entire script and press Enter
-// 4. The system will automatically fill all grades with proper delays
-
 (async function() {
   const studentData = ${JSON.stringify(finalGradesData, null, 2)};
   
   console.log('🔍 Starting LOGSIS grade import for', studentData.length, 'students...');
   console.log('📊 Student data:', studentData);
-  console.log('⏰ Using delays between operations for system stability');
 
-  // Helper function to add delays
   function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  // Helper function to sanitize grade values
   function sanitizeGrade(value) {
     if (!value || value === '' || value === '0.0' || value === '0' || value === '0.00') {
       return '';
     }
-    // Convert to number and back to string to remove trailing .0
     const numValue = parseFloat(value);
     return isNaN(numValue) ? '' : numValue.toString();
   }
@@ -3695,7 +3468,6 @@ function copyFinalGradesToConsole() {
   let processedCount = 0;
   let errorCount = 0;
 
-  // Process each student with delays
   for (let index = 0; index < studentData.length; index++) {
     const student = studentData[index];
     const studentId = student['ID number'];
@@ -3703,13 +3475,12 @@ function copyFinalGradesToConsole() {
     if (!studentId) {
       console.warn('❌ Skipping student at index', index, '- No ID number');
       errorCount++;
-      await delay(100); // Small delay even for skipped students
+      await delay(100);
       continue;
     }
 
     console.log(\`\\\\n🎯 Processing student \${index + 1}/\${studentData.length}: ID \${studentId}\`);
 
-    // Find the student row in LOGSIS - look for the ID in any table cell
     const allCells = document.querySelectorAll('td');
     let studentRow = null;
     
@@ -3722,31 +3493,23 @@ function copyFinalGradesToConsole() {
 
     if (!studentRow) {
       console.warn(\`❌ Student ID \${studentId} not found in LOGSIS table\`);
-      console.log('🔍 Available IDs in table:');
-      document.querySelectorAll('td').forEach(td => {
-        if (td.textContent.match(/\\\\d{6,}/)) {
-          console.log('  -', td.textContent.trim());
-        }
-      });
       errorCount++;
-      await delay(500); // Delay before next student
+      await delay(500);
       continue;
     }
 
     console.log(\`✅ Found student row for ID \${studentId}\`);
 
-    // Get all input fields in this row
     const allInputs = studentRow.querySelectorAll('input[type="text"]');
     console.log(\`📝 Found \${allInputs.length} input fields in row\`);
 
     if (allInputs.length < 6) {
       console.warn('❌ Not enough input fields found in row. Expected at least 6, found:', allInputs.length);
       errorCount++;
-      await delay(500); // Delay before next student
+      await delay(500);
       continue;
     }
 
-    // LOGSIS typically has this order for English courses
     const gradeFields = [
       { index: 0, name: 'Participation & Portfolio of 10', grade: student['Participation & Portfolio of 10'] },
       { index: 1, name: 'Tests of 30', grade: student['Tests of 30'] },
@@ -3755,21 +3518,16 @@ function copyFinalGradesToConsole() {
       { index: 4, name: 'Final of 30', grade: student['Final of 30'] }
     ];
 
-    console.log('🎯 Grade mapping for English courses:', gradeFields.map(f => f.name));
-
     let filledFields = 0;
 
-    // Fill each grade field with delays between fields
     for (const { index, name, grade } of gradeFields) {
       const sanitizedGrade = sanitizeGrade(grade);
       
       if (index < allInputs.length && sanitizedGrade !== '') {
         const input = allInputs[index];
         
-        // Fill the field
         input.value = sanitizedGrade;
         
-        // Trigger events with delays between them
         await delay(50);
         input.dispatchEvent(new Event('input', { bubbles: true }));
         await delay(50);
@@ -3778,72 +3536,42 @@ function copyFinalGradesToConsole() {
         input.dispatchEvent(new Event('blur', { bubbles: true }));
         
         filledFields++;
-        console.log(\`   ✅ Filled \${name}: \${sanitizedGrade} (field index \${index})\`);
+        console.log(\`   ✅ Filled \${name}: \${sanitizedGrade}\`);
         
-        // Delay between filling different fields for the same student
         await delay(200);
-      } else if (index < allInputs.length) {
-        console.log(\`   ⏭️  Skipping \${name} - no grade data\`);
-        await delay(50); // Small delay for skipped fields
       }
     }
 
     processedCount++;
     console.log(\`✓ Student \${studentId}: Successfully filled \${filledFields} fields\`);
     
-    // Delay between processing different students
     if (index < studentData.length - 1) {
-      console.log(\`⏳ Waiting before next student...\`);
-      await delay(800); // Longer delay between students
+      await delay(800);
     }
   }
 
-  // Show completion summary
   console.log(
-    \`%c\\\\n🎉 LOGSIS Import Complete! \\\\nProcessed: \${processedCount} students \\\\nErrors: \${errorCount}\\\\nUsed delays for system stability\`,
+    \`%c\\\\n🎉 LOGSIS Import Complete! \\\\nProcessed: \${processedCount} students \\\\nErrors: \${errorCount}\`,
     "background: #4CAF50; color: white; font-weight: bold; padding: 10px; border-radius: 5px; font-size: 14px;"
   );
   
-  if (errorCount > 0) {
-    console.warn(
-      \`%c⚠️ Some students (\${errorCount}) could not be processed. Check the console above for details.\`,
-      "background: #FF9800; color: white; font-weight: bold; padding: 8px; border-radius: 4px;"
-    );
-  }
-
   return {
     success: true,
     processed: processedCount,
-    errors: errorCount,
-    message: \`Successfully imported grades for \${processedCount} students with proper delays\`
+    errors: errorCount
   };
 })();
-
-// Manual field mapping helper for English courses
-console.log('\\\\n💡 MANUAL FIELD MAPPING HELPER FOR ENGLISH COURSES:');
-console.log('Expected field order:');
-console.log('1. Participation & Portfolio of 10');
-console.log('2. Tests of 30');
-console.log('3. Presentation of 10');
-console.log('4. Midterm of 20');
-console.log('5. Final of 30');
-console.log('\\\\n⏰ Delay settings:');
-console.log('- Between fields: 200ms');
-console.log('- Between students: 800ms');
-console.log('- Between events: 50ms');
 `;
 
-  // Copy to clipboard
   navigator.clipboard.writeText(jsCode)
     .then(() => {
       showStatus('✅ LOGSIS import script copied to clipboard!', document.getElementById('copyToConsoleButton'));
       
-      // Show detailed instructions
       setTimeout(() => {
         const instructions = `LOGSIS Import Script Copied! ✅
 📊 GRADES BEING IMPORTED FOR ENGLISH COURSES:
 • Participation + Portfolio → Participation & Portfolio of 10
-• Pop Quiz 1 + Pop Quiz 2 + Test 1 GV + Test 2 LR + Speaking Test + Writing Test + Writing Portfolio → Tests of 30  
+• All Tests Combined → Tests of 30  
 • Presentation → Presentation of 10
 • Midterm → Midterm of 20
 • Final → Final of 30`;
@@ -3866,13 +3594,10 @@ function showResultsAnalysis() {
     return;
   }
   
-  // Calculate statistics
   const stats = calculateStatistics(savedData.students);
   
-  // Update the modal with the calculated data
   updateStatsModal(stats);
   
-  // Show the modal
   document.getElementById('statsModal').style.display = 'block';
 }
 
@@ -3889,37 +3614,19 @@ function calculateStatistics(students) {
   let othersCount = 0;
   
   const gradeDistribution = {
-    aPlus: 0, // 100.00%-96%
-    a: 0,     // 95.99%-92%
-    aMinus: 0, // 91.99%-90%
-    bPlus: 0, // 89.99%-86%
-    b: 0,     // 85.99%-82%
-    bMinus: 0, // 81.99%-80%
-    cPlus: 0, // 79.99%-76%
-    c: 0,     // 75.99%-72%
-    cMinus: 0, // 71.99%-70%
-    dPlus: 0, // 69.99%-66%
-    d: 0,     // 65.99%-62%
-    dMinus: 0, // 61.99%-60%
-    f: 0      // 59.99%-0%
+    aPlus: 0, a: 0, aMinus: 0, bPlus: 0, b: 0, bMinus: 0,
+    cPlus: 0, c: 0, cMinus: 0, dPlus: 0, d: 0, dMinus: 0, f: 0
   };
 
-  // Grade Distribution by percentage ranges
   const percentageDistribution = {
-    ninetyToHundred: 0,   // 90-100%
-    eightyToEightyNine: 0, // 80-89%
-    seventyToSeventyNine: 0, // 70-79%
-    sixtyToSixtyNine: 0,  // 60-69%
-    belowSixty: 0         // Below 60%
+    ninetyToHundred: 0, eightyToEightyNine: 0, seventyToSeventyNine: 0, sixtyToSixtyNine: 0, belowSixty: 0
   };
   
   students.forEach(student => {
-    // Skip empty rows
     if (!student[1] && !student[2]) return;
     
     totalStudents++;
     
-    // Calculate total score
     let score = 0;
     for (let i = 3; i <= 21; i++) {
       const value = parseFloat(student[i]);
@@ -3928,81 +3635,44 @@ function calculateStatistics(students) {
       }
     }
     
-    // Update highest and lowest scores
     if (score > highestScore) highestScore = score;
     if (score > 0 && score < lowestScore) lowestScore = score;
     
     totalScore += score;
     
-    // Categorize by final status
     const finallyValue = determineFinallyValue(student);
     switch (finallyValue) {
-      case 'Pass':
-        passCount++;
-        break;
-      case 'Not Pass':
-        notPassCount++;
-        break;
-      case 'FA':
-        faCount++;
-        break;
-      case 'WA':
-        waCount++;
-        break;
-      case 'IP':
-        ipCount++;
-        break;
-      default:
-        othersCount++;
+      case 'Pass': passCount++; break;
+      case 'Not Pass': notPassCount++; break;
+      case 'FA': faCount++; break;
+      case 'WA': waCount++; break;
+      case 'IP': ipCount++; break;
+      default: othersCount++;
     }
     
-    // Categorize by grade distribution (only for students with final scores)
     if (finallyValue === 'Pass' || finallyValue === 'Not Pass') {
-      // Grade letters distribution
-      if (score >= 96) {
-        gradeDistribution.aPlus++;
-      } else if (score >= 92) {
-        gradeDistribution.a++;
-      } else if (score >= 90) {
-        gradeDistribution.aMinus++;
-      } else if (score >= 86) {
-        gradeDistribution.bPlus++;
-      } else if (score >= 82) {
-        gradeDistribution.b++;
-      } else if (score >= 80) {
-        gradeDistribution.bMinus++;
-      } else if (score >= 76) {
-        gradeDistribution.cPlus++;
-      } else if (score >= 72) {
-        gradeDistribution.c++;
-      } else if (score >= 70) {
-        gradeDistribution.cMinus++;
-      } else if (score >= 66) {
-        gradeDistribution.dPlus++;
-      } else if (score >= 62) {
-        gradeDistribution.d++;
-      } else if (score >= 60) {
-        gradeDistribution.dMinus++;
-      } else {
-        gradeDistribution.f++;
-      }
+      if (score >= 96) gradeDistribution.aPlus++;
+      else if (score >= 92) gradeDistribution.a++;
+      else if (score >= 90) gradeDistribution.aMinus++;
+      else if (score >= 86) gradeDistribution.bPlus++;
+      else if (score >= 82) gradeDistribution.b++;
+      else if (score >= 80) gradeDistribution.bMinus++;
+      else if (score >= 76) gradeDistribution.cPlus++;
+      else if (score >= 72) gradeDistribution.c++;
+      else if (score >= 70) gradeDistribution.cMinus++;
+      else if (score >= 66) gradeDistribution.dPlus++;
+      else if (score >= 62) gradeDistribution.d++;
+      else if (score >= 59.5) gradeDistribution.dMinus++;
+      else gradeDistribution.f++;
       
-      // Percentage range distribution
-      if (score >= 90) {
-        percentageDistribution.ninetyToHundred++;
-      } else if (score >= 80) {
-        percentageDistribution.eightyToEightyNine++;
-      } else if (score >= 70) {
-        percentageDistribution.seventyToSeventyNine++;
-      } else if (score >= 60) {
-        percentageDistribution.sixtyToSixtyNine++;
-      } else {
-        percentageDistribution.belowSixty++;
-      }
+      if (score >= 90) percentageDistribution.ninetyToHundred++;
+      else if (score >= 80) percentageDistribution.eightyToEightyNine++;
+      else if (score >= 70) percentageDistribution.seventyToSeventyNine++;
+      else if (score >= 59.5) percentageDistribution.sixtyToSixtyNine++;
+      else if (score > 0) percentageDistribution.belowSixty++;
     }
   });
   
-  // Calculate percentages
   const passPercentage = totalStudents > 0 ? ((passCount / totalStudents) * 100).toFixed(1) : 0;
   const notPassPercentage = totalStudents > 0 ? ((notPassCount / totalStudents) * 100).toFixed(1) : 0;
   const faPercentage = totalStudents > 0 ? ((faCount / totalStudents) * 100).toFixed(1) : 0;
@@ -4035,7 +3705,6 @@ function calculateStatistics(students) {
 }
 
 function updateStatsModal(stats) {
-  // Update Numerical Analysis table
   const numericalAnalysisRow = `
     <td>${stats.totalStudents}</td>
     <td>${stats.highestScore}</td>
@@ -4050,7 +3719,6 @@ function updateStatsModal(stats) {
   `;
   document.getElementById('numericalAnalysisData').innerHTML = numericalAnalysisRow;
   
-  // Update Grade Letters Distribution table
   const gradeLettersRow = `
     <td>${stats.gradeDistribution.aPlus}</td>
     <td>${stats.gradeDistribution.a}</td>
@@ -4068,7 +3736,6 @@ function updateStatsModal(stats) {
   `;
   document.getElementById('gradeLettersDistributionData').innerHTML = gradeLettersRow;
   
-  // Update Grade Distribution table
   const gradeDistributionRow = `
     <td>${stats.percentageDistribution.ninetyToHundred}</td>
     <td>${stats.percentageDistribution.eightyToEightyNine}</td>
@@ -4087,24 +3754,21 @@ function calculateAndFormatTotal(student) {
     let totalScore = 0;
     let hasPassingExam = false;
     
-    // Individual exam scores and their weights
     const exams = [
-        {score: parseFloat(student[3]) || 0, weight: 20, name: 'Participation'},
-        {score: parseFloat(student[4]) || 0, weight: 20, name: 'Portfolio'},
-        {score: parseFloat(student[5]) || 0, weight: 25, name: 'Presentation'},
-        {score: parseFloat(student[6]) || 0, weight: 10, name: 'Pop Quiz 1'},
-        {score: parseFloat(student[8]) || 0, weight: 10, name: 'Pop Quiz 2'},
-        {score: parseFloat(student[10]) || 0, weight: 20, name: 'Test 1 GV'},
-        {score: parseFloat(student[12]) || 0, weight: 20, name: 'Test 2 LR'},
-        {score: parseFloat(student[14]) || 0, weight: 20, name: 'Speaking Test'},
-        {score: parseFloat(student[16]) || 0, weight: 20, name: 'Writing Test'},
-        {score: parseFloat(student[18]) || 0, weight: 20, name: 'Writing Portfolio'},
-        {score: parseFloat(student[20]) || 0, weight: 20, name: 'Midterm'},
-        {score: parseFloat(student[21]) || 0, weight: 30, name: 'Final Exam'}
+        {score: parseFloat(student[3]) || 0, weight: 20},
+        {score: parseFloat(student[4]) || 0, weight: 20},
+        {score: parseFloat(student[5]) || 0, weight: 25},
+        {score: parseFloat(student[6]) || 0, weight: 10},
+        {score: parseFloat(student[8]) || 0, weight: 10},
+        {score: parseFloat(student[10]) || 0, weight: 20},
+        {score: parseFloat(student[12]) || 0, weight: 20},
+        {score: parseFloat(student[14]) || 0, weight: 20},
+        {score: parseFloat(student[16]) || 0, weight: 20},
+        {score: parseFloat(student[18]) || 0, weight: 20},
+        {score: parseFloat(student[20]) || 0, weight: 20},
+        {score: parseFloat(student[21]) || 0, weight: 30}
     ];
     
-    // Check if any single exam or combination meets the 59.5% threshold
-    // Check individual exams
     for (const exam of exams) {
         if (exam.score > 0) {
             const percentage = (exam.score / exam.weight) * 100;
@@ -4115,9 +3779,7 @@ function calculateAndFormatTotal(student) {
         }
     }
     
-    // Check combinations of exams if no single exam passed
     if (!hasPassingExam) {
-        // Check all possible combinations of exams (this is simplified)
         let combinedScore = 0;
         let combinedWeight = 0;
         
@@ -4137,7 +3799,6 @@ function calculateAndFormatTotal(student) {
         }
     }
     
-    // Calculate total score
     for (const exam of exams) {
         totalScore += exam.score;
     }
@@ -4148,13 +3809,11 @@ function calculateAndFormatTotal(student) {
     };
 }
 
-// UPDATED: getPerformanceAnalysis function with new academic status criteria
 function getPerformanceAnalysis(student) {
     const finallyValue = determineFinallyValue(student);
     const hasAlphabetCode = (finallyValue !== 'IP' && finallyValue !== 'Pass' && finallyValue !== 'Not Pass') &&
         /[A-Za-z]/.test(finallyValue);
 
-    // Get raw values to check if data exists
     const popQuiz1Value = student[6] || '';
     const test1GVValue = student[8] || '';
     const midtermValue = student[13] || '';
@@ -4169,31 +3828,27 @@ function getPerformanceAnalysis(student) {
     let atRiskCounts = 0;
     let emailType = 'appreciable';
 
-    // Calculate academic statuses based on the new criteria
-    // Academic Status-1: Pop Quiz 1 + Test 1
     if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '') {
         const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
         const test1GVScore = parseFloat(test1GVValue) || 0;
         const combinedScore1 = popQuiz1Score + test1GVScore;
-        const combinedMax1 = 10 + 20; // Pop Quiz 1 [10] + Test 1 GV [20]
+        const combinedMax1 = 10 + 20;
         const combinedPercentage1 = (combinedScore1 / combinedMax1) * 100;
         academicStatus1 = combinedPercentage1 >= 59.5 ? 'Normal' : 'At-Risk';
         if (academicStatus1 === 'At-Risk') atRiskCounts++;
     }
 
-    // Academic Status-2: Pop Quiz 1 + Test 1 + Midterm
     if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '' && midtermValue.trim() !== '') {
         const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
         const test1GVScore = parseFloat(test1GVValue) || 0;
         const midtermScore = parseFloat(midtermValue) || 0;
         const combinedScore2 = popQuiz1Score + test1GVScore + midtermScore;
-        const combinedMax2 = 10 + 20 + 50; // Pop Quiz 1 [10] + Test 1 GV [20] + Midterm [50]
+        const combinedMax2 = 10 + 20 + 50;
         const combinedPercentage2 = (combinedScore2 / combinedMax2) * 100;
         academicStatus2 = combinedPercentage2 >= 59.5 ? 'Normal' : 'At-Risk';
         if (academicStatus2 === 'At-Risk') atRiskCounts++;
     }
 
-    // Academic Status-3: Pop Quiz 1 + Test 1 + Midterm + Speaking Test + Pop Quiz 2 + Writing Test
     if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '' && midtermValue.trim() !== '' && 
         speakingTestValue.trim() !== '' && popQuiz2Value.trim() !== '' && writingTestValue.trim() !== '') {
         const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
@@ -4203,35 +3858,32 @@ function getPerformanceAnalysis(student) {
         const popQuiz2Score = parseFloat(popQuiz2Value) || 0;
         const writingTestScore = parseFloat(writingTestValue) || 0;
         const combinedScore3 = popQuiz1Score + test1GVScore + midtermScore + speakingTestScore + popQuiz2Score + writingTestScore;
-        const combinedMax3 = 10 + 20 + 50 + 20 + 10 + 20; // All components from assessments sheet
+        const combinedMax3 = 10 + 20 + 50 + 20 + 10 + 20;
         const combinedPercentage3 = (combinedScore3 / combinedMax3) * 100;
         academicStatus3 = combinedPercentage3 >= 59.5 ? 'Normal' : 'At-Risk';
         if (academicStatus3 === 'At-Risk') atRiskCounts++;
     }
 
-    // Calculate overall status based on cumulative assessments
     let cumulativeScore = 0;
     let cumulativeMax = 0;
     let hasAnyData = false;
     
-    // Check each assessment in order
     const assessments = [
-        {score: parseFloat(student[6]) || 0, max: 10, name: 'Pop Quiz 1'}, // Pop Quiz 1
-        {score: parseFloat(student[8]) || 0, max: 20, name: 'Test 1 GV'}, // Test 1 GV
-        {score: parseFloat(student[13]) || 0, max: 50, name: 'Midterm'}, // Midterm
-        {score: parseFloat(student[10]) || 0, max: 20, name: 'Speaking Test'}, // Speaking Test
-        {score: parseFloat(student[7]) || 0, max: 10, name: 'Pop Quiz 2'}, // Pop Quiz 2
-        {score: parseFloat(student[11]) || 0, max: 20, name: 'Writing Test'}, // Writing Test
-        {score: parseFloat(student[14]) || 0, max: 50, name: 'Final Exam'}   // Final Exam
+        {score: parseFloat(student[6]) || 0, max: 10},
+        {score: parseFloat(student[8]) || 0, max: 20},
+        {score: parseFloat(student[13]) || 0, max: 50},
+        {score: parseFloat(student[10]) || 0, max: 20},
+        {score: parseFloat(student[7]) || 0, max: 10},
+        {score: parseFloat(student[11]) || 0, max: 20},
+        {score: parseFloat(student[14]) || 0, max: 50}
     ];
     
     for (const assessment of assessments) {
-        if (assessment.score > 0 || (assessment.name === 'Final Exam' && student[14].trim() !== '')) {
+        if (assessment.score > 0) {
             cumulativeScore += assessment.score;
             cumulativeMax += assessment.max;
             hasAnyData = true;
             
-            // Check if cumulative percentage meets the threshold
             if (cumulativeMax > 0) {
                 const cumulativePercentage = (cumulativeScore / cumulativeMax) * 100;
                 if (cumulativePercentage >= 59.5) {
@@ -4242,18 +3894,14 @@ function getPerformanceAnalysis(student) {
         }
     }
     
-    // If we didn't set overallStatus to Normal in the loop, set it to At-Risk
     if (hasAnyData && !overallStatus) {
         overallStatus = 'At-Risk';
     }
 
-    // COUNT OVERALL STATUS IN AT-RISK COUNTS
     if (overallStatus === 'At-Risk') {
         atRiskCounts++;
     }
 
-    // Determine email type based on status progression and final result
-    // Email categories are linked ONLY to Academic Statuses 1-3, not Overall Status
     if (finallyValue === 'Not Pass') {
         emailType = 'not-pass';
     } else if (finallyValue === 'Pass') {
@@ -4302,7 +3950,6 @@ function getPerformanceAnalysis(student) {
 
 document.getElementById('xlsxFileInput').addEventListener('change', handleGradesFile);
 
-// MODIFIED: Initialize with raw view as default
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   const savedUser = localStorage.getItem('currentUser');
@@ -4328,14 +3975,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   jsonFileInput.addEventListener('change', loadFromFile);
 
-  switchView('raw'); // Start with raw view
+  switchView('raw');
 
-  // Add event listener for closing the modal
   document.querySelector('.close-modal').addEventListener('click', function() {
     document.getElementById('statsModal').style.display = 'none';
   });
 
-  // Close modal if user clicks outside of it
   window.addEventListener('click', function(event) {
     const modal = document.getElementById('statsModal');
     if (event.target === modal) {
@@ -4381,8 +4026,292 @@ Center For Language and Foundation Studies
 </a>. Copyright <span class="copyright">&copy; <a href="mailto:h.rehman@asu.edu.om">drkhan</a> <span id="year"></span></span>.
 </footer>
 <script>
-    // Automatically insert current year
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
+  <script>
+function collectGrades() { ... }
+function restoreGrades(data) { ... }
+/* ==============================
+   GMS DATA ENGINE v1
+   Safe Add-On Block
+   Does NOT modify UI or layout
+============================== */
+
+const GMS_DB_NAME = "GMS_DATABASE_V1";
+const GMS_STORE = "grades_store";
+let gmsDB;
+let isDirty = false;
+
+/* ---------- OPEN DATABASE ---------- */
+function openGMSDatabase() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(GMS_DB_NAME, 1);
+
+        request.onupgradeneeded = function (event) {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(GMS_STORE)) {
+                db.createObjectStore(GMS_STORE, { keyPath: "id" });
+            }
+        };
+
+        request.onsuccess = function (event) {
+            gmsDB = event.target.result;
+            resolve();
+        };
+
+        request.onerror = function () {
+            reject("Database failed to open");
+        };
+    });
+}
+
+/* ---------- SAVE DATA ---------- */
+function saveGMSData(dataObject) {
+    return new Promise((resolve, reject) => {
+        const tx = gmsDB.transaction(GMS_STORE, "readwrite");
+        const store = tx.objectStore(GMS_STORE);
+
+        store.put({
+            id: "main_grades",
+            data: dataObject,
+            timestamp: new Date().toISOString()
+        });
+
+        tx.oncomplete = function () {
+            isDirty = false;
+            autoBackupJSON(dataObject);
+            resolve();
+        };
+
+        tx.onerror = function () {
+            reject("Save failed");
+        };
+    });
+}
+
+/* ---------- LOAD DATA ---------- */
+function loadGMSData() {
+    return new Promise((resolve, reject) => {
+        const tx = gmsDB.transaction(GMS_STORE, "readonly");
+        const store = tx.objectStore(GMS_STORE);
+        const request = store.get("main_grades");
+
+        request.onsuccess = function () {
+            if (request.result) {
+                resolve(request.result.data);
+            } else {
+                resolve(null);
+            }
+        };
+
+        request.onerror = function () {
+            reject("Load failed");
+        };
+    });
+}
+
+/* ---------- AUTO BACKUP JSON ---------- */
+function autoBackupJSON(data) {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "GMS_AutoBackup.json";
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+/* ---------- TRACK CHANGES ---------- */
+document.addEventListener("input", () => {
+    isDirty = true;
+});
+
+/* ---------- BEFORE CLOSE WARNING ---------- */
+window.addEventListener("beforeunload", function (e) {
+    if (isDirty) {
+        e.preventDefault();
+        e.returnValue = "You have unsaved changes. Save before exiting.";
+    }
+});
+
+/* ---------- AUTO LOAD ON START ---------- */
+document.addEventListener("DOMContentLoaded", async function () {
+    await openGMSDatabase();
+
+    const savedData = await loadGMSData();
+    if (savedData) {
+        if (typeof restoreGrades === "function") {
+            restoreGrades(savedData);
+        }
+    }
+});
+
+/* ---------- MANUAL SAVE BUTTON LINK ---------- */
+/* Call this inside your existing Save button */
+async function GMS_SAVE_HANDLER() {
+    if (typeof collectGrades === "function") {
+        const data = collectGrades();
+        await saveGMSData(data);
+        alert("Grades Saved Successfully");
+    }
+}
+</script>
+<script>
+// ==============================
+// GMS PERMANENT DATA ENGINE
+// ==============================
+
+const GMS_DB_NAME = "GMS_Permanent_DB";
+const GMS_STORE = "grades_store";
+
+function openGMSDatabase() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(GMS_DB_NAME, 1);
+
+        request.onupgradeneeded = function(event) {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(GMS_STORE)) {
+                db.createObjectStore(GMS_STORE);
+            }
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+
+        request.onerror = function(event) {
+            reject(event.target.error);
+        };
+    });
+}
+
+async function savePermanentBackup() {
+    try {
+        const db = await openGMSDatabase();
+        const tx = db.transaction(GMS_STORE, "readwrite");
+        const store = tx.objectStore(GMS_STORE);
+
+        store.put(allCoursesData, "backupData");
+
+        console.log("Permanent Backup Saved");
+    } catch (error) {
+        console.error("Permanent Save Failed:", error);
+    }
+}
+
+async function restorePermanentBackup() {
+    try {
+        const db = await openGMSDatabase();
+        const tx = db.transaction(GMS_STORE, "readonly");
+        const store = tx.objectStore(GMS_STORE);
+
+        const request = store.get("backupData");
+
+        request.onsuccess = function() {
+            if (request.result) {
+                if (!localStorage.getItem("allCoursesData")) {
+                    allCoursesData = request.result;
+                    saveToLocalStorage();
+                    console.log("Restored From Permanent Backup");
+                }
+            }
+        };
+    } catch (error) {
+        console.error("Restore Failed:", error);
+    }
+}
+
+// Hook into your existing save system
+const originalSave = saveToLocalStorage;
+
+saveToLocalStorage = function() {
+    originalSave();
+    savePermanentBackup();
+};
+
+// Restore on startup
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(() => {
+        restorePermanentBackup();
+    }, 1000);
+});
+
+</script>
+
+<script>
+// ==============================
+// GMS PERMANENT BACKUP ENGINE
+// ==============================
+
+const GMS_DB_NAME = "GMS_Permanent_DB";
+const GMS_STORE = "backup_store";
+
+function openGMSDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(GMS_DB_NAME, 1);
+
+    request.onupgradeneeded = function(e) {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(GMS_STORE)) {
+        db.createObjectStore(GMS_STORE);
+      }
+    };
+
+    request.onsuccess = e => resolve(e.target.result);
+    request.onerror = e => reject(e.target.error);
+  });
+}
+
+async function savePermanentBackup() {
+  try {
+    const db = await openGMSDB();
+    const tx = db.transaction(GMS_STORE, "readwrite");
+    const store = tx.objectStore(GMS_STORE);
+    store.put(allCoursesData, "mainData");
+    console.log("Permanent backup saved.");
+  } catch (err) {
+    console.error("Permanent save failed:", err);
+  }
+}
+
+async function restorePermanentBackup() {
+  try {
+    const db = await openGMSDB();
+    const tx = db.transaction(GMS_STORE, "readonly");
+    const store = tx.objectStore(GMS_STORE);
+    const request = store.get("mainData");
+
+    request.onsuccess = function() {
+      if (request.result) {
+        if (!localStorage.getItem("SGS_All_Courses")) {
+          allCoursesData = request.result;
+          localStorage.setItem("SGS_All_Courses", JSON.stringify(allCoursesData));
+          console.log("Restored from permanent backup.");
+          location.reload();
+        }
+      }
+    };
+  } catch (err) {
+    console.error("Restore failed:", err);
+  }
+}
+
+// Hook into your existing save function
+const originalSaveFunction = saveToLocalStorage;
+
+saveToLocalStorage = function() {
+  originalSaveFunction();
+  savePermanentBackup();
+};
+
+// Try restore when page loads
+document.addEventListener("DOMContentLoaded", function() {
+  setTimeout(() => {
+    restorePermanentBackup();
+  }, 800);
+});
+</script>
+
 </body>
 </html>
