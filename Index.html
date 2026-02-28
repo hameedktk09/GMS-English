@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CLFS-GMS</title>
+  <title>CLFS-GMS English</title>
   <style>
     /* ALL ORIGINAL CSS STYLES REMAIN EXACTLY THE SAME */
     body {
@@ -899,6 +899,8 @@
       #performanceAnalysisButton,
       #resultsAnalysisButton,
       #copyToConsoleButton,
+      #printAllSheetsButton,
+      #checkForUpdatesButton,
       #noNamesMessage,
       .status-message,
       .error-message,
@@ -990,7 +992,7 @@
 
     .split-button-container {
       display: flex;
-      align-items: stretch; /* Stretch children to fill the height */
+      align-items: stretch;
       border: 1px solid #ccc;
       border-radius: 5px;
       overflow: hidden;
@@ -1007,10 +1009,9 @@
       font-size: 16px;
       cursor: pointer;
       outline: none;
-      flex-grow: 1; /* Allows the dropdown to take up available space */
+      flex-grow: 1;
     }
 
-    /* Improved email dropdown styling */
     .email-select-container {
       display: flex;
       width: 100%;
@@ -1020,7 +1021,6 @@
       height: 30px;
     }
 
-    /* Style the placeholder option text */
     #email-dropdown option[disabled]:first-child {
       color: #999;
     }
@@ -1033,14 +1033,14 @@
       cursor: pointer;
       font-size: 14px;
       font-weight: bold;
-      border-left: 1px solid #ccc; /* Separator line */
+      border-left: 1px solid #ccc;
       transition: background-color 0.2s;
       white-space: nowrap;
     }
     
     .send-button:hover {
       background-color: #0b7dda;
-      color: #00FFFF
+      color: #00FFFF;
     }
 
     .preview {
@@ -1051,7 +1051,7 @@
     }
 
     .content {
-      flex: 1; /* Pushes footer to bottom if content is short */
+      flex: 1;
       padding: 50px;
     }
 
@@ -1071,7 +1071,7 @@
     }
 
     footer span {
-      font-weight: bold; /* year highlighted */
+      font-weight: bold;
     }
 
     footer .copyright {
@@ -1080,23 +1080,23 @@
     }
 
     footer .univ-link {
-      color: white;           /* keep it white */
+      color: white;
       font-weight: bold;
-      text-decoration: none;  /* remove underline */
+      text-decoration: none;
     }
 
     footer .univ-link:hover {
-      text-decoration: underline; /* underline on hover only */
+      text-decoration: underline;
     }
 
     footer a {
-      color: white;           /* links appear white */
+      color: white;
       font-weight: bold;
-      text-decoration: none;  /* remove underline */
+      text-decoration: none;
     }
 
     footer a:hover {
-      text-decoration: underline; /* underline on hover */
+      text-decoration: underline;
       color: #00FFFF;
     }
     
@@ -1104,11 +1104,155 @@
       display: none;
     }
 
-    /* Style for percentage columns */
     .percentage-column {
       background-color: #f0f0f0 !important;
       font-weight: bold;
     }
+
+/* Print All Sheets Styles */
+.print-all-sheets-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.print-all-sheets-content {
+    background-color: #fefefe;
+    margin: 3% auto;
+    padding: 20px;
+    border: 2px solid #0066CC;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.print-all-sheets-content h3 {
+    color: #0066CC;
+    margin-top: 0;
+}
+
+.print-all-sheets-content button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+#print-confirm {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#print-cancel {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Print button style */
+#printAllSheetsButton {
+    background-color: #FF9800;
+    color: white;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 6px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    display: none;
+}
+
+#printAllSheetsButton:hover {
+    background-color: #F57C00;
+}
+
+/* Update modal styles */
+#updateModal .stats-modal-content {
+    max-width: 600px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#updateContent {
+    margin: 20px 0;
+}
+
+#updateContent p {
+    margin: 8px 0;
+}
+
+#updateContent hr {
+    border: 1px solid #ddd;
+}
+
+#updateContent div {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+#downloadUpdateBtn {
+    background-color: #FF9800 !important;
+    color: white !important;
+    border: 1px solid #000 !important;
+    border-radius: 5px !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    cursor: pointer;
+}
+
+#downloadUpdateBtn:hover {
+    background-color: #F57C00 !important;
+}
+
+#remindLaterBtn {
+    background-color: #6c757d !important;
+    color: white !important;
+    border: 1px solid #000 !important;
+    border-radius: 5px !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    cursor: pointer;
+}
+
+#remindLaterBtn:hover {
+    background-color: #5a6268 !important;
+}
+
+#checkForUpdatesButton {
+    background-color: #FF9800 !important;
+    color: white !important;
+}
+
+#checkForUpdatesButton:hover {
+    background-color: #F57C00 !important;
+}
+
+#checkForUpdatesButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
   </style>
 </head>
 
@@ -1231,7 +1375,9 @@
     </div>
     <button class="blue-button" id="performanceAnalysisButton" onclick="switchView('performance-analysis')" style="display: none;">📊 Performance Analysis</button>
     <button class="blue-button" id="resultsAnalysisButton" onclick="showResultsAnalysis()">📈 Statistics Analysis</button>
-    <button class="blue-button" id="copyToConsoleButton" onclick="copyFinalGradesToConsole()" style="display: none;">Copy to Console</button>
+    <button class="blue-button" id="copyToConsoleButton" onclick="copyFinalGradesToConsole()">📋 Copy to Console</button>
+    <button class="blue-button" id="printAllSheetsButton" style="display: none;">🖨️ Print All Sheets</button>
+    <button class="blue-button" id="checkForUpdatesButton" style="display: none;" onclick="checkForUpdates(true)">🔄 Check for Updates</button>
   </div>
   <div class="search-container">
     <input type="text" id="searchInput" placeholder="Search by Name or ID">
@@ -1336,6 +1482,22 @@
   </div>
 </div>
 
+<!-- Print All Sheets Confirmation Modal (hidden but kept for compatibility) -->
+<div id="printAllSheetsModal" class="print-all-sheets-modal" style="display: none;">
+    <div class="print-all-sheets-content">
+        <h3>🖨️ Print All Sheets</h3>
+        <p>This will print all three grade sheets:</p>
+        <ul style="text-align: left; margin: 15px 30px;">
+            <li>📄 Raw Grades Sheet</li>
+            <li>📊 Assessments Grade Sheet</li>
+            <li>📈 Final Grades Sheet</li>
+        </ul>
+        <p>Each sheet will print on a separate page with logo and headers.</p>
+        <button id="print-confirm">Yes, Print All</button>
+        <button id="print-cancel">Cancel</button>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1343,8 +1505,6 @@
 
 <script>
 // ALL ORIGINAL JAVASCRIPT CODE REMAINS EXACTLY THE SAME
-// Only the determineFinallyValue function has been fixed to correctly show "Not Pass" for scores below 59.5
-
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
 const fileInput = document.getElementById('fileInput');
@@ -1541,7 +1701,6 @@ function applyGradeColorCoding() {
     });
 }
 
-// FIXED: determineFinallyValue function - Now correctly returns "Not Pass" for scores below 59.5
 function determineFinallyValue(student) {
   const participation = parseFloat(student[3]) || 0;
   const ePortfolio = parseFloat(student[4]) || 0;
@@ -1569,7 +1728,7 @@ function determineFinallyValue(student) {
   if (total >= 59.5) {
     return "Pass";
   } else if (total > 0 && total < 59.5) {
-    return "Not Pass"; // Fixed: Previously this returned "Pass"
+    return "Not Pass";
   } else {
     return "";
   }
@@ -2422,25 +2581,44 @@ function setEditMode(editable) {
     clearDropdown.style.display = '';
     performanceAnalysisButton.style.display = '';
     resultsAnalysisButton.style.display = '';
-    copyToConsoleButton.style.display = 'none';
+    copyToConsoleButton.style.display = 'block';
+    
+    // Show update button only in raw view
+    const updateBtn = document.getElementById('checkForUpdatesButton');
+    if (updateBtn) updateBtn.style.display = 'block';
+    
   } else if (currentView === 'summative') {
     lockButton.style.display = 'none';
     clearDropdown.style.display = 'none';
     performanceAnalysisButton.style.display = '';
     resultsAnalysisButton.style.display = '';
-    copyToConsoleButton.style.display = 'none';
+    copyToConsoleButton.style.display = 'block';
+    
+    // Hide update button in other views
+    const updateBtn = document.getElementById('checkForUpdatesButton');
+    if (updateBtn) updateBtn.style.display = 'none';
+    
   } else if (currentView === 'final') {
     lockButton.style.display = 'none';
     clearDropdown.style.display = 'none';
     performanceAnalysisButton.style.display = 'none';
     resultsAnalysisButton.style.display = '';
     copyToConsoleButton.style.display = 'block';
+    
+    // Hide update button in other views
+    const updateBtn = document.getElementById('checkForUpdatesButton');
+    if (updateBtn) updateBtn.style.display = 'none';
+    
   } else if (currentView === 'performance-analysis') {
     lockButton.style.display = 'none';
     clearDropdown.style.display = 'none';
     performanceAnalysisButton.style.display = 'none';
     resultsAnalysisButton.style.display = '';
-    copyToConsoleButton.style.display = 'none';
+    copyToConsoleButton.style.display = 'block';
+    
+    // Hide update button in other views
+    const updateBtn = document.getElementById('checkForUpdatesButton');
+    if (updateBtn) updateBtn.style.display = 'none';
   }
 
   Array.from(tbody.rows).forEach(row => {
@@ -3178,6 +3356,14 @@ function switchView(viewType) {
     importButton.style.display = 'none';
   }
 
+  copyToConsoleButton.style.display = 'block';
+
+  // Show/hide update button based on view
+  const updateBtn = document.getElementById('checkForUpdatesButton');
+  if (updateBtn) {
+    updateBtn.style.display = viewType === 'raw' ? 'block' : 'none';
+  }
+
   if (viewType === 'raw') {
     sheetTitle.textContent = 'Raw Grades Sheet';
     viewSwitcherButton.textContent = 'Raw Grades Sheet';
@@ -3389,6 +3575,7 @@ function sendGroupEmail(groupType) {
   window.location.href = mailtoLink;
 }
 
+// FIXED: copyFinalGradesToConsole with proper LOGSIS input targeting for hidden fields
 function copyFinalGradesToConsole() {
   const tableRows = Array.from(document.querySelectorAll('#studentTable tbody tr'));
   const finalGradesData = [];
@@ -3405,54 +3592,26 @@ function copyFinalGradesToConsole() {
     const savedStudentData = savedData.students[index];
 
     if (savedStudentData && savedStudentData.length > 3) {
-      student['ID number'] = savedStudentData[1] || '';
+      student['Student Id'] = savedStudentData[1] || '';
+      student['Student Name'] = savedStudentData[2] || '';
       
-      const participation = savedStudentData[3] || '';
-      const portfolio = savedStudentData[4] || '';
-      const presentation = savedStudentData[5] || '';
-      const popQuiz1 = savedStudentData[6] || '';
-      const popQuiz2 = savedStudentData[8] || '';
-      const test1GV = savedStudentData[10] || '';
-      const test2LR = savedStudentData[12] || '';
-      const speakingTest = savedStudentData[14] || '';
-      const writingTest = savedStudentData[16] || '';
-      const writingPortfolio = savedStudentData[18] || '';
-      const midterm = savedStudentData[20] || '';
-      const final = savedStudentData[21] || '';
-      
-      const participationPortfolio = (parseFloat(participation) || 0) + (parseFloat(portfolio) || 0);
-      
-      const popQuiz1Percent = parseFloat(calculatePercentage(popQuiz1, 10, 2.5)) || 0;
-      const popQuiz2Percent = parseFloat(calculatePercentage(popQuiz2, 10, 2.5)) || 0;
-      const test1GVPercent = parseFloat(calculatePercentage(test1GV, 20, 5)) || 0;
-      const test2LRPercent = parseFloat(calculatePercentage(test2LR, 20, 5)) || 0;
-      const speakingTestPercent = parseFloat(calculatePercentage(speakingTest, 20, 5)) || 0;
-      const writingTestPercent = parseFloat(calculatePercentage(writingTest, 20, 5)) || 0;
-      const writingPortfolioPercent = parseFloat(calculatePercentage(writingPortfolio, 20, 5)) || 0;
-      const tests = popQuiz1Percent + popQuiz2Percent + test1GVPercent + test2LRPercent + speakingTestPercent + writingTestPercent + writingPortfolioPercent;
-      
-      student['Participation & Portfolio of 10'] = participationPortfolio > 0 ? participationPortfolio.toFixed(1).replace(/\.0+$/, '') : '';
-      student['Tests of 30'] = tests > 0 ? tests.toFixed(1).replace(/\.0+$/, '') : '';
-      student['Presentation of 10'] = presentation > 0 ? presentation.toFixed(1).replace(/\.0+$/, '') : '';
-      student['Midterm of 20'] = midterm;
-      student['Final of 30'] = final;
-      
-      student['Total [100%]'] = row.cells[8].textContent.trim() || '';
-      student['Finally'] = row.cells[9].textContent.trim().toUpperCase() || '';
-      student['Grade Letter'] = row.cells[10].textContent.trim() || '';
+      student['Participation and e-Portfolio of 10'] = row.cells[3].textContent.trim() || '';
+      student['Tests of 30'] = row.cells[4].textContent.trim() || '';
+      student['Presentation of 10'] = row.cells[5].textContent.trim() || '';
+      student['Midterm of 20'] = row.cells[6].textContent.trim() || '';
+      student['Final of 30'] = row.cells[7].textContent.trim() || '';
 
       finalGradesData.push(student);
     }
   });
 
   const jsCode = `
-// LOGSIS Grade Import Script with Delays
+// LOGSIS Grade Import Script
 (async function() {
+  console.log('🔍 Starting LOGSIS grade import for', ${finalGradesData.length}, 'students...');
+  
   const studentData = ${JSON.stringify(finalGradesData, null, 2)};
   
-  console.log('🔍 Starting LOGSIS grade import for', studentData.length, 'students...');
-  console.log('📊 Student data:', studentData);
-
   function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -3465,98 +3624,116 @@ function copyFinalGradesToConsole() {
     return isNaN(numValue) ? '' : numValue.toString();
   }
 
+  async function revealAndSetGrade(container, grade) {
+    if (container) {
+      container.click();
+      await delay(200);
+      const input = container.querySelector('input[type="hidden"], input[type="text"]');
+      if (input) {
+        input.value = grade;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        return true;
+      }
+    }
+    return false;
+  }
+
   let processedCount = 0;
   let errorCount = 0;
 
   for (let index = 0; index < studentData.length; index++) {
     const student = studentData[index];
-    const studentId = student['ID number'];
+    const studentId = student['Student Id'];
+    const studentName = student['Student Name'];
     
     if (!studentId) {
-      console.warn('❌ Skipping student at index', index, '- No ID number');
+      console.warn('❌ Skipping student at index', index, '- No ID');
       errorCount++;
       await delay(100);
       continue;
     }
 
-    console.log(\`\\\\n🎯 Processing student \${index + 1}/\${studentData.length}: ID \${studentId}\`);
+    console.log(\`\\n🎯 Processing [\${index + 1}/\${studentData.length}]: \${studentId} - \${studentName}\`);
 
-    const allCells = document.querySelectorAll('td');
     let studentRow = null;
+    const allCells = document.querySelectorAll('td');
     
     for (const cell of allCells) {
       if (cell.textContent.trim() === studentId) {
         studentRow = cell.closest('tr');
+        console.log(\`✅ Found row for ID \${studentId}\`);
         break;
       }
     }
 
     if (!studentRow) {
-      console.warn(\`❌ Student ID \${studentId} not found in LOGSIS table\`);
+      console.warn(\`❌ Student ID \${studentId} not found\`);
       errorCount++;
       await delay(500);
       continue;
     }
 
-    console.log(\`✅ Found student row for ID \${studentId}\`);
+    const gradeContainers = studentRow.querySelectorAll('div.a-GV-columnItem');
+    console.log(\`📦 Found \${gradeContainers.length} grade containers\`);
 
-    const allInputs = studentRow.querySelectorAll('input[type="text"]');
-    console.log(\`📝 Found \${allInputs.length} input fields in row\`);
-
-    if (allInputs.length < 6) {
-      console.warn('❌ Not enough input fields found in row. Expected at least 6, found:', allInputs.length);
+    if (gradeContainers.length < 5) {
+      console.warn('⚠️ Expected at least 5 grade containers, found:', gradeContainers.length);
       errorCount++;
       await delay(500);
       continue;
     }
 
-    const gradeFields = [
-      { index: 0, name: 'Participation & Portfolio of 10', grade: student['Participation & Portfolio of 10'] },
-      { index: 1, name: 'Tests of 30', grade: student['Tests of 30'] },
-      { index: 2, name: 'Presentation of 10', grade: student['Presentation of 10'] },
-      { index: 3, name: 'Midterm of 20', grade: student['Midterm of 20'] },
-      { index: 4, name: 'Final of 30', grade: student['Final of 30'] }
+    const gradeValues = [
+      student['Participation and e-Portfolio of 10'],
+      student['Tests of 30'],
+      student['Presentation of 10'],
+      student['Midterm of 20'],
+      student['Final of 30']
     ];
 
-    let filledFields = 0;
+    let filledCount = 0;
 
-    for (const { index, name, grade } of gradeFields) {
-      const sanitizedGrade = sanitizeGrade(grade);
+    for (let i = 0; i < 5; i++) {
+      const container = gradeContainers[i];
+      const grade = sanitizeGrade(gradeValues[i]);
       
-      if (index < allInputs.length && sanitizedGrade !== '') {
-        const input = allInputs[index];
+      if (container && grade !== '') {
+        const hiddenInput = container.querySelector('input[type="hidden"]');
         
-        input.value = sanitizedGrade;
-        
-        await delay(50);
-        input.dispatchEvent(new Event('input', { bubbles: true }));
-        await delay(50);
-        input.dispatchEvent(new Event('change', { bubbles: true }));
-        await delay(50);
-        input.dispatchEvent(new Event('blur', { bubbles: true }));
-        
-        filledFields++;
-        console.log(\`   ✅ Filled \${name}: \${sanitizedGrade}\`);
-        
-        await delay(200);
+        if (hiddenInput) {
+          const oldValue = hiddenInput.value;
+          hiddenInput.value = grade;
+          hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+          hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+          console.log(\`   ✅ Hidden input \${i+1}: \${oldValue} → \${grade}\`);
+          filledCount++;
+        } else {
+          const success = await revealAndSetGrade(container, grade);
+          if (success) {
+            console.log(\`   ✅ Grade \${i+1}: set to \${grade} (via click)\`);
+            filledCount++;
+          }
+        }
+        await delay(150);
       }
     }
 
     processedCount++;
-    console.log(\`✓ Student \${studentId}: Successfully filled \${filledFields} fields\`);
+    console.log(\`✓ Student \${studentId}: Completed \${filledCount}/5 fields\`);
     
     if (index < studentData.length - 1) {
-      await delay(800);
+      await delay(500);
     }
   }
 
   console.log(
-    \`%c\\\\n🎉 LOGSIS Import Complete! \\\\nProcessed: \${processedCount} students \\\\nErrors: \${errorCount}\`,
+    \`%c\\n🎉 LOGSIS Import Complete! \\nProcessed: \${processedCount} students \\nErrors: \${errorCount}\`,
     "background: #4CAF50; color: white; font-weight: bold; padding: 10px; border-radius: 5px; font-size: 14px;"
   );
   
   return {
-    success: true,
+    success: processedCount > 0,
     processed: processedCount,
     errors: errorCount
   };
@@ -3565,17 +3742,18 @@ function copyFinalGradesToConsole() {
 
   navigator.clipboard.writeText(jsCode)
     .then(() => {
-      showStatus('✅ LOGSIS import script copied to clipboard!', document.getElementById('copyToConsoleButton'));
+      showStatus('✅ LOGSIS script copied!', document.getElementById('copyToConsoleButton'));
       
       setTimeout(() => {
-        const instructions = `LOGSIS Import Script Copied! ✅
-📊 GRADES BEING IMPORTED FOR ENGLISH COURSES:
-• Participation + Portfolio → Participation & Portfolio of 10
-• All Tests Combined → Tests of 30  
-• Presentation → Presentation of 10
-• Midterm → Midterm of 20
-• Final → Final of 30`;
+        const instructions = `✅ SCRIPT COPIED!
 
+To use:
+1. Go to LOGSIS grade entry page
+2. Open Console (F12 → Console tab)
+3. Paste script and press Enter
+
+The script will find students by ID and update their grades.`;
+        
         alert(instructions);
       }, 500);
     })
@@ -3585,6 +3763,495 @@ function copyFinalGradesToConsole() {
     });
 }
 
+// FIXED: Print All Sheets Function - Triggered by Ctrl+P
+function printAllSheets() {
+  // Store current view to restore later
+  const originalView = currentView;
+  
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  
+  if (!printWindow) {
+    alert('Please allow pop-ups to print');
+    return;
+  }
+  
+  // Get current semester and course info
+  const currentSemester = getCurrentSemester();
+  const instructorName = document.getElementById('instructorName').textContent;
+  const courseName = courseSelect.options[courseSelect.selectedIndex].text;
+  const courseCodeValue = courseCode.value;
+  const sectionValue = sectionSelect.value;
+  
+  // Get the logo
+  const logoImg = document.querySelector('.logo-wrapper img');
+  const logoSrc = logoImg ? logoImg.src : '';
+  
+  // Start building the print document
+  let printContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>CLFS-GMS - Grade Sheets</title>
+      <style>
+        body { 
+          font-family: 'Times New Roman', Times, serif; 
+          margin: 0; 
+          padding: 20px; 
+          background: white; 
+        }
+        .page { 
+          page-break-after: always; 
+          margin: 0;
+          padding: 20px;
+        }
+        .page:last-child { 
+          page-break-after: auto; 
+        }
+        .university-header {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        .university-header img {
+          max-height: 100px;
+          width: auto;
+          margin-bottom: 10px;
+        }
+        .university-header h1 {
+          margin: 5px 0;
+          font-size: 24px;
+          color: #000;
+        }
+        .university-header h2 {
+          margin: 5px 0;
+          font-size: 20px;
+          color: #000;
+        }
+        .university-header .sheet-title {
+          color: blue;
+          font-size: 22px;
+          margin: 10px 0;
+        }
+        .university-header h3 {
+          margin: 5px 0;
+          font-size: 18px;
+        }
+        .university-header .course-info {
+          margin: 10px 0;
+          font-size: 16px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 15px;
+          border: 1px solid #000;
+          background-color: white;
+          font-size: 14px;
+        }
+        th {
+          background: #F8F8F8;
+          border: 1px solid #000;
+          padding: 8px 5px;
+          text-align: center;
+          font-weight: bold;
+        }
+        td {
+          border: 1px solid #000;
+          padding: 5px;
+          text-align: center;
+        }
+        td:first-child, td:nth-child(2) {
+          background-color: #F8F8F8;
+        }
+        td:last-child {
+          background-color: #F8F8F8;
+          font-weight: bold;
+        }
+        .tooltip, .tooltip-container, button, .dropdown, .view-switcher, 
+        .clear-dropdown, .search-container, #lockButton, #copyToConsoleButton,
+        #printAllSheetsButton, #checkForUpdatesButton, .button-box, .logout-button, .status-message-wrapper,
+        .error-message {
+          display: none !important;
+        }
+        .red-text { color: red; font-weight: bold; }
+        .green-text { color: green; font-weight: bold; }
+        .finally-pass { color: green; font-weight: bold; }
+        .finally-fail { color: red; font-weight: bold; }
+        .finally-ip, .finally-wa { color: black; font-weight: bold; }
+        .total-pass { color: green; font-weight: bold; }
+        .total-fail { color: red; font-weight: bold; }
+        .low-grade-red { color: red; }
+        .grade-normal { color: black; }
+        @media print {
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+      </style>
+    </head>
+    <body>
+  `;
+
+  // Function to get table HTML for a specific view
+  function getViewTable(viewType) {
+    switchView(viewType);
+    
+    // Clone the table
+    const table = document.getElementById('studentTable').cloneNode(true);
+    
+    // Remove all interactive elements
+    const removeSelectors = [
+      'button', '.dropdown', '.view-switcher', '.clear-dropdown', 
+      '.search-container', '#lockButton', '#copyToConsoleButton',
+      '#printAllSheetsButton', '#checkForUpdatesButton', '.tooltip', '.tooltip-container',
+      '.status-message-wrapper', '.error-message'
+    ];
+    
+    removeSelectors.forEach(selector => {
+      table.querySelectorAll(selector).forEach(el => el.remove());
+    });
+    
+    // Remove contenteditable attributes
+    table.querySelectorAll('[contenteditable="true"]').forEach(el => {
+      el.removeAttribute('contenteditable');
+    });
+    
+    return table.outerHTML;
+  }
+
+  // Generate Raw Grades Sheet
+  printContent += `
+    <div class="page">
+      <div class="university-header">
+        ${logoSrc ? `<img src="${logoSrc}" alt="CLFS Logo">` : ''}
+        <h1>A'Sharqiyah University Ibra, Oman</h1>
+        <h2>Center For Language and Foundation Studies</h2>
+        <div class="sheet-title">Raw Grades Sheet</div>
+        <h3>${currentSemester.fullText}</h3>
+        <div class="course-info">
+          <strong>Instructor:</strong> ${instructorName} | 
+          <strong>Course:</strong> ${courseName} (${courseCodeValue}) | 
+          <strong>Section:</strong> ${sectionValue}
+        </div>
+      </div>
+      ${getViewTable('raw')}
+    </div>
+  `;
+
+  // Generate Assessments Grade Sheet
+  printContent += `
+    <div class="page">
+      <div class="university-header">
+        ${logoSrc ? `<img src="${logoSrc}" alt="CLFS Logo">` : ''}
+        <h1>A'Sharqiyah University Ibra, Oman</h1>
+        <h2>Center For Language and Foundation Studies</h2>
+        <div class="sheet-title">Assessments Grade Sheet</div>
+        <h3>${currentSemester.fullText}</h3>
+        <div class="course-info">
+          <strong>Instructor:</strong> ${instructorName} | 
+          <strong>Course:</strong> ${courseName} (${courseCodeValue}) | 
+          <strong>Section:</strong> ${sectionValue}
+        </div>
+      </div>
+      ${getViewTable('summative')}
+    </div>
+  `;
+
+  // Generate Final Grades Sheet
+  printContent += `
+    <div class="page">
+      <div class="university-header">
+        ${logoSrc ? `<img src="${logoSrc}" alt="CLFS Logo">` : ''}
+        <h1>A'Sharqiyah University Ibra, Oman</h1>
+        <h2>Center For Language and Foundation Studies</h2>
+        <div class="sheet-title">Final Grades Sheet</div>
+        <h3>${currentSemester.fullText}</h3>
+        <div class="course-info">
+          <strong>Instructor:</strong> ${instructorName} | 
+          <strong>Course:</strong> ${courseName} (${courseCodeValue}) | 
+          <strong>Section:</strong> ${sectionValue}
+        </div>
+      </div>
+      ${getViewTable('final')}
+    </div>
+  `;
+
+  printContent += `
+    </body>
+    </html>
+  `;
+
+  // Write to the new window
+  printWindow.document.write(printContent);
+  printWindow.document.close();
+  
+  // Wait for content to load then print
+  printWindow.onload = function() {
+    printWindow.print();
+  };
+  
+  // Restore original view
+  setTimeout(() => {
+    switchView(originalView);
+  }, 500);
+}
+
+// Override Ctrl+P to print all three sheets
+window.addEventListener('keydown', function(e) {
+  // Check for Ctrl+P (Windows/Linux) or Cmd+P (Mac)
+  if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+    e.preventDefault(); // Prevent default print
+    printAllSheets();
+  }
+});
+
+// ============================================
+// AUTO-UPDATE SYSTEM FOR EXE VERSION
+// ============================================
+
+// Configuration - UPDATE THESE WITH YOUR GITHUB INFO
+const UPDATE_CONFIG = {
+    // Your GitHub username and repository
+    githubUser: 'yourusername',
+    githubRepo: 'your-repo-name',
+    
+    // Current app version - update this when you release new versions
+    currentVersion: '1.0.0',
+    
+    // Where to check for updates
+    updateUrl: 'https://api.github.com/repos/{user}/{repo}/releases/latest',
+    
+    // Download page URL (your GitHub releases page)
+    downloadPage: 'https://github.com/{user}/{repo}/releases/latest',
+    
+    // Check for updates on startup?
+    checkOnStartup: true,
+    
+    // How often to check (in days)
+    checkIntervalDays: 7
+};
+
+// Store last update check
+const LAST_CHECK_KEY = 'gms_last_update_check';
+
+// Create update button in the button box
+function addUpdateButton() {
+    const buttonBox = document.querySelector('.button-box > div');
+    if (buttonBox) {
+        // Check if button already exists
+        if (document.getElementById('checkForUpdatesButton')) return;
+        
+        const updateButton = document.createElement('button');
+        updateButton.className = 'blue-button';
+        updateButton.id = 'checkForUpdatesButton';
+        updateButton.innerHTML = '🔄 Check for Updates';
+        updateButton.onclick = () => checkForUpdates(true);
+        updateButton.style.marginLeft = '5px';
+        updateButton.style.backgroundColor = '#FF9800';
+        updateButton.style.display = 'none'; // Initially hidden
+        buttonBox.appendChild(updateButton);
+    }
+}
+
+// Check for updates
+async function checkForUpdates(showNoUpdateMessage = true) {
+    const updateButton = document.getElementById('checkForUpdatesButton');
+    const originalText = updateButton ? updateButton.innerHTML : '🔄 Check for Updates';
+    
+    try {
+        if (updateButton) {
+            updateButton.innerHTML = '⏳ Checking...';
+            updateButton.disabled = true;
+        }
+        
+        // Construct GitHub API URL
+        const url = UPDATE_CONFIG.updateUrl
+            .replace('{user}', UPDATE_CONFIG.githubUser)
+            .replace('{repo}', UPDATE_CONFIG.githubRepo);
+        
+        console.log('Checking for updates at:', url);
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`GitHub API returned ${response.status}`);
+        }
+        
+        const release = await response.json();
+        const latestVersion = release.tag_name.replace(/^v/, ''); // Remove 'v' prefix if present
+        
+        console.log(`Current version: ${UPDATE_CONFIG.currentVersion}, Latest: ${latestVersion}`);
+        
+        // Compare versions
+        const hasUpdate = compareVersions(latestVersion, UPDATE_CONFIG.currentVersion) > 0;
+        
+        // Save last check time
+        localStorage.setItem(LAST_CHECK_KEY, Date.now().toString());
+        
+        if (hasUpdate) {
+            showUpdateDialog(release, latestVersion);
+        } else if (showNoUpdateMessage) {
+            showStatus('✅ You have the latest version!', document.querySelector('.green-button'));
+        }
+        
+    } catch (error) {
+        console.error('Update check failed:', error);
+        if (showNoUpdateMessage) {
+            showStatus('❌ Failed to check for updates', document.querySelector('.green-button'));
+        }
+    } finally {
+        if (updateButton) {
+            updateButton.innerHTML = originalText;
+            updateButton.disabled = false;
+        }
+    }
+}
+
+// Compare version numbers (e.g., "1.0.0" vs "1.1.0")
+function compareVersions(v1, v2) {
+    const parts1 = v1.split('.').map(Number);
+    const parts2 = v2.split('.').map(Number);
+    
+    for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
+        const num1 = parts1[i] || 0;
+        const num2 = parts2[i] || 0;
+        if (num1 > num2) return 1;
+        if (num1 < num2) return -1;
+    }
+    return 0;
+}
+
+// Show update dialog
+function showUpdateDialog(release, latestVersion) {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('updateModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'updateModal';
+        modal.className = 'stats-modal'; // Reuse stats modal style
+        modal.innerHTML = `
+            <div class="stats-modal-content" style="max-width: 600px;">
+                <span class="close-modal" onclick="document.getElementById('updateModal').style.display='none'">&times;</span>
+                <h2 style="color: #FF9800; text-align: center;">🔄 Update Available</h2>
+                <div id="updateContent"></div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button id="downloadUpdateBtn" class="green-button" style="margin-right: 10px;">📥 Download Update</button>
+                    <button id="remindLaterBtn" class="blue-button" onclick="document.getElementById('updateModal').style.display='none'">⏰ Remind Later</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    // Format release date
+    const releaseDate = new Date(release.published_at).toLocaleDateString();
+    
+    // Update content
+    const content = document.getElementById('updateContent');
+    content.innerHTML = `
+        <div style="text-align: left; padding: 15px;">
+            <p><strong>New version available:</strong> v${latestVersion}</p>
+            <p><strong>Current version:</strong> v${UPDATE_CONFIG.currentVersion}</p>
+            <p><strong>Released:</strong> ${releaseDate}</p>
+            <hr style="margin: 15px 0;">
+            <p><strong>What's new:</strong></p>
+            <div style="background: #f5f5f5; padding: 10px; border-radius: 5px; max-height: 200px; overflow-y: auto;">
+                ${release.body.replace(/\n/g, '<br>') || 'No release notes available.'}
+            </div>
+        </div>
+    `;
+    
+    // Setup download button
+    const downloadBtn = document.getElementById('downloadUpdateBtn');
+    downloadBtn.onclick = () => {
+        const downloadUrl = UPDATE_CONFIG.downloadPage
+            .replace('{user}', UPDATE_CONFIG.githubUser)
+            .replace('{repo}', UPDATE_CONFIG.githubRepo);
+        window.open(downloadUrl, '_blank');
+        modal.style.display = 'none';
+    };
+    
+    // Show modal
+    modal.style.display = 'block';
+}
+
+// Check if we should check for updates based on last check
+function shouldCheckForUpdates() {
+    const lastCheck = localStorage.getItem(LAST_CHECK_KEY);
+    if (!lastCheck) return true;
+    
+    const daysSinceLastCheck = (Date.now() - parseInt(lastCheck)) / (1000 * 60 * 60 * 24);
+    return daysSinceLastCheck >= UPDATE_CONFIG.checkIntervalDays;
+}
+
+// Add update option to menu
+function addUpdateMenuItem() {
+    // Add to view switcher options
+    const viewSwitcherOptions = document.querySelector('.view-switcher-options');
+    if (viewSwitcherOptions) {
+        // Check if already added
+        if (viewSwitcherOptions.querySelector('button[onclick*="checkForUpdates"]')) return;
+        
+        const separator = document.createElement('hr');
+        separator.style.margin = '5px 0';
+        separator.style.borderColor = '#ccc';
+        viewSwitcherOptions.appendChild(separator);
+        
+        const updateOption = document.createElement('button');
+        updateOption.innerHTML = '🔄 Check for Updates';
+        updateOption.onclick = () => checkForUpdates(true);
+        updateOption.style.color = '#FF9800';
+        viewSwitcherOptions.appendChild(updateOption);
+    }
+}
+
+// Initialize update system
+function initUpdateSystem() {
+    // Add update button (initially hidden)
+    addUpdateButton();
+    
+    // Add update option to menu
+    addUpdateMenuItem();
+    
+    // Check for updates on startup if enabled (silent check)
+    if (UPDATE_CONFIG.checkOnStartup && shouldCheckForUpdates()) {
+        setTimeout(() => {
+            checkForUpdates(false); // Silent check
+        }, 5000); // Check after 5 seconds to not slow down startup
+    }
+    
+    // Add version info to footer
+    const footer = document.querySelector('footer');
+    if (footer) {
+        const copyrightSpan = footer.querySelector('.copyright');
+        if (copyrightSpan && !footer.querySelector('.app-version')) {
+            const versionSpan = document.createElement('span');
+            versionSpan.className = 'app-version';
+            versionSpan.style.marginLeft = '15px';
+            versionSpan.style.color = '#FFFF00';
+            versionSpan.innerHTML = ` | v${UPDATE_CONFIG.currentVersion}`;
+            copyrightSpan.appendChild(versionSpan);
+        }
+    }
+    
+    // Show update button only in raw view initially
+    if (currentView === 'raw') {
+        const updateBtn = document.getElementById('checkForUpdatesButton');
+        if (updateBtn) updateBtn.style.display = 'block';
+    }
+}
+
+// Run initialization when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Your existing DOMContentLoaded code...
+    // Add this at the end:
+    setTimeout(initUpdateSystem, 1000);
+});
+
+// Also add a manual update check function that can be called from console
+window.forceCheckForUpdates = function() {
+    checkForUpdates(true);
+};
+
+// FIXED: showResultsAnalysis now uses Final Grades Sheet data
 function showResultsAnalysis() {
   const currentKey = getStorageKey();
   const savedData = allCoursesData[currentKey];
@@ -3594,18 +4261,19 @@ function showResultsAnalysis() {
     return;
   }
   
-  const stats = calculateStatistics(savedData.students);
+  const stats = calculateStatisticsFromFinalGrades(savedData.students);
   
   updateStatsModal(stats);
   
   document.getElementById('statsModal').style.display = 'block';
 }
 
-function calculateStatistics(students) {
+function calculateStatisticsFromFinalGrades(students) {
   let totalStudents = 0;
   let highestScore = 0;
-  let lowestScore = 100;
-  let totalScore = 0;
+  let lowestScore = 0;
+  let totalScoreSum = 0;
+  
   let passCount = 0;
   let notPassCount = 0;
   let faCount = 0;
@@ -3619,68 +4287,71 @@ function calculateStatistics(students) {
   };
 
   const percentageDistribution = {
-    ninetyToHundred: 0, eightyToEightyNine: 0, seventyToSeventyNine: 0, sixtyToSixtyNine: 0, belowSixty: 0
+    ninetyToHundred: 0, 
+    eightyToEightyNine: 0, 
+    seventyToSeventyNine: 0, 
+    sixtyToSixtyNine: 0, 
+    belowSixty: 0
   };
+  
+  let hasValidData = false;
   
   students.forEach(student => {
     if (!student[1] && !student[2]) return;
     
     totalStudents++;
     
-    let score = 0;
-    for (let i = 3; i <= 21; i++) {
-      const value = parseFloat(student[i]);
-      if (!isNaN(value)) {
-        score += value;
-      }
+    const finalValues = calculateFinalValues(student);
+    const totalScore = parseFloat(finalValues.totalScore) || 0;
+    const finallyValue = finalValues.finallyValue;
+    const gradeLetter = finalValues.gradeLetter;
+    
+    if (totalScore > 0) {
+      hasValidData = true;
+      if (totalScore > highestScore) highestScore = totalScore;
+      if (lowestScore === 0 || totalScore < lowestScore) lowestScore = totalScore;
+      totalScoreSum += totalScore;
     }
     
-    if (score > highestScore) highestScore = score;
-    if (score > 0 && score < lowestScore) lowestScore = score;
-    
-    totalScore += score;
-    
-    const finallyValue = determineFinallyValue(student);
     switch (finallyValue) {
       case 'Pass': passCount++; break;
       case 'Not Pass': notPassCount++; break;
       case 'FA': faCount++; break;
       case 'WA': waCount++; break;
       case 'IP': ipCount++; break;
-      default: othersCount++;
+      default: if (finallyValue && finallyValue.trim() !== '') othersCount++;
     }
     
-    if (finallyValue === 'Pass' || finallyValue === 'Not Pass') {
-      if (score >= 96) gradeDistribution.aPlus++;
-      else if (score >= 92) gradeDistribution.a++;
-      else if (score >= 90) gradeDistribution.aMinus++;
-      else if (score >= 86) gradeDistribution.bPlus++;
-      else if (score >= 82) gradeDistribution.b++;
-      else if (score >= 80) gradeDistribution.bMinus++;
-      else if (score >= 76) gradeDistribution.cPlus++;
-      else if (score >= 72) gradeDistribution.c++;
-      else if (score >= 70) gradeDistribution.cMinus++;
-      else if (score >= 66) gradeDistribution.dPlus++;
-      else if (score >= 62) gradeDistribution.d++;
-      else if (score >= 59.5) gradeDistribution.dMinus++;
-      else gradeDistribution.f++;
+    if (totalScore > 0 && (finallyValue === 'Pass' || finallyValue === 'Not Pass')) {
+      if (gradeLetter === 'A+') gradeDistribution.aPlus++;
+      else if (gradeLetter === 'A') gradeDistribution.a++;
+      else if (gradeLetter === 'A-') gradeDistribution.aMinus++;
+      else if (gradeLetter === 'B+') gradeDistribution.bPlus++;
+      else if (gradeLetter === 'B') gradeDistribution.b++;
+      else if (gradeLetter === 'B-') gradeDistribution.bMinus++;
+      else if (gradeLetter === 'C+') gradeDistribution.cPlus++;
+      else if (gradeLetter === 'C') gradeDistribution.c++;
+      else if (gradeLetter === 'C-') gradeDistribution.cMinus++;
+      else if (gradeLetter === 'D+') gradeDistribution.dPlus++;
+      else if (gradeLetter === 'D') gradeDistribution.d++;
+      else if (gradeLetter === 'D-') gradeDistribution.dMinus++;
+      else if (gradeLetter === 'F') gradeDistribution.f++;
       
-      if (score >= 90) percentageDistribution.ninetyToHundred++;
-      else if (score >= 80) percentageDistribution.eightyToEightyNine++;
-      else if (score >= 70) percentageDistribution.seventyToSeventyNine++;
-      else if (score >= 59.5) percentageDistribution.sixtyToSixtyNine++;
-      else if (score > 0) percentageDistribution.belowSixty++;
+      if (totalScore >= 90) percentageDistribution.ninetyToHundred++;
+      else if (totalScore >= 80) percentageDistribution.eightyToEightyNine++;
+      else if (totalScore >= 70) percentageDistribution.seventyToSeventyNine++;
+      else if (totalScore >= 59.5) percentageDistribution.sixtyToSixtyNine++;
+      else if (totalScore > 0) percentageDistribution.belowSixty++;
     }
   });
   
-  const passPercentage = totalStudents > 0 ? ((passCount / totalStudents) * 100).toFixed(1) : 0;
-  const notPassPercentage = totalStudents > 0 ? ((notPassCount / totalStudents) * 100).toFixed(1) : 0;
-  const faPercentage = totalStudents > 0 ? ((faCount / totalStudents) * 100).toFixed(1) : 0;
-  const waPercentage = totalStudents > 0 ? ((waCount / totalStudents) * 100).toFixed(1) : 0;
-  const ipPercentage = totalStudents > 0 ? ((ipCount / totalStudents) * 100).toFixed(1) : 0;
-  const othersPercentage = totalStudents > 0 ? ((othersCount / totalStudents) * 100).toFixed(1) : 0;
+  const validStudents = totalStudents > 0 ? totalStudents : 1;
+  const averageScore = totalStudents > 0 && totalScoreSum > 0 ? (totalScoreSum / totalStudents).toFixed(1) : 0;
   
-  const averageScore = totalStudents > 0 ? (totalScore / totalStudents).toFixed(1) : 0;
+  if (!hasValidData) {
+    lowestScore = 0;
+    highestScore = 0;
+  }
   
   return {
     totalStudents,
@@ -3688,17 +4359,17 @@ function calculateStatistics(students) {
     averageScore,
     lowestScore: Math.round(lowestScore),
     passCount,
-    passPercentage,
+    passPercentage: ((passCount / validStudents) * 100).toFixed(1),
     notPassCount,
-    notPassPercentage,
+    notPassPercentage: ((notPassCount / validStudents) * 100).toFixed(1),
     faCount,
-    faPercentage,
+    faPercentage: ((faCount / validStudents) * 100).toFixed(1),
     waCount,
-    waPercentage,
+    waPercentage: ((waCount / validStudents) * 100).toFixed(1),
     ipCount,
-    ipPercentage,
+    ipPercentage: ((ipCount / validStudents) * 100).toFixed(1),
     othersCount,
-    othersPercentage,
+    othersPercentage: ((othersCount / validStudents) * 100).toFixed(1),
     gradeDistribution,
     percentageDistribution
   };
@@ -3746,206 +4417,144 @@ function updateStatsModal(stats) {
   document.getElementById('gradeDistributionData').innerHTML = gradeDistributionRow;
 }
 
-function getStatusFromPercentage(percentage) {
-    return percentage >= 59.5 ? 'Normal' : 'At-Risk';
-}
-
-function calculateAndFormatTotal(student) {
-    let totalScore = 0;
-    let hasPassingExam = false;
-    
-    const exams = [
-        {score: parseFloat(student[3]) || 0, weight: 20},
-        {score: parseFloat(student[4]) || 0, weight: 20},
-        {score: parseFloat(student[5]) || 0, weight: 25},
-        {score: parseFloat(student[6]) || 0, weight: 10},
-        {score: parseFloat(student[8]) || 0, weight: 10},
-        {score: parseFloat(student[10]) || 0, weight: 20},
-        {score: parseFloat(student[12]) || 0, weight: 20},
-        {score: parseFloat(student[14]) || 0, weight: 20},
-        {score: parseFloat(student[16]) || 0, weight: 20},
-        {score: parseFloat(student[18]) || 0, weight: 20},
-        {score: parseFloat(student[20]) || 0, weight: 20},
-        {score: parseFloat(student[21]) || 0, weight: 30}
-    ];
-    
-    for (const exam of exams) {
-        if (exam.score > 0) {
-            const percentage = (exam.score / exam.weight) * 100;
-            if (percentage >= 59.5) {
-                hasPassingExam = true;
-                break;
-            }
-        }
-    }
-    
-    if (!hasPassingExam) {
-        let combinedScore = 0;
-        let combinedWeight = 0;
-        
-        for (const exam of exams) {
-            if (exam.score > 0) {
-                combinedScore += exam.score;
-                combinedWeight += exam.weight;
-                
-                if (combinedWeight > 0) {
-                    const combinedPercentage = (combinedScore / combinedWeight) * 100;
-                    if (combinedPercentage >= 59.5) {
-                        hasPassingExam = true;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    
-    for (const exam of exams) {
-        totalScore += exam.score;
-    }
-    
-    return {
-        score: totalScore,
-        isPassing: hasPassingExam || totalScore >= 59.5
-    };
-}
-
 function getPerformanceAnalysis(student) {
-    const finallyValue = determineFinallyValue(student);
-    const hasAlphabetCode = (finallyValue !== 'IP' && finallyValue !== 'Pass' && finallyValue !== 'Not Pass') &&
-        /[A-Za-z]/.test(finallyValue);
+  // Keep your existing getPerformanceAnalysis function
+  const finallyValue = determineFinallyValue(student);
+  const hasAlphabetCode = (finallyValue !== 'IP' && finallyValue !== 'Pass' && finallyValue !== 'Not Pass') &&
+      /[A-Za-z]/.test(finallyValue);
 
-    const popQuiz1Value = student[6] || '';
-    const test1GVValue = student[8] || '';
-    const midtermValue = student[13] || '';
-    const speakingTestValue = student[10] || '';
-    const popQuiz2Value = student[7] || '';
-    const writingTestValue = student[11] || '';
-    
-    let academicStatus1 = '';
-    let academicStatus2 = '';
-    let academicStatus3 = '';
-    let overallStatus = '';
-    let atRiskCounts = 0;
-    let emailType = 'appreciable';
+  const popQuiz1Value = student[6] || '';
+  const test1GVValue = student[8] || '';
+  const midtermValue = student[13] || '';
+  const speakingTestValue = student[10] || '';
+  const popQuiz2Value = student[7] || '';
+  const writingTestValue = student[11] || '';
+  
+  let academicStatus1 = '';
+  let academicStatus2 = '';
+  let academicStatus3 = '';
+  let overallStatus = '';
+  let atRiskCounts = 0;
+  let emailType = 'appreciable';
 
-    if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '') {
-        const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
-        const test1GVScore = parseFloat(test1GVValue) || 0;
-        const combinedScore1 = popQuiz1Score + test1GVScore;
-        const combinedMax1 = 10 + 20;
-        const combinedPercentage1 = (combinedScore1 / combinedMax1) * 100;
-        academicStatus1 = combinedPercentage1 >= 59.5 ? 'Normal' : 'At-Risk';
-        if (academicStatus1 === 'At-Risk') atRiskCounts++;
-    }
+  if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '') {
+    const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
+    const test1GVScore = parseFloat(test1GVValue) || 0;
+    const combinedScore1 = popQuiz1Score + test1GVScore;
+    const combinedMax1 = 10 + 20;
+    const combinedPercentage1 = (combinedScore1 / combinedMax1) * 100;
+    academicStatus1 = combinedPercentage1 >= 59.5 ? 'Normal' : 'At-Risk';
+    if (academicStatus1 === 'At-Risk') atRiskCounts++;
+  }
 
-    if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '' && midtermValue.trim() !== '') {
-        const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
-        const test1GVScore = parseFloat(test1GVValue) || 0;
-        const midtermScore = parseFloat(midtermValue) || 0;
-        const combinedScore2 = popQuiz1Score + test1GVScore + midtermScore;
-        const combinedMax2 = 10 + 20 + 50;
-        const combinedPercentage2 = (combinedScore2 / combinedMax2) * 100;
-        academicStatus2 = combinedPercentage2 >= 59.5 ? 'Normal' : 'At-Risk';
-        if (academicStatus2 === 'At-Risk') atRiskCounts++;
-    }
+  if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '' && midtermValue.trim() !== '') {
+    const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
+    const test1GVScore = parseFloat(test1GVValue) || 0;
+    const midtermScore = parseFloat(midtermValue) || 0;
+    const combinedScore2 = popQuiz1Score + test1GVScore + midtermScore;
+    const combinedMax2 = 10 + 20 + 50;
+    const combinedPercentage2 = (combinedScore2 / combinedMax2) * 100;
+    academicStatus2 = combinedPercentage2 >= 59.5 ? 'Normal' : 'At-Risk';
+    if (academicStatus2 === 'At-Risk') atRiskCounts++;
+  }
 
-    if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '' && midtermValue.trim() !== '' && 
-        speakingTestValue.trim() !== '' && popQuiz2Value.trim() !== '' && writingTestValue.trim() !== '') {
-        const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
-        const test1GVScore = parseFloat(test1GVValue) || 0;
-        const midtermScore = parseFloat(midtermValue) || 0;
-        const speakingTestScore = parseFloat(speakingTestValue) || 0;
-        const popQuiz2Score = parseFloat(popQuiz2Value) || 0;
-        const writingTestScore = parseFloat(writingTestValue) || 0;
-        const combinedScore3 = popQuiz1Score + test1GVScore + midtermScore + speakingTestScore + popQuiz2Score + writingTestScore;
-        const combinedMax3 = 10 + 20 + 50 + 20 + 10 + 20;
-        const combinedPercentage3 = (combinedScore3 / combinedMax3) * 100;
-        academicStatus3 = combinedPercentage3 >= 59.5 ? 'Normal' : 'At-Risk';
-        if (academicStatus3 === 'At-Risk') atRiskCounts++;
-    }
+  if (popQuiz1Value.trim() !== '' && test1GVValue.trim() !== '' && midtermValue.trim() !== '' && 
+      speakingTestValue.trim() !== '' && popQuiz2Value.trim() !== '' && writingTestValue.trim() !== '') {
+    const popQuiz1Score = parseFloat(popQuiz1Value) || 0;
+    const test1GVScore = parseFloat(test1GVValue) || 0;
+    const midtermScore = parseFloat(midtermValue) || 0;
+    const speakingTestScore = parseFloat(speakingTestValue) || 0;
+    const popQuiz2Score = parseFloat(popQuiz2Value) || 0;
+    const writingTestScore = parseFloat(writingTestValue) || 0;
+    const combinedScore3 = popQuiz1Score + test1GVScore + midtermScore + speakingTestScore + popQuiz2Score + writingTestScore;
+    const combinedMax3 = 10 + 20 + 50 + 20 + 10 + 20;
+    const combinedPercentage3 = (combinedScore3 / combinedMax3) * 100;
+    academicStatus3 = combinedPercentage3 >= 59.5 ? 'Normal' : 'At-Risk';
+    if (academicStatus3 === 'At-Risk') atRiskCounts++;
+  }
 
-    let cumulativeScore = 0;
-    let cumulativeMax = 0;
-    let hasAnyData = false;
-    
-    const assessments = [
-        {score: parseFloat(student[6]) || 0, max: 10},
-        {score: parseFloat(student[8]) || 0, max: 20},
-        {score: parseFloat(student[13]) || 0, max: 50},
-        {score: parseFloat(student[10]) || 0, max: 20},
-        {score: parseFloat(student[7]) || 0, max: 10},
-        {score: parseFloat(student[11]) || 0, max: 20},
-        {score: parseFloat(student[14]) || 0, max: 50}
-    ];
-    
-    for (const assessment of assessments) {
-        if (assessment.score > 0) {
-            cumulativeScore += assessment.score;
-            cumulativeMax += assessment.max;
-            hasAnyData = true;
-            
-            if (cumulativeMax > 0) {
-                const cumulativePercentage = (cumulativeScore / cumulativeMax) * 100;
-                if (cumulativePercentage >= 59.5) {
-                    overallStatus = 'Normal';
-                    break;
-                }
-            }
+  let cumulativeScore = 0;
+  let cumulativeMax = 0;
+  let hasAnyData = false;
+  
+  const assessments = [
+    {score: parseFloat(student[6]) || 0, max: 10},
+    {score: parseFloat(student[8]) || 0, max: 20},
+    {score: parseFloat(student[13]) || 0, max: 50},
+    {score: parseFloat(student[10]) || 0, max: 20},
+    {score: parseFloat(student[7]) || 0, max: 10},
+    {score: parseFloat(student[11]) || 0, max: 20},
+    {score: parseFloat(student[14]) || 0, max: 50}
+  ];
+  
+  for (const assessment of assessments) {
+    if (assessment.score > 0) {
+      cumulativeScore += assessment.score;
+      cumulativeMax += assessment.max;
+      hasAnyData = true;
+      
+      if (cumulativeMax > 0) {
+        const cumulativePercentage = (cumulativeScore / cumulativeMax) * 100;
+        if (cumulativePercentage >= 59.5) {
+          overallStatus = 'Normal';
+          break;
         }
+      }
     }
-    
-    if (hasAnyData && !overallStatus) {
-        overallStatus = 'At-Risk';
-    }
+  }
+  
+  if (hasAnyData && !overallStatus) {
+    overallStatus = 'At-Risk';
+  }
 
-    if (overallStatus === 'At-Risk') {
-        atRiskCounts++;
-    }
+  if (overallStatus === 'At-Risk') {
+    atRiskCounts++;
+  }
 
-    if (finallyValue === 'Not Pass') {
-        emailType = 'not-pass';
-    } else if (finallyValue === 'Pass') {
-        emailType = 'appreciable';
-    } else if (academicStatus1 === 'Normal' && !academicStatus2 && !academicStatus3) {
-        emailType = 'appreciable';
-    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'Normal' && !academicStatus3) {
-        emailType = 'appreciable';
-    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'Normal' && academicStatus3 === 'Normal') {
-        emailType = 'appreciable';
-    } else if (academicStatus1 === 'At-Risk' && !academicStatus2 && !academicStatus3) {
-        emailType = 'at-risk';
-    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'At-Risk' && !academicStatus3) {
-        emailType = 'at-risk';
-    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'At-Risk' && academicStatus3 === 'At-Risk') {
-        emailType = 'at-risk';
-    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'Normal' && !academicStatus3) {
-        emailType = 'improved';
-    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'Normal' && academicStatus3 === 'Normal') {
-        emailType = 'appreciable';
-    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'At-Risk' && academicStatus3 === 'Normal') {
-        emailType = 'improved';
-    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'At-Risk' && !academicStatus3) {
-        emailType = 'at-risk';
-    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'At-Risk' && academicStatus3 === 'At-Risk') {
-        emailType = 'at-risk';
-    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'At-Risk' && academicStatus3 === 'Normal') {
-        emailType = 'improved';
-    } else if (academicStatus1 === 'Normal' && academicStatus2 === 'Normal' && academicStatus3 === 'At-Risk') {
-        emailType = 'at-risk';
-    } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'Normal' && academicStatus3 === 'At-Risk') {
-        emailType = 'at-risk';
-    }
+  if (finallyValue === 'Not Pass') {
+    emailType = 'not-pass';
+  } else if (finallyValue === 'Pass') {
+    emailType = 'appreciable';
+  } else if (academicStatus1 === 'Normal' && !academicStatus2 && !academicStatus3) {
+    emailType = 'appreciable';
+  } else if (academicStatus1 === 'Normal' && academicStatus2 === 'Normal' && !academicStatus3) {
+    emailType = 'appreciable';
+  } else if (academicStatus1 === 'Normal' && academicStatus2 === 'Normal' && academicStatus3 === 'Normal') {
+    emailType = 'appreciable';
+  } else if (academicStatus1 === 'At-Risk' && !academicStatus2 && !academicStatus3) {
+    emailType = 'at-risk';
+  } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'At-Risk' && !academicStatus3) {
+    emailType = 'at-risk';
+  } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'At-Risk' && academicStatus3 === 'At-Risk') {
+    emailType = 'at-risk';
+  } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'Normal' && !academicStatus3) {
+    emailType = 'improved';
+  } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'Normal' && academicStatus3 === 'Normal') {
+    emailType = 'appreciable';
+  } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'At-Risk' && academicStatus3 === 'Normal') {
+    emailType = 'improved';
+  } else if (academicStatus1 === 'Normal' && academicStatus2 === 'At-Risk' && !academicStatus3) {
+    emailType = 'at-risk';
+  } else if (academicStatus1 === 'Normal' && academicStatus2 === 'At-Risk' && academicStatus3 === 'At-Risk') {
+    emailType = 'at-risk';
+  } else if (academicStatus1 === 'Normal' && academicStatus2 === 'At-Risk' && academicStatus3 === 'Normal') {
+    emailType = 'improved';
+  } else if (academicStatus1 === 'Normal' && academicStatus2 === 'Normal' && academicStatus3 === 'At-Risk') {
+    emailType = 'at-risk';
+  } else if (academicStatus1 === 'At-Risk' && academicStatus2 === 'Normal' && academicStatus3 === 'At-Risk') {
+    emailType = 'at-risk';
+  }
 
-    return {
-        academicStatus1,
-        academicStatus2, 
-        academicStatus3,
-        overallStatus,
-        atRiskCounts: atRiskCounts === 0 ? '' : atRiskCounts,
-        email: hasAlphabetCode || !hasAnyData ? 'Not Applicable' : (student[1] ? `${student[1]}@asu.edu.om` : ''),
-        finallyValue: hasAnyData || hasAlphabetCode ? finallyValue : '',
-        emailType
-    };
+  return {
+    academicStatus1,
+    academicStatus2, 
+    academicStatus3,
+    overallStatus,
+    atRiskCounts: atRiskCounts === 0 ? '' : atRiskCounts,
+    email: hasAlphabetCode || !hasAnyData ? 'Not Applicable' : (student[1] ? `${student[1]}@asu.edu.om` : ''),
+    finallyValue: hasAnyData || hasAlphabetCode ? finallyValue : '',
+    emailType
+  };
 }
 
 document.getElementById('xlsxFileInput').addEventListener('change', handleGradesFile);
@@ -4028,21 +4637,17 @@ Center For Language and Foundation Studies
 <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
-  <script>
-function collectGrades() { ... }
-function restoreGrades(data) { ... }
-/* ==============================
-   GMS DATA ENGINE v1
-   Safe Add-On Block
-   Does NOT modify UI or layout
-============================== */
-
+<!-- Additional backup scripts -->
+<script>
+function collectGrades() { /* dummy */ }
+function restoreGrades(data) { /* dummy */ }
+</script>
+<script>
 const GMS_DB_NAME = "GMS_DATABASE_V1";
 const GMS_STORE = "grades_store";
 let gmsDB;
 let isDirty = false;
 
-/* ---------- OPEN DATABASE ---------- */
 function openGMSDatabase() {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open(GMS_DB_NAME, 1);
@@ -4065,7 +4670,6 @@ function openGMSDatabase() {
     });
 }
 
-/* ---------- SAVE DATA ---------- */
 function saveGMSData(dataObject) {
     return new Promise((resolve, reject) => {
         const tx = gmsDB.transaction(GMS_STORE, "readwrite");
@@ -4089,7 +4693,6 @@ function saveGMSData(dataObject) {
     });
 }
 
-/* ---------- LOAD DATA ---------- */
 function loadGMSData() {
     return new Promise((resolve, reject) => {
         const tx = gmsDB.transaction(GMS_STORE, "readonly");
@@ -4110,7 +4713,6 @@ function loadGMSData() {
     });
 }
 
-/* ---------- AUTO BACKUP JSON ---------- */
 function autoBackupJSON(data) {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const link = document.createElement("a");
@@ -4122,12 +4724,10 @@ function autoBackupJSON(data) {
     document.body.removeChild(link);
 }
 
-/* ---------- TRACK CHANGES ---------- */
 document.addEventListener("input", () => {
     isDirty = true;
 });
 
-/* ---------- BEFORE CLOSE WARNING ---------- */
 window.addEventListener("beforeunload", function (e) {
     if (isDirty) {
         e.preventDefault();
@@ -4135,7 +4735,6 @@ window.addEventListener("beforeunload", function (e) {
     }
 });
 
-/* ---------- AUTO LOAD ON START ---------- */
 document.addEventListener("DOMContentLoaded", async function () {
     await openGMSDatabase();
 
@@ -4147,8 +4746,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 });
 
-/* ---------- MANUAL SAVE BUTTON LINK ---------- */
-/* Call this inside your existing Save button */
 async function GMS_SAVE_HANDLER() {
     if (typeof collectGrades === "function") {
         const data = collectGrades();
@@ -4157,161 +4754,5 @@ async function GMS_SAVE_HANDLER() {
     }
 }
 </script>
-<script>
-// ==============================
-// GMS PERMANENT DATA ENGINE
-// ==============================
-
-const GMS_DB_NAME = "GMS_Permanent_DB";
-const GMS_STORE = "grades_store";
-
-function openGMSDatabase() {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open(GMS_DB_NAME, 1);
-
-        request.onupgradeneeded = function(event) {
-            const db = event.target.result;
-            if (!db.objectStoreNames.contains(GMS_STORE)) {
-                db.createObjectStore(GMS_STORE);
-            }
-        };
-
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-
-        request.onerror = function(event) {
-            reject(event.target.error);
-        };
-    });
-}
-
-async function savePermanentBackup() {
-    try {
-        const db = await openGMSDatabase();
-        const tx = db.transaction(GMS_STORE, "readwrite");
-        const store = tx.objectStore(GMS_STORE);
-
-        store.put(allCoursesData, "backupData");
-
-        console.log("Permanent Backup Saved");
-    } catch (error) {
-        console.error("Permanent Save Failed:", error);
-    }
-}
-
-async function restorePermanentBackup() {
-    try {
-        const db = await openGMSDatabase();
-        const tx = db.transaction(GMS_STORE, "readonly");
-        const store = tx.objectStore(GMS_STORE);
-
-        const request = store.get("backupData");
-
-        request.onsuccess = function() {
-            if (request.result) {
-                if (!localStorage.getItem("allCoursesData")) {
-                    allCoursesData = request.result;
-                    saveToLocalStorage();
-                    console.log("Restored From Permanent Backup");
-                }
-            }
-        };
-    } catch (error) {
-        console.error("Restore Failed:", error);
-    }
-}
-
-// Hook into your existing save system
-const originalSave = saveToLocalStorage;
-
-saveToLocalStorage = function() {
-    originalSave();
-    savePermanentBackup();
-};
-
-// Restore on startup
-document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(() => {
-        restorePermanentBackup();
-    }, 1000);
-});
-
-</script>
-
-<script>
-// ==============================
-// GMS PERMANENT BACKUP ENGINE
-// ==============================
-
-const GMS_DB_NAME = "GMS_Permanent_DB";
-const GMS_STORE = "backup_store";
-
-function openGMSDB() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(GMS_DB_NAME, 1);
-
-    request.onupgradeneeded = function(e) {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(GMS_STORE)) {
-        db.createObjectStore(GMS_STORE);
-      }
-    };
-
-    request.onsuccess = e => resolve(e.target.result);
-    request.onerror = e => reject(e.target.error);
-  });
-}
-
-async function savePermanentBackup() {
-  try {
-    const db = await openGMSDB();
-    const tx = db.transaction(GMS_STORE, "readwrite");
-    const store = tx.objectStore(GMS_STORE);
-    store.put(allCoursesData, "mainData");
-    console.log("Permanent backup saved.");
-  } catch (err) {
-    console.error("Permanent save failed:", err);
-  }
-}
-
-async function restorePermanentBackup() {
-  try {
-    const db = await openGMSDB();
-    const tx = db.transaction(GMS_STORE, "readonly");
-    const store = tx.objectStore(GMS_STORE);
-    const request = store.get("mainData");
-
-    request.onsuccess = function() {
-      if (request.result) {
-        if (!localStorage.getItem("SGS_All_Courses")) {
-          allCoursesData = request.result;
-          localStorage.setItem("SGS_All_Courses", JSON.stringify(allCoursesData));
-          console.log("Restored from permanent backup.");
-          location.reload();
-        }
-      }
-    };
-  } catch (err) {
-    console.error("Restore failed:", err);
-  }
-}
-
-// Hook into your existing save function
-const originalSaveFunction = saveToLocalStorage;
-
-saveToLocalStorage = function() {
-  originalSaveFunction();
-  savePermanentBackup();
-};
-
-// Try restore when page loads
-document.addEventListener("DOMContentLoaded", function() {
-  setTimeout(() => {
-    restorePermanentBackup();
-  }, 800);
-});
-</script>
-
 </body>
 </html>
